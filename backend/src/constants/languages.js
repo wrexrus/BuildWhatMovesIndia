@@ -2,21 +2,22 @@
  * Supported Regional Language Definitions & Mapping
  */
 const SUPPORTED_LANGUAGES = {
-  EN: "Plain English",
-  HI: "Hinglish (Hindi written in Roman script)",
-  HINGLISH: "Hinglish (Hindi written in Roman script)",
-  HI_IN: "Hindi (Devanagari script)",
-  MR: "Marathi",
-  GU: "Gujarati",
-  TA: "Tamil",
-  TE: "Telugu",
-  KN: "Kannada",
-  BN: "Bengali"
+  EN: "English",
+  HI: "Hindi (हिंदी - Devanagari script)",
+  MR: "Marathi (मराठी - Devanagari script)",
+  TA: "Tamil (தமிழ் - Tamil script)",
+  PA: "Punjabi (ਪੰਜਾਬੀ - Gurmukhi script)"
 };
 
 function getLanguageName(code) {
   const langKey = (code || 'EN').toUpperCase();
-  return SUPPORTED_LANGUAGES[langKey] || SUPPORTED_LANGUAGES.EN;
+  switch (langKey) {
+    case 'HI': return 'Hindi (written in native Devanagari script - हिंदी)';
+    case 'MR': return 'Marathi (written in native Devanagari script - मराठी)';
+    case 'TA': return 'Tamil (written in native Tamil script - தமிழ்)';
+    case 'PA': return 'Punjabi (written in native Gurmukhi script - ਪੰਜਾਬੀ)';
+    default: return 'simple English';
+  }
 }
 
 module.exports = {

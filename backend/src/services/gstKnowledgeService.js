@@ -7,28 +7,36 @@ const openai = process.env.OPENAI_API_KEY
   : null;
 
 /**
- * Multilingual Offline GST Knowledge Base (English, Hindi/Hinglish, Marathi)
+ * Multilingual Offline GST Knowledge Base (English, Hindi, Marathi, Tamil, Punjabi)
  */
 const KNOWLEDGE_BASE_MULTILINGUAL = {
   GSTR2B: {
-    EN: "GSTR-2B is an auto-generated monthly statement on the GST portal that shows all tax credits uploaded by your suppliers.\n\nKey rules:\n• You can only claim Input Tax Credit (ITC) for bills appearing in GSTR-2B\n• It becomes static on the 14th of every month.",
-    HI: "GSTR-2B GST portal par automatic banne wala monthly statement hai jo aapke suppliers ke dwara upload kiye gaye tax credits dikhata hai.\n\nMukhya niyam:\n• Aap sirf wahi credit claim kar sakte hain jo GSTR-2B me dikhe\n• Yeh har mahine ki 14 tareekh ko freeze ho jata hai.",
-    MR: "GSTR-2B हे GST पोर्टलवर स्वयंचलितपणे तयार होणारे मासिक विवरण पत्रक आहे जे तुमच्या सप्लायरने अपलोड केलेले टॅक्स क्रेडिट दाखवते.\n\nमहत्त्वाचे नियम:\n• GSTR-2B मध्ये दिसणाऱ्या बिलांवरच तुम्ही ITC दावा करू शकता\n• हे प्रत्येक महिन्याच्या १४ तारखेला स्थिर होते."
+    EN: "GSTR-2B is an auto-generated monthly statement on the GST portal showing tax credits uploaded by your suppliers.\n\nKey rules:\n• Claim ITC only for bills appearing in GSTR-2B\n• Statement locks on the 14th of every month.",
+    HI: "GSTR-2B GST पोर्टल पर स्वचालित रूप से उत्पन्न होने वाला विवरण है जो आपके आपूर्तिकर्ताओं द्वारा अपलोड किए गए टैक्स क्रेडिट को दिखाता है।\n\nमुख्य नियम:\n• केवल GSTR-2B में दिखने वाले बिलों पर ITC का दावा करें\n• यह हर महीने की 14 तारीख को लॉक होता है।",
+    MR: "GSTR-2B हे GST पोर्टलवर स्वयंचलितपणे तयार होणारे मासिक विवरण आहे जे तुमच्या सप्लायरने अपलोड केलेले टॅक्स क्रेडिट दाखवते.\n\nमहत्त्वाचे नियम:\n• GSTR-2B मध्ये दिसणाऱ्या बिलांवरच ITC दावा करा\n• हे प्रत्येक महिन्याच्या १४ तारखेला लॉक होते.",
+    TA: "GSTR-2B என்பது GST போர்ட்டலில் உங்கள் சப்ளையர்களால் பதிவேற்றப்பட்ட வரி வரவுகளைக் காட்டும் ஒரு தானியங்கி அறிக்கை ஆகும்.\n\nமுக்கிய விதிகள்:\n• GSTR-2B இல் தோன்றும் பில்களுக்கு மட்டுமே ITC கோருங்கள்\n• இது ஒவ்வொரு மாதமும் 14 ஆம் தேதி லாக் செய்யப்படும்.",
+    PA: "GSTR-2B GST ਪੋਰਟਲ 'ਤੇ ਆਟੋ-ਜਨਰੇਟ ਕੀਤਾ ਮਹੀਨਾਵਾਰ ਬਿਆਨ ਹੈ ਜੋ ਤੁਹਾਡੇ ਸਪਲਾਇਰਾਂ ਦੁਆਰਾ ਅਪਲੋਡ ਕੀਤੇ ਟੈਕਸ ਕ੍ਰੈਡਿਟ ਦਿਖਾਉਂਦਾ ਹੈ।\n\nਮੁੱਖ ਨਿਯਮ:\n• ਕੇਵਲ GSTR-2B ਵਿੱਚ ਦਿਖਾਈ ਦੇਣ ਵਾਲੇ ਬਿਲਾਂ 'ਤੇ ITC ਦਾ ਦਾਅਵਾ ਕਰੋ\n• ਇਹ ਹਰ ਮਹੀਨੇ ਦੀ 14 ਤਾਰੀਖ ਨੂੰ ਲਾਕ ਹੁੰਦਾ ਹੈ।"
   },
   GSTR3B_DUE_DATE: {
-    EN: "GSTR-3B is your monthly tax payment summary return.\n\nFiling details:\n• Due Date: 20th of every month\n• Late Fee: ₹50 per day (₹20 for Nil return)\n• Interest: 18% per annum for delayed cash tax payment.",
-    HI: "GSTR-3B aapka monthly tax bhugtan summary return hai.\n\nReturn jankari:\n• Last Date: Har mahine ki 20 tareekh\n• Late Fee: ₹50 prati din (Nil return ke liye ₹20)\n• Byaj: Late payment par 18% varshik byaj.",
-    MR: "GSTR-3B हा तुमचा मासिक टॅक्स भरणा समरी रिटर्न आहे.\n\nमहत्त्वाची माहिती:\n• शेवटची तारीख: प्रत्येक महिन्याची २० तारीख\n• उशिरा फी: दररोज ₹५० (निल रिटर्नसाठी ₹२०)\n• व्याज: उशिरा भरणावर १८% वार्षिक व्याज."
+    EN: "GSTR-3B is your monthly tax summary return.\n\nFiling details:\n• Due Date: 20th of every month\n• Late Fee: ₹50 per day (₹20 for Nil return)\n• Interest: 18% per annum for delayed payment.",
+    HI: "GSTR-3B आपका मासिक टैक्स रिटर्न सारांश है।\n\nफाइलिंग विवरण:\n• अंतिम तिथि: हर महीने की 20 तारीख\n• विलंब शुल्क: ₹50 प्रति दिन (शून्य रिटर्न के लिए ₹20)\n• ब्याज: देरी से भुगतान पर 18% वार्षिक ब्याज।",
+    MR: "GSTR-3B हा तुमचा मासिक टॅक्स रिटर्न समरी आहे.\n\nमहत्त्वाची माहिती:\n• शेवटची तारीख: प्रत्येक महिन्याची २० तारीख\n• उशिरा फी: दररोज ₹५० (निल रिटर्नसाठी ₹२०)\n• व्याज: उशिरा भरणावर १८% वार्षिक व्याज.",
+    TA: "GSTR-3B என்பது உங்கள் மாதாந்திர வரி தாக்கல் சுருக்கம் ஆகும்.\n\nதாக்கல் விவரங்கள்:\n• கடைசி தேதி: ஒவ்வொரு மாதமும் 20 ஆம் தேதி\n• தாமதக் கட்டணம்: நாள் ஒன்றுக்கு ₹50 (Nil ரிட்டர்னுக்கு ₹20)\n• வட்டி: தாமதமான கட்டணத்திற்கு ஆண்டுக்கு 18% வட்டி.",
+    PA: "GSTR-3B ਤੁਹਾਡੀ ਮਹੀਨਾਵਾਰ ਟੈਕਸ ਸਮਰੀ ਰਿਟਰਨ ਹੈ।\n\nਫਾਈਲਿੰਗ ਵੇਰਵੇ:\n• ਆਖਰੀ ਮਿਤੀ: ਹਰ ਮਹੀਨੇ ਦੀ 20 ਤਾਰੀਖ\n• ਦੇਰੀ ਫੀਸ: ₹50 ਪ੍ਰਤੀ ਦਿਨ (Nil ਰਿਟਰਨ ਲਈ ₹20)\n• ਵਿਆਜ: ਦੇਰੀ ਨਾਲ ਭੁਗਤਾਨ 'ਤੇ 18% ਸਾਲਾਨਾ ਵਿਆਜ।"
   },
   TAX_PAYABLE: {
-    EN: "Your total outward sales tax liability is ₹42,500.\n\nTax breakdown:\n• Eligible ITC Available: ₹18,200\n• Net Cash Tax Payable: ₹24,300\n• Blocked Pending Credit: ₹6,500 (Saved from audit notice).",
-    HI: "Aapki kul sales tax denadari ₹42,500 hai.\n\nTax hisab:\n• Eligible Credit: ₹18,200\n• Net Cash Denadari: ₹24,300\n• Blocked Credit: ₹6,500 (Notice se bachaya gaya).",
-    MR: "तुमची एकूण विक्री टॅक्स देयता ₹४२,५०० आहे.\n\nटॅक्स हिशोब:\n• पात्र क्रेडिट: ₹१८,२००\n• निव्वळ भरणा रक्कम: ₹२४,३००\n• ब्लॉक क्रेडिट: ₹६,५०० (नोटीसपासून सुरक्षित)."
+    EN: "Your total sales tax liability is ₹42,500.\n\nTax breakdown:\n• Eligible ITC: ₹18,200\n• Net Cash Payable: ₹24,300\n• Blocked Pending Credit: ₹6,500 (Saved from notice).",
+    HI: "आपकी कुल बिक्री टैक्स देनदारी ₹42,500 है।\n\nटैक्स का हिसाब:\n• पात्र ITC: ₹18,200\n• शुद्ध नकद देनदारी: ₹24,300\n• ब्लॉक किया गया क्रेडिट: ₹6,500 (नोटिस से सुरक्षित)।",
+    MR: "तुमची एकूण विक्री टॅक्स देयता ₹४२,५०० आहे.\n\nटॅक्स हिशोब:\n• पात्र क्रेडिट: ₹१८,२००\n• निव्वळ भरणा रक्कम: ₹२४,३००\n• ब्लॉक क्रेडिट: ₹६,५०० (नोटीसपासून सुरक्षित).",
+    TA: "உங்கள் மொத்த விற்பனை வரி பொறுப்பு ₹42,500 ஆகும்.\n\nவரி விவரம்:\n• தகுதியான ITC: ₹18,200\n• நிகர ரொக்க செலுத்தவேண்டியது: ₹24,300\n• தடுப்பு வரவு: ₹6,500 (அறிவிப்பிலிருந்து பாதுகாக்கப்பட்டது).",
+    PA: "ਤੁਹਾਡੀ ਕੁੱਲ ਵਿਕਰੀ ਟੈਕਸ ਦੇਣਦਾਰੀ ₹42,500 ਹੈ।\n\nਟੈਕਸ ਵੇਰਵਾ:\n• ਯੋਗ ITC: ₹18,200\n• ਸ਼ੁੱਧ ਨਕਦ ਦੇਣਦਾਰੀ: ₹24,300\n• ਬਲਾਕ ਕੀਤਾ ਕ੍ਰੈਡਿਟ: ₹6,500 (ਨੋਟਿਸ ਤੋਂ ਸੁਰੱਖਿਅਤ)।"
   },
   ASIAN_PAINTS: {
-    EN: "Asian Paints has not uploaded invoice #AP/2026/045 to the GST portal yet.\n\nAction steps:\n• Call Asian Paints to upload bill in GSTR-1\n• Do not claim ₹4,500 credit in this month's GSTR-3B\n• Safely claim next month once it appears in GSTR-2B.",
-    HI: "Asian Paints ne bill #AP/2026/045 abhi tak portal par upload nahi kiya hai.\n\nAction steps:\n• Asian Paints ko GSTR-1 file karne ko kahein\n• Iss mahine ₹4,500 ka credit na lein\n• Agle mahine GSTR-2B me dikhne par safely claim karein.",
-    MR: "Asian Paints ने बिल नंबर #AP/2026/045 अजून पोर्टलवर अपलोड केलेले नाही.\n\nकारवाईचे टप्पे:\n• Asian Paints ला GSTR-1 भरण्यास सांगा\n• या महिन्यात ₹४,५०० चे क्रेडिट घेऊ नका\n• पुढील महिन्यात GSTR-2B मध्ये आल्यावर सुरक्षित दावा करा."
+    EN: "Asian Paints has not uploaded invoice #AP/2026/045 yet.\n\nAction steps:\n• Call supplier to file GSTR-1\n• Do not claim ₹4,500 credit in this month's return\n• Claim next month once visible in GSTR-2B.",
+    HI: "एशियन पेंट्स ने बिल #AP/2026/045 अभी तक अपलोड नहीं किया है।\n\nकार्रवाई के कदम:\n• आपूर्तिकर्ता को GSTR-1 फाइल करने के लिए कहें\n• इस महीने ₹4,500 के क्रेडिट का दावा न करें\n• GSTR-2B में दिखने के बाद अगले महीने सुरक्षित दावा करें।",
+    MR: "Asian Paints ने बिल नंबर #AP/2026/045 अजून अपलोड केलेले नाही.\n\nकारवाईचे टप्पे:\n• सप्लायरला GSTR-1 भरण्यास सांगा\n• या महिन्यात ₹४,५०० चे क्रेडिट घेऊ नका\n• पुढील महिन्यात GSTR-2B मध्ये आल्यावर सुरक्षित दावा करा.",
+    TA: "ஏசியன் பெயிண்ட்ஸ் #AP/2026/045 பில்லை இன்னும் பதிவேற்றவில்லை.\n\nநடவடிக்கை படிகள்:\n• GSTR-1 தாக்கல் செய்ய சப்ளையரை அழைக்கவும்\n• இந்த மாதம் ₹4,500 கிரெடிட்டை கோர வேண்டாம்\n• GSTR-2B இல் தெரிந்தவுடன் அடுத்த மாதம் கோருங்கள்.",
+    PA: "ਏਸ਼ੀਅਨ ਪੇਂਟਸ ਨੇ ਅਜੇ ਤੱਕ ਬਿੱਲ #AP/2026/045 ਅਪਲੋਡ ਨਹੀਂ ਕੀਤਾ ਹੈ।\n\nਕਾਰਵਾਈ ਦੇ ਕਦਮ:\n• ਸਪਲਾਇਰ ਨੂੰ GSTR-1 ਫਾਈਲ ਕਰਨ ਲਈ ਕਹੋ\n• ਇਸ ਮਹੀਨੇ ₹4,500 ਦੇ ਕ੍ਰੈਡਿਟ ਦਾ ਦਾਅਵਾ ਨਾ ਕਰੋ\n• GSTR-2B ਵਿੱਚ ਦਿਖਾਈ ਦੇਣ ਤੋਂ ਬਾਅਦ ਅਗਲੇ ਮਹੀਨੇ ਦਾਅਵਾ ਕਰੋ।"
   }
 };
 
@@ -45,7 +53,7 @@ function isGstDomainQuery(query) {
 }
 
 /**
- * Process GST Chatbot Query with Strict Language Matching & Bulleted Formatting
+ * Process GST Chatbot Query with Strict Multilingual Matching & Bullet Formatting
  */
 async function processGstChatbotQuery(userQuery, language = 'EN', activeContext = null) {
   if (!userQuery || userQuery.trim().length === 0) {
@@ -61,10 +69,14 @@ async function processGstChatbotQuery(userQuery, language = 'EN', activeContext 
   // 1. Domain Guardrail Check
   if (!isGstDomainQuery(query)) {
     let outOfDomainMsg = "I am your GST & Tax Assistant. I can only help with GST filing, invoice mismatches, tax credit rules, and portal navigation. Please ask a GST or tax-related question!";
-    if (langKey === 'HI' || langKey === 'HINGLISH') {
-      outOfDomainMsg = "Main aapka GST aur Tax Assistant hoon. Main sirf GST returns, invoice mismatches, tax credit aur portal guide me madad kar sakta hoon. Kripya GST se juda sawal poochein!";
+    if (langKey === 'HI') {
+      outOfDomainMsg = "मैं आपका GST और टैक्स सहायक हूँ। मैं केवल GST रिटर्न, बिल में अंतर, टैक्स क्रेडिट और पोर्टल संबंधी प्रश्नों में मदद कर सकता हूँ। कृपया GST से संबंधित प्रश्न पूछें!";
     } else if (langKey === 'MR') {
       outOfDomainMsg = "मी तुमचा GST सहाय्यक आहे. मी फक्त GST रिटर्न, बिल फरक आणि पोर्टल मार्गदर्शनात मदत करू शकतो. कृपया GST संबंधित प्रश्न विचारा!";
+    } else if (langKey === 'TA') {
+      outOfDomainMsg = "நான் உங்கள் ஜிஎஸ்டி மற்றும் வரி உதவியாளர். ஜிஎஸ்டி தாக்கல் மற்றும் போர்ட்டல் தொடர்பான கேள்விகளுக்கு மட்டுமே என்னால் உதவ முடியும்!";
+    } else if (langKey === 'PA') {
+      outOfDomainMsg = "ਮੈਂ ਤੁਹਾਡਾ GST ਅਤੇ ਟੈਕਸ ਸਹਾਇਕ ਹਾਂ। ਮੈਂਿਰਫ਼ GST ਰਿਟਰਨਾਂ ਅਤੇ ਪੋਰਟਲ ਸੰਬੰਧੀ ਪ੍ਰਸ਼ਨਾਂ ਵਿੱਚ ਮਦਦ ਕਰ ਸਕਦਾ ਹਾਂ!";
     }
 
     return {
@@ -75,15 +87,15 @@ async function processGstChatbotQuery(userQuery, language = 'EN', activeContext 
   }
 
   const langInstruction = getLanguageName(langKey);
-  const systemInstruction = `You are a friendly Indian Chartered Accountant (CA) helping Ramesh (Nagpur hardware shop owner).
+  const systemInstruction = `You are a friendly Indian Chartered Accountant (CA) helping Ramesh, a hardware shop owner.
 
 STRICT LANGUAGE RULE:
-You MUST respond EXCLUSIVELY in ${langInstruction}. If the query is in Hindi/Hinglish or language is HI, respond in Hinglish/Hindi. If language is MR, respond in Marathi. If EN, respond in English.
+You MUST respond EXCLUSIVELY in ${langInstruction}. Use proper native scripts for Hindi, Marathi, Tamil, Punjabi, or English as requested.
 
 STRICT FORMATTING RULE:
-1. If the user asks for steps, procedures, tax calculations, or actions, use clean bullet points (• ).
+1. For procedures, actions, tax breakdowns, or steps, use clean bullet points (• ).
 2. For general explanations, use short 1-2 sentence paragraphs.
-3. Keep response concise, friendly, and practical.`;
+3. Keep output practical, clear, and readable.`;
 
   // Priority 1: Google Gemini 1.5 Flash API (Free Tier)
   if (hasGeminiKey()) {
@@ -158,10 +170,14 @@ STRICT FORMATTING RULE:
 
   // Default fallback in requested language
   let defaultAns = "To file your GST return safely without penalties, always match your purchase bills against GSTR-2B.";
-  if (langKey === 'HI' || langKey === 'HINGLISH') {
-    defaultAns = "GST return safe file karne ke liye hamesha GSTR-2B check karein. Agar supplier ne bill upload nahi kiya hai, toh uska credit agle mahine lene se penalty nahi aayegi.";
+  if (langKey === 'HI') {
+    defaultAns = "GST रिटर्न सुरक्षित फाइल करने के लिए हमेशा अपने खरीद बिलों का GSTR-2B से मिलान करें।";
   } else if (langKey === 'MR') {
-    defaultAns = "GST रिटर्न सुरक्षित भरण्यासाठी नेहमी GSTR-2B मधील बिले तपासा. सप्लायरने बिल अपलोड केले नसल्यास पुढील महिन्यात क्रेडिट घ्या.";
+    defaultAns = "GST रिटर्न सुरक्षित भरण्यासाठी नेहमी GSTR-2B मधील बिले तपासा.";
+  } else if (langKey === 'TA') {
+    defaultAns = "உங்கள் ஜிஎஸ்டி ரிட்டர்னைப் பாதுகாப்பாகத் தாக்கல் செய்ய, எப்போதும் உங்கள் பில்களை GSTR-2B உடன் ஒப்பிட்டுப் பாருங்கள்.";
+  } else if (langKey === 'PA') {
+    defaultAns = "ਆਪਣੀ GST ਰਿਟਰਨ ਸੁਰੱਖਿਅਤ ਫਾਈਲ ਕਰਨ ਲਈ, ਹਮੇਸ਼ਾ ਆਪਣੇ ਬਿੱਲਾਂ ਦਾ GSTR-2B ਨਾਲ ਮਿਲਾਨ ਕਰੋ।";
   }
 
   return {

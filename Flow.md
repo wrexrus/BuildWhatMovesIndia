@@ -15,9 +15,12 @@ This document maps every backend function, API endpoint, data structure, and cal
        ├──> SearchGSTIN.jsx ──────> GET /api/services/search-taxpayer/:gstin ──> taxpayers_mock.json
        │                     └────> GET /api/services/track-returns/:gstin ───> Return Filing History
        │
-       └──> ChatbotWidget.jsx ────> POST /api/chat/guide (HI / MR / EN) ─────> gstKnowledgeService.js / Gemini API
-             ├── Dynamic Quick Tap Presets (EN, HI, MR)
-             └── Bulleted Action Formatting (• )
+       └──> ChatbotWidget.jsx ────> POST /api/chat/guide (HI / MR / TA / PA / EN) ──> gstKnowledgeService.js / Gemini API
+             ├── Dynamic Config (chatbotConfig.js)
+             ├── Native Script Multilingual Support (Hindi, Marathi, Tamil, Punjabi, English)
+             ├── Auto-Scroll to Latest Message (messagesEndRef)
+             ├── Body Scroll Lock (overflow: hidden when open)
+             └── Non-Overlapping Quick Tap Actions Toolbar
 ```
 
 ---
@@ -35,8 +38,8 @@ backend/
 │   ├── config/
 │   │   └── env.js                  # Centralized env config (PORT, GEMINI_API_KEY, OPENAI_API_KEY)
 │   ├── constants/
-│   │   ├── languages.js            # Regional language mappings (EN, HI, MR, GU, etc.)
-│   │   └── rules.js                # Core rule codes & titles (ERR_SUPPLIER_UNFILED, etc.)
+│   │   ├── languages.js            # Regional language mappings (EN, HI, MR, TA, PA)
+│   │   └── rules.js                # Core rule codes & titles
 │   ├── controllers/
 │   │   ├── authController.js           # handleMockLogin()
 │   │   ├── chatController.js           # handleChatQuery()
@@ -62,7 +65,7 @@ backend/
 │       ├── aiExplainerService.js       # generateExplanation() [Gemini / OpenAI / Template]
 │       ├── chatService.js              # answerCitizenQuery() [Context-Aware Tax Q&A]
 │       ├── geminiService.js            # generateGeminiContent() [Google Gemini 1.5 Flash Free Tier]
-│       ├── gstKnowledgeService.js      # processGstChatbotQuery() [Multilingual Knowledge Base]
+│       ├── gstKnowledgeService.js      # processGstChatbotQuery() [Multilingual Native Scripts]
 │       ├── reconciliationService.js   # reconcileInvoices() [Rule Engine]
 │       └── voiceService.js             # generateVoiceScript() [Multi-Language SSML Audio Payload]
 ├── tests/
@@ -74,8 +77,10 @@ backend/
 
 frontend/
 ├── src/
+│   ├── config/
+│   │   └── chatbotConfig.js            # Multilingual presets, native script welcome msgs & quick actions
 │   ├── components/
-│   │   └── ChatbotWidget.jsx           # Floating Chatbot Icon, Language Selector, Quick Tap Actions
+│   │   └── ChatbotWidget.jsx           # Industry-standard Chatbot UI with Body Scroll Lock & Auto-Scroll
 │   ├── pages/
 │   │   └── searchTaxpayer/
 │   │       ├── SearchGSTIN.jsx         # Connected to GET /api/services/search-taxpayer & track-returns
@@ -95,4 +100,4 @@ frontend/
 | `SearchGSTIN.jsx` | `GET /api/services/search-taxpayer/:gstin` | `CONNECTED & WORKING` | Legal Name, Trade Name, Active Status, Jurisdiction |
 | `SearchGSTIN.jsx` | `GET /api/services/track-returns/:gstin` | `CONNECTED & WORKING` | Multi-month GSTR-1 & GSTR-3B Filing History & ARNs |
 | `SearchPAN.jsx` | `GET /api/services/search-taxpayer/:gstin` | `CONNECTED & WORKING` | Derived Taxpayer & Business details |
-| `ChatbotWidget.jsx` | `POST /api/chat/guide` | `CONNECTED & WORKING` | Multilingual responses (EN, HI, MR), Bullet formatting (• ), Quick Tap Presets |
+| `ChatbotWidget.jsx` | `POST /api/chat/guide` | `CONNECTED & WORKING` | Native Multilingual (HI, MR, TA, PA, EN), Auto-Scroll, Scroll Lock |

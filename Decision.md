@@ -149,9 +149,21 @@ Refactored backend into config, constants, middleware, and domain routes (`authR
 ## Decision 013: Priority 2 Chatbot Corrections — Strict Language Matching, Bullet Formatting & Dynamic Quick Tap Presets
 
 - **Date**: 2026-08-24
-- **Status**: Approved, Implemented & Verified (18/18 Tests Passing)
+- **Status**: Approved, Implemented & Verified
 
 ### Decision
-1. **Strict Language Matching**: Fixed language selection across English (`EN`), Hindi/Hinglish (`HI`), and Marathi (`MR`). Both query prompt and backend response are guaranteed to be in the exact same selected language.
-2. **Actionable Bullet Formatting**: Configured `gstKnowledgeService.js` to structure step-by-step procedures, tax calculations, and citizen actions into clean bullet points (`• `), using short paragraphs for general concepts.
-3. **Language-Aware Quick Tap Actions**: Updated `ChatbotWidget.jsx` to dynamically render preset tap buttons (`🔴 Why is Asian Paints red?`, `📅 GSTR-3B Due Date`, `💰 How much tax to pay?`, `📊 What is GSTR-2B?`) in English, Hinglish, or Marathi matching the selected language!
+Implemented strict language matching, bullet formatting for action steps (`• `), and quick tap presets.
+
+---
+
+## Decision 014: Industry-Standard Chatbot UI Overhaul — Devanagari/Native Scripts, Non-Overlapping Quick Toolbar & Body Scroll Lock
+
+- **Date**: 2026-08-25
+- **Status**: Approved, Implemented & Verified (18/18 Tests Passing + Production Build in 5.64s)
+
+### Context & Decision
+Complete UI & architecture overhaul of the ChatbotWidget (`ChatbotWidget.jsx` & `chatbotConfig.js`):
+1. **Body Scroll Lock**: Added `document.body.style.overflow = 'hidden'` when the chatbot is open, preventing background page scrolling.
+2. **Auto-Scroll to Latest Message**: Implemented `messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })` triggering on every new message or bot response.
+3. **Native Regional Language Support**: Replaced Hinglish with native Devanagari Hindi (`HI`), Marathi (`MR`), Tamil (`TA`), Punjabi (`PA`), and English (`EN`). All system prompts, knowledge bases, and quick action chips utilize native scripts.
+4. **Non-Overlapping Quick Tap Toolbar**: Created a collapsible top quick-action toolbar positioned outside the message history area, ensuring tap action chips never overlap or obscure bot responses.
