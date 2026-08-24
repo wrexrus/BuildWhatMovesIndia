@@ -16,6 +16,9 @@ import SearchGSTIN from "./pages/searchTaxpayer/SearchGSTIN";
 import SearchPAN from "./pages/searchTaxpayer/SearchPAN";
 import SearchTemporaryID from "./pages/searchTaxpayer/SearchTemporaryID";
 import SearchComposition from "./pages/searchTaxpayer/SearchComposition";
+import GstLaw from "./pages/GSTLaw";
+import HelpTaxpayerFacilities from "./pages/HelpTaxPayerFacilities";
+import Footer from "./components/Footer";
 
 const MainLayout = () => {
   return (
@@ -27,6 +30,7 @@ const MainLayout = () => {
       </main>
       {/* Floating Citizen Assistant Chatbot */}
       <ChatbotWidget />
+      <Footer />
     </div>
   );
 };
@@ -63,6 +67,16 @@ const router = createBrowserRouter([
       {
         path: "*",
         element: <Navigate to="/" replace />,
+      },
+
+      {
+        path: "/gst-law",
+        element: <GstLaw />,
+      },
+
+      {
+        path: "/help-taxpayer-facilities",
+        element: <HelpTaxpayerFacilities />,
       },
     ],
   },
