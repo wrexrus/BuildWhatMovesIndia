@@ -1,0 +1,12 @@
+[
+  { "hsnCode": "3208", "description": "Paints & Varnishes (Paints, Primers, Emulsions)", "gstRate": 18, "cgst": 9, "sgst": 9 },
+  { "hsnCode": "2523", "description": "Portland Cement, Aluminous Cement (PPC/OPC Cement)", "gstRate": 28, "cgst": 14, "sgst": 14 },
+  { "hsnCode": "8481", "description": "Taps, Cocks, Valves & Sanitary Fittings", "gstRate": 18, "cgst": 9, "sgst": 9 },
+  { "hsnCode": "7318", "description": "Screws, Bolts, Nuts, Rivets & Fasteners", "gstRate": 18, "cgst": 9, "sgst": 9 },
+  { "hsnCode": "8544", "description": "Insulated Wires, Cables & Winding Wire", "gstRate": 18, "cgst": 9, "sgst": 9 },
+  { "hsnCode": "7214", "description": "TMT Steel Bars, Rods & Angles", "gstRate": 18, "cgst": 9, "sgst": 9 },
+  { "hsnCode": "3506", "description": "Adhesives & Glues (Fevicol SH)", "gstRate": 18, "cgst": 9, "sgst": 9 },
+  { "hsnCode": "3917", "description": "Tubes, Pipes & Hoses of Plastics (PVC Pipes)", "gstRate": 18, "cgst": 9, "sgst": 9 },
+  { "hsnCode": "6907", "description": "Ceramic Flags, Paving, Hearth & Vitrified Tiles", "gstRate": 18, "cgst": 9, "sgst": 9 },
+  { "hsnCode": "8507", "description": "Electric Accumulators & Inverter Batteries", "gstRate": 28, "cgst": 14, "sgst": 14 }
+]

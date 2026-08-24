@@ -1,0 +1,80 @@
+[
+  {
+    "gstin": "27AAAAA1234A1Z5",
+    "legalName": "RAMESH KUMAR",
+    "tradeName": "Nagpur Hardware & Sanitary Store",
+    "registrationDate": "2017-07-01",
+    "taxpayerType": "Regular",
+    "gstinStatus": "ACTIVE",
+    "stateJurisdiction": "Ward 4, Nagpur Zone, Maharashtra",
+    "centerJurisdiction": "Nagpur Commissionerate",
+    "constitutionOfBusiness": "Proprietorship",
+    "natureOfBusiness": "Retail Trade, Wholesale Trade",
+    "filingStatus": [
+      { "period": "062026", "form": "GSTR-3B", "filingDate": "2026-07-19", "status": "FILED", "arn": "AA270626112233V" },
+      { "period": "052026", "form": "GSTR-3B", "filingDate": "2026-06-18", "status": "FILED", "arn": "AA270526445566V" },
+      { "period": "042026", "form": "GSTR-3B", "filingDate": "2026-05-20", "status": "FILED", "arn": "AA270426778899V" }
+    ]
+  },
+  {
+    "gstin": "27AAACA1234A1Z1",
+    "legalName": "ASIAN PAINTS LIMITED",
+    "tradeName": "Asian Paints Industrial Depot",
+    "registrationDate": "2017-07-01",
+    "taxpayerType": "Regular",
+    "gstinStatus": "ACTIVE",
+    "stateJurisdiction": "Mumbai Zone, Maharashtra",
+    "centerJurisdiction": "Mumbai West",
+    "constitutionOfBusiness": "Public Limited Company",
+    "natureOfBusiness": "Manufacturer, Wholesale Supplier",
+    "filingStatus": [
+      { "period": "072026", "form": "GSTR-1", "filingDate": "PENDING", "status": "NOT_FILED", "arn": null },
+      { "period": "062026", "form": "GSTR-1", "filingDate": "2026-07-10", "status": "FILED", "arn": "AA270626998877V" }
+    ]
+  },
+  {
+    "gstin": "27AAACJ5678B1Z2",
+    "legalName": "JAQUAR & COMPANY PRIVATE LIMITED",
+    "tradeName": "Jaquar Bathware",
+    "registrationDate": "2017-07-01",
+    "taxpayerType": "Regular",
+    "gstinStatus": "ACTIVE",
+    "stateJurisdiction": "Pune Zone, Maharashtra",
+    "centerJurisdiction": "Pune Central",
+    "constitutionOfBusiness": "Private Limited Company",
+    "natureOfBusiness": "Manufacturer",
+    "filingStatus": [
+      { "period": "072026", "form": "GSTR-1", "filingDate": "2026-08-10", "status": "FILED", "arn": "AA270726332211V" }
+    ]
+  },
+  {
+    "gstin": "27AAACU9012C1Z3",
+    "legalName": "ULTRATECH CEMENT LIMITED",
+    "tradeName": "UltraTech Cement Depot Nagpur",
+    "registrationDate": "2017-07-01",
+    "taxpayerType": "Regular",
+    "gstinStatus": "ACTIVE",
+    "stateJurisdiction": "Nagpur Zone",
+    "centerJurisdiction": "Nagpur East",
+    "constitutionOfBusiness": "Public Limited Company",
+    "natureOfBusiness": "Wholesale Depot",
+    "filingStatus": [
+      { "period": "072026", "form": "GSTR-1", "filingDate": "2026-08-18", "status": "FILED_LATE", "arn": "AA270726554433V" }
+    ]
+  },
+  {
+    "gstin": "27ABCDE9999F1Z9",
+    "legalName": "LOCAL HARDWARE WHOLESALE TRADERS",
+    "tradeName": "Local Hardware Wholesaler (Cancelled)",
+    "registrationDate": "2018-03-15",
+    "taxpayerType": "Regular",
+    "gstinStatus": "CANCELLED_SUO_MOTO",
+    "cancellationDate": "2026-04-01",
+    "stateJurisdiction": "Nagpur Zone",
+    "constitutionOfBusiness": "Proprietorship",
+    "natureOfBusiness": "Retailer",
+    "filingStatus": [
+      { "period": "072026", "form": "GSTR-1", "filingDate": "N/A", "status": "CANCELLED", "arn": null }
+    ]
+  }
+]
