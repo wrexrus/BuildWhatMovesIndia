@@ -122,7 +122,7 @@ const navLinks = [
   },
   {
     label: "GST Law",
-    href: "#",
+    to: "/gst-law",
   },
   {
     label: "Downloads",
@@ -134,7 +134,7 @@ const navLinks = [
   },
   {
     label: "Help and Taxpayer Facilities",
-    href: "#",
+    to: "/help-taxpayer-facilities",
   },
   {
     label: "e-Invoice",
@@ -220,10 +220,9 @@ function MegaPanel({ menu, onSelect }) {
               focus-visible:outline-amber
               focus-visible:-outline-offset-2
 
-              ${
-                previewTab === tab
-                  ? "bg-white text-navy shadow-sm"
-                  : "text-ink/80 hover:bg-white/80 hover:text-navy"
+              ${previewTab === tab
+                ? "bg-white text-navy shadow-sm"
+                : "text-ink/80 hover:bg-white/80 hover:text-navy"
               }
             `}
           >
@@ -234,10 +233,9 @@ function MegaPanel({ menu, onSelect }) {
               className={`
                 shrink-0
                 transition-all
-                ${
-                  previewTab === tab
-                    ? "translate-x-0 opacity-100 text-amber"
-                    : "-translate-x-1 opacity-0"
+                ${previewTab === tab
+                  ? "translate-x-0 opacity-100 text-amber"
+                  : "-translate-x-1 opacity-0"
                 }
               `}
             />
@@ -557,10 +555,9 @@ const Navbar = () => {
                   focus-visible:outline-amber
                   focus-visible:outline-offset-2
 
-                  ${
-                    highContrast
-                      ? "border-amber bg-amber text-navy"
-                      : "border-white/40 text-white/80 hover:border-white hover:text-white"
+                  ${highContrast
+                    ? "border-amber bg-amber text-navy"
+                    : "border-white/40 text-white/80 hover:border-white hover:text-white"
                   }
                 `}
               >
@@ -804,10 +801,9 @@ const Navbar = () => {
                         transition-colors
                         duration-150
 
-                        ${
-                          isActive || isOpen
-                            ? "bg-[#3F6F9F] text-white"
-                            : "text-white/90 hover:bg-navy-hover hover:text-white"
+                        ${isActive || isOpen
+                          ? "bg-[#3F6F9F] text-white"
+                          : "text-white/90 hover:bg-navy-hover hover:text-white"
                         }
 
                         focus-visible:outline-2
@@ -943,10 +939,9 @@ const Navbar = () => {
                         transition-colors
                         duration-150
 
-                        ${
-                          isOpen
-                            ? "bg-navy-hover text-white"
-                            : "text-white/90 hover:bg-navy-hover hover:text-white"
+                        ${isOpen
+                          ? "bg-navy-hover text-white"
+                          : "text-white/90 hover:bg-navy-hover hover:text-white"
                         }
 
                         focus-visible:outline-2
@@ -991,32 +986,27 @@ const Navbar = () => {
                   className="relative lg:shrink-0"
                 >
                   <Link
-                    to={link.href}
-                    onClick={() =>
-                      selectLink(link.label)
-                    }
-                    aria-current={
-                      isActive ? "page" : undefined
-                    }
+                    to={link.to || link.href || "#"}
+                    onClick={() => selectLink(link.label)}
+                    aria-current={isActive ? "page" : undefined}
                     className={`
-                      flex h-11
-                      items-center
-                      whitespace-nowrap
-                      px-4
-                      text-[0.87rem]
-                      font-medium
-                      transition-colors
-                      duration-150
+    flex h-11
+    items-center
+    whitespace-nowrap
+    px-4
+    text-[0.87rem]
+    font-medium
+    transition-colors
+    duration-150
 
-                      ${
-                        isActive
-                          ? "border-b-2 border-amber bg-[#3F6F9F] text-white"
-                          : "text-white/90 hover:bg-navy-hover hover:text-white"
+    ${isActive
+                        ? "border-b-2 border-amber bg-[#3F6F9F] text-white"
+                        : "text-white/90 hover:bg-navy-hover hover:text-white"
                       }
 
-                      focus-visible:outline-2
-                      focus-visible:outline-amber
-                    `}
+    focus-visible:outline-2
+    focus-visible:outline-amber
+  `}
                   >
                     {link.label}
                   </Link>

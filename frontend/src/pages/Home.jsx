@@ -13,7 +13,6 @@ const Home = () => {
       <NoticeBar />
       <NewsAndHelp />
       <DueDatesAndMedia />
-      <Footer />
     </div>
   )
 }
