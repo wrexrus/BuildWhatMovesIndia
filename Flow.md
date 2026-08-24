@@ -7,22 +7,17 @@ This document maps every backend function, API endpoint, data structure, and cal
 
 ---
 
-## 1. High-Level Citizen Journey Flow
+## 1. High-Level Citizen Journey & Chatbot Connection Flow
 
 ```
-[1. Ramesh Login] ──> [2. Tax Period / Dashboard] ──> [3. Upload / Select Invoices (GSTR-1)]
-                                                                     │
-                                                                     ▼
-[6. Confirmation & Summary] <── [5. Interactive Fix & Action] <── [4. Mismatch Engine + AI Explainer]
-                                       │                                       │
-                                       ▼                                       ▼
-                             [One-Click Resolution]                 [Voice Script & Chat Q&A]
-                                                                               │
-                                                                               ▼
-                                                                    [Domain-Bounded GST Chatbot Guide]
-                                                                               │
-                                                                               ▼
-                                                                    [Terminal Chat CLI & Gemini API]
+[Frontend Client (Vite + React)]
+       │
+       ├──> SearchGSTIN.jsx ──────> GET /api/services/search-taxpayer/:gstin ──> taxpayers_mock.json
+       │                     └────> GET /api/services/track-returns/:gstin ───> Return Filing History
+       │
+       └──> ChatbotWidget.jsx ────> POST /api/chat/guide (HI / MR / EN) ─────> gstKnowledgeService.js / Gemini API
+             ├── Dynamic Quick Tap Presets (EN, HI, MR)
+             └── Bulleted Action Formatting (• )
 ```
 
 ---
@@ -37,6 +32,11 @@ backend/
 │   ├── invoices.json               # Ramesh's 20 mock invoices (clean + 6 deliberate errors)
 │   └── taxpayers_mock.json         # Taxpayer profiles & return filing histories
 ├── src/
+│   ├── config/
+│   │   └── env.js                  # Centralized env config (PORT, GEMINI_API_KEY, OPENAI_API_KEY)
+│   ├── constants/
+│   │   ├── languages.js            # Regional language mappings (EN, HI, MR, GU, etc.)
+│   │   └── rules.js                # Core rule codes & titles (ERR_SUPPLIER_UNFILED, etc.)
 │   ├── controllers/
 │   │   ├── authController.js           # handleMockLogin()
 │   │   ├── chatController.js           # handleChatQuery()
@@ -48,13 +48,21 @@ backend/
 │   │   ├── resolutionController.js     # resolveMismatch()
 │   │   ├── taxpayerServiceController.js# searchTaxpayer(), trackReturnStatus(), hsnLookup()
 │   │   └── voiceController.js          # getVoiceExplanation()
+│   ├── middleware/
+│   │   └── errorHandler.js         # Centralized error handler & requestLogger
 │   ├── routes/
-│   │   └── apiRoutes.js                # Express REST API endpoints
+│   │   ├── apiRoutes.js            # Main router composing all domain sub-routers
+│   │   ├── authRoutes.js           # /api/auth
+│   │   ├── chatRoutes.js           # /api/chat
+│   │   ├── filingRoutes.js         # /api/gstr3b
+│   │   ├── invoiceRoutes.js        # /api/invoices
+│   │   ├── portalServiceRoutes.js  # /api/services
+│   │   └── reconciliationRoutes.js # /api/reconcile
 │   └── services/
 │       ├── aiExplainerService.js       # generateExplanation() [Gemini / OpenAI / Template]
 │       ├── chatService.js              # answerCitizenQuery() [Context-Aware Tax Q&A]
 │       ├── geminiService.js            # generateGeminiContent() [Google Gemini 1.5 Flash Free Tier]
-│       ├── gstKnowledgeService.js      # processGstChatbotQuery() [Domain Guardrails & Knowledge Base]
+│       ├── gstKnowledgeService.js      # processGstChatbotQuery() [Multilingual Knowledge Base]
 │       ├── reconciliationService.js   # reconcileInvoices() [Rule Engine]
 │       └── voiceService.js             # generateVoiceScript() [Multi-Language SSML Audio Payload]
 ├── tests/
@@ -63,22 +71,28 @@ backend/
 ├── vercel.json
 ├── package.json
 └── server.js                          # Main Express application entry point
+
+frontend/
+├── src/
+│   ├── components/
+│   │   └── ChatbotWidget.jsx           # Floating Chatbot Icon, Language Selector, Quick Tap Actions
+│   ├── pages/
+│   │   └── searchTaxpayer/
+│   │       ├── SearchGSTIN.jsx         # Connected to GET /api/services/search-taxpayer & track-returns
+│   │       └── SearchPAN.jsx           # Connected to GSTIN derivation search API
+│   └── utils/
+│       └── api.js                      # REST API fetch client for Express backend endpoints
+├── vite.config.js                      # Proxy configuration pointing /api -> http://localhost:5000
+└── package.json
 ```
 
 ---
 
-## 3. Function Call Matrix
+## 3. Connected Services Matrix
 
-| Endpoint | Controller | Service / Function Called | Called By | Output |
-|---|---|---|---|---|
-| `POST /api/auth/mock-login` | `authController.mockLogin` | Inline user generator | Login Screen | Session Token & Profile for Ramesh |
-| `GET /api/invoices` | `invoiceController.getInvoices` | `reconciliationService.loadInvoices()` | Dashboard UI | Array of 20 invoices |
-| `POST /api/reconcile` | `reconciliationController.reconcile` | `reconciliationService.reconcileInvoices()` <br> `aiExplainerService.generateExplanation()` | Mismatch Screen | Reconciliation JSON + AI Explanations |
-| `POST /api/invoices/resolve` | `resolutionController.resolveMismatch` | `reconciliationService.reconcileInvoices()` | Resolution Cards | Updated tax liability & fixed invoice |
-| `POST /api/chat/guide` | `chatbotController.handleChatbotGuide` | `gstKnowledgeService.processGstChatbotQuery()` <br> `geminiService.generateGeminiContent()` | Chatbot Widget / Guide Bar | Bounded GST guidance or polite refusal |
-| `POST /api/explain-voice` | `voiceController.getVoiceExplanation` | `voiceService.generateVoiceScript()` | Voice Read-Out Button | Multi-Language SSML Audio script payload |
-| `GET /api/services/search-taxpayer/:gstin` | `taxpayerServiceController.searchTaxpayer` | `taxpayerServiceController.loadTaxpayers()` | Search Taxpayer Menu | Legal Name, Trade Name, Active/Cancelled Status |
-| `GET /api/services/track-returns/:gstin` | `taxpayerServiceController.trackReturnStatus` | `taxpayerServiceController.loadTaxpayers()` | Track Return Menu | GSTR-1 / GSTR-3B Filing History & ARNs |
-| `GET /api/services/hsn-lookup` | `taxpayerServiceController.hsnLookup` | `taxpayerServiceController.loadHsnData()` | Rate Finder | HSN Code, Description & GST Tax Rate |
-| `POST /api/gstr3b/submit` | `filingController.submitGstr3b` | `reconciliationService.reconcileInvoices()` | Submission Screen | Confirmation Receipt & ARN |
-| `GET /api/gstr3b/receipt/:arn/html` | `filingController.getFilingReceiptHtml` | HTML Template Generator | Browser / PDF View | Printable Citizen Filing Summary |
+| Frontend Component | Backend Endpoint | Status | Output Features |
+|---|---|---|---|
+| `SearchGSTIN.jsx` | `GET /api/services/search-taxpayer/:gstin` | `CONNECTED & WORKING` | Legal Name, Trade Name, Active Status, Jurisdiction |
+| `SearchGSTIN.jsx` | `GET /api/services/track-returns/:gstin` | `CONNECTED & WORKING` | Multi-month GSTR-1 & GSTR-3B Filing History & ARNs |
+| `SearchPAN.jsx` | `GET /api/services/search-taxpayer/:gstin` | `CONNECTED & WORKING` | Derived Taxpayer & Business details |
+| `ChatbotWidget.jsx` | `POST /api/chat/guide` | `CONNECTED & WORKING` | Multilingual responses (EN, HI, MR), Bullet formatting (• ), Quick Tap Presets |

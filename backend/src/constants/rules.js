@@ -1,0 +1,25 @@
+/**
+ * Core GST Reconciliation Rule Codes & Descriptions
+ */
+const RULE_CODES = {
+  ERR_SUPPLIER_UNFILED: "ERR_SUPPLIER_UNFILED",
+  ERR_TAX_AMOUNT_MISMATCH: "ERR_TAX_AMOUNT_MISMATCH",
+  ERR_DUPLICATE_CLAIM: "ERR_DUPLICATE_CLAIM",
+  ERR_SUPPLIER_CANCELLED: "ERR_SUPPLIER_CANCELLED",
+  ERR_DEFERRED_ITC_LATE_UPLOAD: "ERR_DEFERRED_ITC_LATE_UPLOAD",
+  ERR_TAXABLE_VALUE_MISMATCH: "ERR_TAXABLE_VALUE_MISMATCH"
+};
+
+const RULE_TITLES = {
+  ERR_SUPPLIER_UNFILED: "Supplier Has Not Uploaded Invoice",
+  ERR_TAX_AMOUNT_MISMATCH: "Tax Amount Mismatch with Supplier",
+  ERR_DUPLICATE_CLAIM: "Duplicate Invoice Claim",
+  ERR_SUPPLIER_CANCELLED: "Supplier GSTIN Cancelled",
+  ERR_DEFERRED_ITC_LATE_UPLOAD: "Supplier Filed Late (ITC Deferred to Next Month)",
+  ERR_TAXABLE_VALUE_MISMATCH: "Taxable Purchase Value Mismatch"
+};
+
+module.exports = {
+  RULE_CODES,
+  RULE_TITLES
+};

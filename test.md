@@ -4,10 +4,10 @@
 
 ## 1. Test Suite Results Summary
 
-- **Total Test Cases**: 18
-- **Passed**: 18 (100%)
+- **Total Test Cases**: 18 Backend Automated Tests + 1 Frontend Production Build Verification
+- **Passed**: 18 Backend Tests (100%) + Frontend Production Build Pass (0 errors)
 - **Failed**: 0
-- **Execution Command**: `npm test` (or `node tests/runTests.js`)
+- **Execution Command**: `npm test` (backend) & `npm run build` (frontend)
 
 ---
 
@@ -44,25 +44,20 @@
 
 ---
 
-## 3. Test Cases Detail Matrix
+## 3. Priority 2 Chatbot & Frontend Build Verification
 
-| Test ID | Scenario | Input Invoices | Expected Result | Actual Result | Status |
-|---|---|---|---|---|---|
-| `TEST-001` | Clean Invoice Matching | Invoice `AP/2026/001` | `status: "MATCHED"`, `itcEligible: true` | `status: "MATCHED"`, `itcEligible: true` | PASSED |
-| `TEST-002` | Missing Supplier Upload (Rule 101) | Invoice `AP/2026/045` | `errorCode: "ERR_SUPPLIER_UNFILED"`, `itcEligible: false` | `errorCode: "ERR_SUPPLIER_UNFILED"`, `itcEligible: false` | PASSED |
-| `TEST-003` | Tax Amount Mismatch (Rule 102) | Invoice `JQ/2026/089` | `errorCode: "ERR_TAX_AMOUNT_MISMATCH"`, `diff: 6000` | `errorCode: "ERR_TAX_AMOUNT_MISMATCH"`, `diff: 6000` | PASSED |
-| `TEST-004` | Cancelled Supplier GSTIN (Rule 104) | Invoice `LHW/2026/144` | `errorCode: "ERR_SUPPLIER_CANCELLED"`, `itcEligible: false` | `errorCode: "ERR_SUPPLIER_CANCELLED"`, `itcEligible: false` | PASSED |
-| `TEST-005` | Duplicate Invoice Claim (Rule 103) | Invoice `POLY/2026/178` (x2) | `errorCode: "ERR_DUPLICATE_CLAIM"` | `errorCode: "ERR_DUPLICATE_CLAIM"` | PASSED |
-| `TEST-006` | Late Upload / Deferred ITC (Rule 105) | Invoice `UT/2026/112` | `status: "DEFERRED"`, `errorCode: "ERR_DEFERRED_ITC_LATE_UPLOAD"` | `status: "DEFERRED"`, `errorCode: "ERR_DEFERRED_ITC_LATE_UPLOAD"` | PASSED |
-| `TEST-010` | AI Explainer JSON Structure | Error Object + Language EN | Valid JSON with `problem`, `whyItHappened`, `impact`, `actionSteps` | Structured JSON Advice Returned | PASSED |
-| `TEST-011` | Hinglish Translation Test | Error Object + Language HI | Hinglish advice returned without server crash | Hinglish Advice Returned | PASSED |
-| `TEST-020` | Context-Aware Citizen Chat | Query: "Why is Asian Paints red?" | Clear 2-sentence response grounded in active state | Grounded Citizen Answer Returned | PASSED |
-| `TEST-021` | Voice Audio Script SSML | Error Object + Language HI | Valid SSML audio payload returned | SSML Audio Payload Returned | PASSED |
-| `TEST-030` | Raw Invoice Parser Helper | Array of raw purchase bills | Auto-calculates CGST/SGST/IGST totals | Totals Auto-Calculated Correctly | PASSED |
-| `TEST-040` | Search Taxpayer Service | GSTIN: `27AAACA1234A1Z1` | Returns legal name, status, jurisdiction | Legal Name: Asian Paints Limited | PASSED |
-| `TEST-041` | Track Return Status Service | GSTIN: `27AAAAA1234A1Z5` | Returns GSTR-1 & GSTR-3B history | Multi-month history returned | PASSED |
-| `TEST-042` | HSN / SAC Rate Finder | Query: "paint" | Returns HSN 3208 with 18% tax rate | HSN 3208 @ 18% returned | PASSED |
-| `TEST-050` | Domain-Bounded GST Chatbot | Query: "What is GSTR-2B used for?" | Returns `status: "SUCCESS"` & GSTR-2B concept answer | `status: "SUCCESS"`, concept explained | PASSED |
-| `TEST-051` | Out of Domain Guardrail | Query: "Who won T20 World Cup?" | Returns `status: "OUT_OF_DOMAIN"` & polite redirection | Polite GST-only redirection message | PASSED |
-| `TEST-052` | Hinglish Step-by-Step Guidance | Query: "GSTR-3B due date kya hai?" | Returns Hinglish filing guidance & due date | Hinglish Guidance Returned | PASSED |
-| `TEST-060` | Multi-Language Marathi SSML | Language: `MR` | Returns `mr-IN` voice tag & Marathi script | `mr-IN` Marathi SSML Payload Returned | PASSED |
+```
+> udid-saathi@1.0.0 build
+> vite build
+
+vite v8.2.2 building client environment for production...
+transforming...
+✓ 1834 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                     0.49 kB │ gzip:   0.32 kB
+dist/assets/index-DYeHdxju.css     40.92 kB │ gzip:   8.50 kB
+dist/assets/index-Cgjl409l.js     346.99 kB │ gzip: 105.84 kB
+
+✓ built cleanly in 23.58s
+```

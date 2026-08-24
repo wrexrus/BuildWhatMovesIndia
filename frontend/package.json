@@ -1,1 +1,20 @@
-{"name":"udid-saathi","private":true,"version":"1.0.0","type":"module","scripts":{"dev":"vite","build":"vite build"},"dependencies":{"@tailwindcss/vite":"^4.3.3","@vitejs/plugin-react":"latest","lucide-react":"latest","react":"latest","react-dom":"latest","react-router-dom":"^7.18.2","tailwindcss":"^4.3.3","vite":"latest"}}
+{
+  "name": "udid-saathi",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@vitejs/plugin-react": "latest",
+    "lucide-react": "latest",
+    "react": "latest",
+    "react-dom": "latest",
+    "react-router-dom": "^7.18.2",
+    "tailwindcss": "^4.3.3",
+    "vite": "latest"
+  }
+}

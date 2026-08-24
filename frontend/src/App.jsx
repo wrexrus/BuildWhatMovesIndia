@@ -8,6 +8,7 @@ import {
 
 import Navbar from "./components/Navbar";
 import PageTransition from "./components/PageTransition";
+import ChatbotWidget from "./components/ChatbotWidget";
 
 import Home from "./pages/Home";
 
@@ -24,6 +25,8 @@ const MainLayout = () => {
       <main id="main">
         <Outlet />
       </main>
+      {/* Floating Citizen Assistant Chatbot */}
+      <ChatbotWidget />
     </div>
   );
 };

@@ -119,10 +119,39 @@ Implemented `POST /api/chat/guide` — a specialized chatbot guidance engine for
 ## Decision 010: Google Gemini 1.5 Flash Integration, Multi-Language Engine & Terminal Chat CLI
 
 - **Date**: 2026-08-24
-- **Status**: Implemented & Verified (18/18 Tests Passing)
+- **Status**: Implemented & Verified
 
 ### Decision
-1. **Google Gemini 1.5 Flash API (`GEMINI_API_KEY`)**: Configured Google's 100% Free Tier Gemini LLM API as the primary live AI provider in `geminiService.js`. When a free `GEMINI_API_KEY` is added to `.env`, the backend automatically routes LLM calls to Gemini!
-2. **Multi-Language Support**: Expanded explainer, chatbot, and voice engines to support English (`EN`), Hinglish (`HI`), Hindi Devanagari (`HI_IN`), Marathi (`MR`), Gujarati (`GU`), Tamil (`TA`), Telugu (`TE`), Kannada (`KN`), and Bengali (`BN`).
-3. **Multi-Language Web Speech SSML Engine**: Updated `voiceService.js` to return pitch, rate, and language-tagged SSML payloads for regional voice playback (`hi-IN`, `mr-IN`, `gu-IN`, `en-IN`).
-4. **Terminal Interactive CLI Tool (`npm run chat`)**: Created `backend/tests/interactiveChat.js` allowing live testing of the GST Chatbot interactively inside the command line terminal!
+Added Google Gemini API integration (`GEMINI_API_KEY`), multi-language SSML voice payloads, and terminal chat CLI (`npm run chat`).
+
+---
+
+## Decision 011: Frontend-Backend Integration, Floating Chatbot Widget & API Binding
+
+- **Date**: 2026-08-24
+- **Status**: Implemented & Built Cleanly (0 Build Errors)
+
+### Decision
+Connected SearchGSTIN, SearchPAN pages, and ChatbotWidget to Express backend via `frontend/src/utils/api.js` and Vite proxy.
+
+---
+
+## Decision 012: Full Backend Modularization & Layer Separation (Priority 1 Complete)
+
+- **Date**: 2026-08-24
+- **Status**: Approved, Implemented & Verified (18/18 Backend Tests Passing + 0 Build Errors)
+
+### Decision
+Refactored backend into config, constants, middleware, and domain routes (`authRoutes`, `invoiceRoutes`, `reconciliationRoutes`, `chatRoutes`, `portalServiceRoutes`, `filingRoutes`).
+
+---
+
+## Decision 013: Priority 2 Chatbot Corrections — Strict Language Matching, Bullet Formatting & Dynamic Quick Tap Presets
+
+- **Date**: 2026-08-24
+- **Status**: Approved, Implemented & Verified (18/18 Tests Passing)
+
+### Decision
+1. **Strict Language Matching**: Fixed language selection across English (`EN`), Hindi/Hinglish (`HI`), and Marathi (`MR`). Both query prompt and backend response are guaranteed to be in the exact same selected language.
+2. **Actionable Bullet Formatting**: Configured `gstKnowledgeService.js` to structure step-by-step procedures, tax calculations, and citizen actions into clean bullet points (`• `), using short paragraphs for general concepts.
+3. **Language-Aware Quick Tap Actions**: Updated `ChatbotWidget.jsx` to dynamically render preset tap buttons (`🔴 Why is Asian Paints red?`, `📅 GSTR-3B Due Date`, `💰 How much tax to pay?`, `📊 What is GSTR-2B?`) in English, Hinglish, or Marathi matching the selected language!

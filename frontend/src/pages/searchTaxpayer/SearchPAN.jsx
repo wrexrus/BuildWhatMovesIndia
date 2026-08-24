@@ -4,11 +4,13 @@ import FormField from "../../components/FormField";
 import SearchButton from "../../components/SearchButton";
 import { isValidPAN } from "../../utils/validators";
 import PageContainer from "../../components/PageContainer";
+import { searchTaxpayerByGSTIN } from "../../utils/api";
 
 const SearchPAN = () => {
     const [pan, setPan] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [result, setResult] = useState(null);
 
     const handleChange = (event) => {
         const value = event.target.value
@@ -37,12 +39,18 @@ const SearchPAN = () => {
 
         setError("");
         setLoading(true);
+        setResult(null);
 
-        await new Promise((resolve) => setTimeout(resolve, 700));
-
-        setLoading(false);
-
-        console.log("Search PAN:", pan);
+        try {
+            // Mock synthetic GSTIN derived from PAN for demonstration
+            const derivedGstin = `27${pan}1Z5`;
+            const data = await searchTaxpayerByGSTIN(derivedGstin);
+            setResult(data);
+        } catch (err) {
+            setError(err.message || "Failed to search by PAN.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -72,7 +80,7 @@ const SearchPAN = () => {
                         value={pan}
                         onChange={handleChange}
                         error={error}
-                        placeholder="Permanent Account Number (PAN)"
+                        placeholder="Permanent Account Number (e.g. AAAAA1234A)"
                         maxLength={10}
                     />
 
@@ -80,6 +88,17 @@ const SearchPAN = () => {
                         <SearchButton loading={loading} />
                     </div>
                 </form>
+
+                {result && (
+                    <div className="mt-8 max-w-3xl bg-white p-6 rounded-lg shadow-sm border border-gray-200">
+                        <h3 className="text-lg font-bold text-gray-800 mb-2">Registered Business for PAN: {pan}</h3>
+                        <div className="p-4 bg-gray-50 rounded border border-gray-100 text-sm">
+                            <p><strong>Trade Name:</strong> {result.tradeName || 'Nagpur Hardware Store'}</p>
+                            <p><strong>Associated GSTIN:</strong> <span className="font-mono">{result.gstin}</span></p>
+                            <p><strong>Status:</strong> <span className="text-green-700 font-semibold">{result.gstinStatus}</span></p>
+                        </div>
+                    </div>
+                )}
             </SearchPageShell>
         </PageContainer>
     );

@@ -1,48 +1,32 @@
 const express = require('express');
 const router = express.Router();
 
-const { mockLogin } = require('../controllers/authController');
-const { getInvoices, updateInvoices, resetInvoices } = require('../controllers/invoiceController');
-const { reconcile } = require('../controllers/reconciliationController');
-const { submitGstr3b, getFilingReceiptHtml } = require('../controllers/filingController');
-const { resolveMismatch } = require('../controllers/resolutionController');
-const { handleChatQuery } = require('../controllers/chatController');
-const { handleChatbotGuide } = require('../controllers/chatbotController');
+const authRoutes = require('./authRoutes');
+const invoiceRoutes = require('./invoiceRoutes');
+const reconciliationRoutes = require('./reconciliationRoutes');
+const chatRoutes = require('./chatRoutes');
+const portalServiceRoutes = require('./portalServiceRoutes');
+const filingRoutes = require('./filingRoutes');
 const { getVoiceExplanation } = require('../controllers/voiceController');
-const { exportReconciliationCsv, uploadRawInvoices } = require('../controllers/exportController');
-const { searchTaxpayer, trackReturnStatus, hsnLookup } = require('../controllers/taxpayerServiceController');
 
-// 1. Auth Route
-router.post('/auth/mock-login', mockLogin);
+// Compose domain-specific sub-routers
+router.use('/auth', authRoutes);
+router.use('/invoices', invoiceRoutes);
+router.use('/reconcile', reconciliationRoutes);
+router.use('/chat', chatRoutes);
+router.use('/services', portalServiceRoutes);
+router.use('/gstr3b', filingRoutes);
 
-// 2. Invoice Management, Parsing & Resolution Routes
-router.get('/invoices', getInvoices);
-router.post('/invoices', updateInvoices);
-router.post('/invoices/reset', resetInvoices);
-router.post('/invoices/resolve', resolveMismatch);
-router.post('/invoices/parse-raw', uploadRawInvoices);
-
-// 3. Reconciliation, Export & AI Plain Language Explainer Routes
-router.post('/reconcile', reconcile);
-router.get('/reconcile/export', exportReconciliationCsv);
+// Direct alias compatibility for /api/explain-voice
 router.post('/explain-voice', getVoiceExplanation);
-
-// 4. Portal Citizen Services (Matching gst.gov.in Services / Search Taxpayer Menu)
-router.get('/services/search-taxpayer/:gstin?', searchTaxpayer);
-router.get('/services/track-returns/:gstin?', trackReturnStatus);
-router.get('/services/hsn-lookup', hsnLookup);
-
-// 5. Citizen Assistant & Bounded GST Guidance Chatbot Routes
-router.post('/chat', handleChatQuery);
-router.post('/chat/guide', handleChatbotGuide);
-
-// 6. Filing & Receipt Routes
-router.post('/gstr3b/submit', submitGstr3b);
-router.get('/gstr3b/receipt/:arn/html', getFilingReceiptHtml);
 
 // Health check endpoint
 router.get('/health', (req, res) => {
-  res.status(200).json({ status: "OK", timestamp: new Date(), service: "GSTR-3B Citizen Helper Backend Engine" });
+  res.status(200).json({
+    status: "OK",
+    timestamp: new Date().toISOString(),
+    service: "GSTR-3B Citizen Helper Modular Backend Engine"
+  });
 });
 
 module.exports = router;
