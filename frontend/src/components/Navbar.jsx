@@ -5,8 +5,14 @@ import {
   Menu,
   Search,
   X,
+  User,
+  LogOut,
+  ShieldCheck,
+  Globe
 } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import { useLanguage } from "../context/LanguageContext";
 import logo from "../assets/logo.png";
 
 /* =========================================================
@@ -345,9 +351,13 @@ function MegaPanel({ menu, onSelect }) {
 
 const Navbar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user, isLoggedIn, logout } = useAuth();
+  const { language, setLanguage, t, languages } = useLanguage();
 
   const [openMenu, setOpenMenu] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [activeLink, setActiveLink] = useState("Home");
   const [fontStep, setFontStep] = useState(1);
   const [highContrast, setHighContrast] = useState(false);
@@ -534,7 +544,24 @@ const Navbar = () => {
               Skip to main content
             </a>
 
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-3">
+              {/* Global Website Language Selector */}
+              <div className="flex items-center gap-1.5 bg-white/10 hover:bg-white/20 border border-white/25 rounded px-2 py-0.5 text-xs text-white transition-colors">
+                <Globe className="w-3.5 h-3.5 text-amber shrink-0" />
+                <select
+                  value={language}
+                  onChange={(e) => setLanguage(e.target.value)}
+                  className="bg-transparent text-white text-xs font-bold focus:outline-none cursor-pointer"
+                  aria-label="Select Website Language"
+                >
+                  {languages.map((lang) => (
+                    <option key={lang.code} value={lang.code} className="bg-navy text-white font-medium">
+                      {lang.nativeName} ({lang.code})
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               {/* High Contrast */}
               <button
                 type="button"
@@ -666,50 +693,70 @@ const Navbar = () => {
               </div>
             </div>
 
-            {/* Actions */}
+            {/* Actions / Logged In Taxpayer Profile */}
             <div className="flex items-center gap-2.5">
-              <button
-                type="button"
-                className="
-                  rounded
-                  border border-white/40
-                  px-4 py-2
-                  text-[0.9rem]
-                  font-medium
-                  transition-all
+              {!isLoggedIn ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => navigate('/register')}
+                    className="
+                      rounded border border-white/40 px-4 py-2 text-[0.9rem] font-medium transition-all
+                      hover:bg-white/10 active:scale-[0.98] cursor-pointer
+                    "
+                  >
+                    {t('navRegister')}
+                  </button>
 
-                  hover:bg-white/10
-                  active:scale-[0.98]
+                  <button
+                    type="button"
+                    onClick={() => navigate('/login')}
+                    className="
+                      rounded bg-white px-5 py-2 text-[0.9rem] font-semibold text-navy transition-all
+                      hover:bg-white/90 active:scale-[0.98] cursor-pointer
+                    "
+                  >
+                    {t('navLogin')}
+                  </button>
+                </>
+              ) : (
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setProfileDropdownOpen(!profileDropdownOpen)}
+                    className="flex items-center gap-2 rounded bg-white/10 hover:bg-white/20 border border-white/30 px-3 py-1.5 text-xs font-semibold text-white transition-all cursor-pointer shadow-xs"
+                  >
+                    <User className="w-4 h-4 text-amber" />
+                    <span>{user?.name || 'Ramesh Kumar'}</span>
+                    <ChevronDown className="w-3.5 h-3.5 opacity-80" />
+                  </button>
 
-                  focus-visible:outline-2
-                  focus-visible:outline-amber
-                  focus-visible:outline-offset-2
-                "
-              >
-                Register
-              </button>
-
-              <button
-                type="button"
-                className="
-                  rounded
-                  bg-white
-                  px-5 py-2
-                  text-[0.9rem]
-                  font-semibold
-                  text-navy
-                  transition-all
-
-                  hover:bg-white/90
-                  active:scale-[0.98]
-
-                  focus-visible:outline-2
-                  focus-visible:outline-amber
-                  focus-visible:outline-offset-2
-                "
-              >
-                Login
-              </button>
+                  {profileDropdownOpen && (
+                    <div className="absolute right-0 top-10 w-64 bg-white text-ink rounded-lg shadow-xl border border-line p-3.5 z-50 text-xs">
+                      <div className="border-b border-line pb-2.5 mb-2.5">
+                        <p className="font-bold text-navy text-sm leading-snug">{user?.name}</p>
+                        <p className="text-[11px] text-ink/80 font-medium">{user?.tradeName || 'Nagpur Hardware Store'}</p>
+                        <p className="text-[10px] font-mono text-slate-500 mt-1">GSTIN: {user?.gstin}</p>
+                      </div>
+                      <div className="text-[10px] text-slate-400 mb-3">
+                        Last Logged In: {user?.lastLogin || 'Today'}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setProfileDropdownOpen(false);
+                          logout();
+                          navigate('/');
+                        }}
+                        className="w-full flex items-center justify-center gap-1.5 rounded bg-red-50 hover:bg-red-100 text-red-700 font-bold py-2 border border-red-200 transition-colors cursor-pointer"
+                      >
+                        <LogOut className="w-3.5 h-3.5" />
+                        <span>{t('navLogout')}</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Mobile Menu */}
               <button

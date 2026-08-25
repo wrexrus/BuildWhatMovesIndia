@@ -1,11 +1,13 @@
+require('dotenv').config();
+
 /**
- * Google Gemini 1.5 Flash Integration (100% Free Tier API)
+ * Google Gemini Integration (100% Free Tier API)
  */
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
 
 /**
- * Call Gemini 1.5 Flash model with system instructions & prompt
+ * Call Gemini model with system instructions & prompt with automatic model fallback
  */
 async function generateGeminiContent(promptText, systemInstruction = "") {
   const apiKey = process.env.GEMINI_API_KEY || GEMINI_API_KEY;
@@ -13,41 +15,52 @@ async function generateGeminiContent(promptText, systemInstruction = "") {
     throw new Error("GEMINI_API_KEY is not set in environment.");
   }
 
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+  // Model fallback chain: gemini-2.0-flash -> gemini-1.5-flash-latest -> gemini-1.5-flash
+  const models = ['gemini-2.0-flash', 'gemini-1.5-flash-latest', 'gemini-1.5-flash'];
+  let lastError = null;
 
-  const payload = {
-    contents: [
-      {
-        role: "user",
-        parts: [
-          { text: systemInstruction ? `${systemInstruction}\n\nUser Question: ${promptText}` : promptText }
-        ]
+  for (const modelName of models) {
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
+
+      const payload = {
+        contents: [
+          {
+            role: "user",
+            parts: [
+              { text: systemInstruction ? `${systemInstruction}\n\nUser Question: ${promptText}` : promptText }
+            ]
+          }
+        ],
+        generationConfig: {
+          temperature: 0.2,
+          maxOutputTokens: 500
+        }
+      };
+
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        lastError = new Error(`Gemini API Error (${response.status}): ${errorText}`);
+        continue; // Try next model in chain
       }
-    ],
-    generationConfig: {
-      temperature: 0.2,
-      maxOutputTokens: 500
+
+      const data = await response.json();
+      const textOutput = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (textOutput) {
+        return textOutput.trim();
+      }
+    } catch (err) {
+      lastError = err;
     }
-  };
-
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Gemini API Error (${response.status}): ${errorText}`);
   }
 
-  const data = await response.json();
-  const textOutput = data.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!textOutput) {
-    throw new Error("Empty response from Gemini API.");
-  }
-
-  return textOutput.trim();
+  throw lastError || new Error("All Gemini API models failed.");
 }
 
 module.exports = {

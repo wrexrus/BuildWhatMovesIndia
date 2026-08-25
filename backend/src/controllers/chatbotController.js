@@ -1,10 +1,12 @@
 const { processGstChatbotQuery } = require('../services/gstKnowledgeService');
 const { reconcileInvoices } = require('../services/reconciliationService');
 const { getCurrentInvoices } = require('./invoiceController');
+const { getAccountHarnessContext } = require('../services/accountHarnessService');
+const { processCopilotRequest } = require('../services/gstCopilotService');
 
 async function handleChatbotGuide(req, res) {
   try {
-    const { query, question, language, includeActiveState } = req.body || {};
+    const { query, question, language, includeActiveState, explanationMode } = req.body || {};
     const userQuery = query || question;
 
     let activeContext = null;
@@ -13,7 +15,12 @@ async function handleChatbotGuide(req, res) {
       activeContext = reconcileInvoices(activeInvoices);
     }
 
-    const result = await processGstChatbotQuery(userQuery, language || 'EN', activeContext);
+    const result = await processGstChatbotQuery(
+      userQuery,
+      language || 'EN',
+      activeContext,
+      explanationMode || 'SHOPKEEPER'
+    );
 
     return res.status(200).json({
       success: true,
@@ -29,6 +36,49 @@ async function handleChatbotGuide(req, res) {
   }
 }
 
+async function handleCopilotGuide(req, res) {
+  try {
+    const { query, language, pageContext, userGstin, explanationMode } = req.body || {};
+    const result = await processCopilotRequest({
+      query,
+      language,
+      pageContext,
+      userGstin,
+      explanationMode
+    });
+
+    return res.status(200).json({
+      success: true,
+      data: result
+    });
+  } catch (err) {
+    console.error("Copilot controller error:", err);
+    return res.status(500).json({
+      success: false,
+      message: "GST Copilot service error.",
+      error: err.message
+    });
+  }
+}
+
+function getHarnessData(req, res) {
+  try {
+    const gstin = req.params.gstin || req.query.gstin;
+    const language = req.query.lang || req.query.language || 'HI';
+
+    const harness = getAccountHarnessContext(gstin, language);
+    return res.status(200).json(harness);
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      message: "Harness service error.",
+      error: err.message
+    });
+  }
+}
+
 module.exports = {
-  handleChatbotGuide
+  handleChatbotGuide,
+  handleCopilotGuide,
+  getHarnessData
 };

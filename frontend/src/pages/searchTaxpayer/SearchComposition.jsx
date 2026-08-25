@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import SearchPageShell from "../../components/SearchPageShell";
 import FormField from "../../components/FormField";
 import SearchButton from "../../components/SearchButton";
+import Alert from "../../components/Alert";
 import { isValidGSTIN } from "../../utils/validators";
 import PageContainer from "../../components/PageContainer";
 
@@ -244,8 +245,10 @@ const SearchComposition = () => {
                     </div>
 
                     {error && (
-                        <div className="mt-6 max-w-2xl rounded-md border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
-                            {error}
+                        <div className="mt-6 max-w-2xl">
+                            <Alert type="error" title="Input Error" onClose={() => setError("")}>
+                                {error}
+                            </Alert>
                         </div>
                     )}
 

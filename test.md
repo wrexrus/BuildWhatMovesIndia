@@ -4,8 +4,8 @@
 
 ## 1. Test Suite Results Summary
 
-- **Total Test Cases**: 18 Backend Automated Tests + 1 Frontend Production Build Verification
-- **Passed**: 18 Backend Tests (100%) + Frontend Production Build Pass (0 errors in 5.64s)
+- **Total Test Cases**: 19 Backend Automated Tests + 1 Frontend Production Build Verification
+- **Passed**: 19 Backend Tests (100%) + Frontend Production Build Pass (0 errors in 1.24s)
 - **Failed**: 0
 - **Execution Command**: `npm test` (backend) & `npm run build` (frontend)
 
@@ -36,15 +36,16 @@
 ✅ [PASS] TEST-051: GST Chatbot correctly blocked non-GST query via domain guardrail
 ✅ [PASS] TEST-052: GST Chatbot provided Hinglish step-by-step guidance
 ✅ [PASS] TEST-060: Multi-language voice generator produced Marathi SSML payload
+✅ [PASS] TEST-070: Account Harness & GST Copilot engine correctly parsed live reconciliation results
 
 -------------------------------------------------------
- TEST SUMMARY: 18 PASSED, 0 FAILED
+ TEST SUMMARY: 19 PASSED, 0 FAILED
 -------------------------------------------------------
 ```
 
 ---
 
-## 3. Priority 2 Chatbot Overhaul & Frontend Build Verification
+## 3. Decision 022 Account Harness Fix Verification
 
 ```
 > udid-saathi@1.0.0 build
@@ -52,12 +53,14 @@
 
 vite v8.2.2 building client environment for production...
 transforming...
-✓ 1835 modules transformed.
+✓ 1843 modules transformed.
 rendering chunks...
 computing gzip size...
 dist/index.html                     0.49 kB │ gzip:   0.32 kB
-dist/assets/index-DWRzkycz.css     43.35 kB │ gzip:   8.80 kB
-dist/assets/index-Dp-wrN5W.js     351.69 kB │ gzip: 107.37 kB
+dist/assets/logo-DWwy4_ax.png   1,107.91 kB
+dist/assets/hero-2RLdDvGr.png   1,880.73 kB
+dist/assets/index-DynIcpXn.css     60.23 kB │ gzip:  11.53 kB
+dist/assets/index-B1c8WrXX.js     395.72 kB │ gzip: 117.96 kB
 
-✓ built cleanly in 5.64s
+✓ built cleanly in 1.24s
 ```

@@ -7,20 +7,17 @@ This document maps every backend function, API endpoint, data structure, and cal
 
 ---
 
-## 1. High-Level Citizen Journey & Chatbot Connection Flow
+## 1. High-Level GST Copilot & Account Harness Defensive Resolution Flow
 
 ```
-[Frontend Client (Vite + React)]
+[POST /api/chat/copilot or GET /api/chat/harness/:gstin]
        │
-       ├──> SearchGSTIN.jsx ──────> GET /api/services/search-taxpayer/:gstin ──> taxpayers_mock.json
-       │                     └────> GET /api/services/track-returns/:gstin ───> Return Filing History
+       ├──> accountHarnessService.js
+       │     └──> reconcileInvoices() -> returns { summary, results }
+       │     └──> Safely reads reconData.results || reconData.reconciliationResults || []
        │
-       └──> ChatbotWidget.jsx ────> POST /api/chat/guide (HI / MR / TA / PA / EN) ──> gstKnowledgeService.js / Gemini API
-             ├── Dynamic Config (chatbotConfig.js)
-             ├── Native Script Multilingual Support (Hindi, Marathi, Tamil, Punjabi, English)
-             ├── Auto-Scroll to Latest Message (messagesEndRef)
-             ├── Body Scroll Lock (overflow: hidden when open)
-             └── Non-Overlapping Quick Tap Actions Toolbar
+       └──> gstCopilotService.js
+             └──> Safely parses summary { totalInvoices, matchedCount, mismatchCount, eligibleItc }
 ```
 
 ---
@@ -36,58 +33,71 @@ backend/
 │   └── taxpayers_mock.json         # Taxpayer profiles & return filing histories
 ├── src/
 │   ├── config/
-│   │   └── env.js                  # Centralized env config (PORT, GEMINI_API_KEY, OPENAI_API_KEY)
+│   │   └── env.js                  # Centralized env config (PORT, JWT_SECRET, JWT_EXPIRES_IN: 10m)
 │   ├── constants/
 │   │   ├── languages.js            # Regional language mappings (EN, HI, MR, TA, PA)
 │   │   └── rules.js                # Core rule codes & titles
 │   ├── controllers/
-│   │   ├── authController.js           # handleMockLogin()
-│   │   ├── chatController.js           # handleChatQuery()
-│   │   ├── chatbotController.js        # handleChatbotGuide()
-│   │   ├── exportController.js         # exportReconciliationCsv(), uploadRawInvoices()
-│   │   ├── filingController.js         # submitGstr3b(), getFilingReceiptHtml()
-│   │   ├── invoiceController.js        # getInvoices(), updateInvoices(), resetInvoices()
+│   │   ├── authController.js       # login(), register(), mockLogin(), getProfile()
+│   │   ├── chatController.js       # handleChatQuery()
+│   │   ├── chatbotController.js    # handleChatbotGuide(), handleCopilotGuide(), getHarnessData()
+│   │   ├── exportController.js     # exportReconciliationCsv(), uploadRawInvoices()
+│   │   ├── filingController.js     # submitGstr3b(), getFilingReceiptHtml()
+│   │   ├── invoiceController.js    # getInvoices(), updateInvoices(), resetInvoices()
 │   │   ├── reconciliationController.js # reconcile()
-│   │   ├── resolutionController.js     # resolveMismatch()
+│   │   ├── resolutionController.js # resolveMismatch()
 │   │   ├── taxpayerServiceController.js# searchTaxpayer(), trackReturnStatus(), hsnLookup()
-│   │   └── voiceController.js          # getVoiceExplanation()
+│   │   └── voiceController.js      # getVoiceExplanation()
 │   ├── middleware/
+│   │   ├── authMiddleware.js       # verifyToken() [JWT 10-Min Session Timeout Handler]
 │   │   └── errorHandler.js         # Centralized error handler & requestLogger
 │   ├── routes/
 │   │   ├── apiRoutes.js            # Main router composing all domain sub-routers
-│   │   ├── authRoutes.js           # /api/auth
-│   │   ├── chatRoutes.js           # /api/chat
+│   │   ├── authRoutes.js           # /api/auth/login, /register, /mock-login, /profile
+│   │   ├── chatRoutes.js           # /api/chat, /api/chat/copilot, /api/chat/harness/:gstin
 │   │   ├── filingRoutes.js         # /api/gstr3b
 │   │   ├── invoiceRoutes.js        # /api/invoices
 │   │   ├── portalServiceRoutes.js  # /api/services
 │   │   └── reconciliationRoutes.js # /api/reconcile
 │   └── services/
-│       ├── aiExplainerService.js       # generateExplanation() [Gemini / OpenAI / Template]
-│       ├── chatService.js              # answerCitizenQuery() [Context-Aware Tax Q&A]
-│       ├── geminiService.js            # generateGeminiContent() [Google Gemini 1.5 Flash Free Tier]
-│       ├── gstKnowledgeService.js      # processGstChatbotQuery() [Multilingual Native Scripts]
-│       ├── reconciliationService.js   # reconcileInvoices() [Rule Engine]
-│       └── voiceService.js             # generateVoiceScript() [Multi-Language SSML Audio Payload]
+│       ├── accountHarnessService.js # getAccountHarnessContext() [Defensive Property Resolution]
+│       ├── aiExplainerService.js   # generateExplanation() [Gemini / OpenAI / Template]
+│       ├── chatService.js          # answerCitizenQuery() [Context-Aware Tax Q&A]
+│       ├── geminiService.js        # generateGeminiContent() [Google Gemini 1.5 Flash Free Tier]
+│       ├── gstCopilotService.js    # processCopilotRequest() [Unified GST Copilot Engine]
+│       ├── gstKnowledgeService.js  # processGstChatbotQuery() [Mode Switcher + Multilingual]
+│       ├── reconciliationService.js # reconcileInvoices() [Rule Engine]
+│       └── voiceService.js         # generateVoiceScript() [Multi-Language SSML Audio Payload]
 ├── tests/
-│   ├── interactiveChat.js              # Interactive Terminal Chatbot CLI (npm run chat)
-│   └── runTests.js                     # 18 automated backend test cases
+│   ├── interactiveChat.js          # Interactive Terminal Chatbot CLI (npm run chat)
+│   └── runTests.js                 # 19 automated backend test cases
 ├── vercel.json
 ├── package.json
-└── server.js                          # Main Express application entry point
+└── server.js                      # Main Express application entry point
 
 frontend/
 ├── src/
 │   ├── config/
-│   │   └── chatbotConfig.js            # Multilingual presets, native script welcome msgs & quick actions
+│   │   └── chatbotConfig.js        # UI_LABELS Multilingual Translation Dictionary (EN, HI, MR, TA, PA)
+│   ├── context/
+│   │   ├── AuthContext.jsx         # Global Auth Context with 10-min Session Timeout & Toast Alerts
+│   │   └── ToastContext.jsx        # Global Toast Provider for Animated CSS Alerts
 │   ├── components/
-│   │   └── ChatbotWidget.jsx           # Industry-standard Chatbot UI with Body Scroll Lock & Auto-Scroll
+│   │   ├── Alert.jsx               # Premium CSS Alert component
+│   │   ├── ChatbotWidget.jsx       # State-Aware GST Copilot with route awareness & event listener
+│   │   ├── CopilotHeroCard.jsx     # Landing Page Copilot Service Card ("Understand. Fix. File.")
+│   │   └── Navbar.jsx              # Navbar with Logged-in Taxpayer Profile Dropdown & Logout
 │   ├── pages/
+│   │   ├── Home.jsx                # Landing page mounted with CopilotHeroCard
+│   │   ├── auth/
+│   │   │   ├── Login.jsx           # Taxpayer Login Page
+│   │   │   └── Register.jsx        # Taxpayer Registration Page
 │   │   └── searchTaxpayer/
-│   │       ├── SearchGSTIN.jsx         # Connected to GET /api/services/search-taxpayer & track-returns
-│   │       └── SearchPAN.jsx           # Connected to GSTIN derivation search API
+│   │       ├── SearchGSTIN.jsx     # Connected to GET /api/services/search-taxpayer & track-returns
+│   │       └── SearchPAN.jsx       # Connected to GSTIN derivation search API
 │   └── utils/
-│       └── api.js                      # REST API fetch client for Express backend endpoints
-├── vite.config.js                      # Proxy configuration pointing /api -> http://localhost:5000
+│       └── api.js                  # REST API client with sendCopilotQuery()
+├── vite.config.js                  # Proxy configuration pointing /api -> http://localhost:5000
 └── package.json
 ```
 
@@ -97,7 +107,6 @@ frontend/
 
 | Frontend Component | Backend Endpoint | Status | Output Features |
 |---|---|---|---|
-| `SearchGSTIN.jsx` | `GET /api/services/search-taxpayer/:gstin` | `CONNECTED & WORKING` | Legal Name, Trade Name, Active Status, Jurisdiction |
-| `SearchGSTIN.jsx` | `GET /api/services/track-returns/:gstin` | `CONNECTED & WORKING` | Multi-month GSTR-1 & GSTR-3B Filing History & ARNs |
-| `SearchPAN.jsx` | `GET /api/services/search-taxpayer/:gstin` | `CONNECTED & WORKING` | Derived Taxpayer & Business details |
-| `ChatbotWidget.jsx` | `POST /api/chat/guide` | `CONNECTED & WORKING` | Native Multilingual (HI, MR, TA, PA, EN), Auto-Scroll, Scroll Lock |
+| `CopilotHeroCard.jsx` | Dispatches `open-gst-copilot` event | `WORKING` | Goal selection & plain language intent launcher |
+| `ChatbotWidget.jsx` | `POST /api/chat/copilot` | `WORKING` | Route-aware GST Copilot with structured diagnostic payloads |
+| `ChatbotWidget.jsx` | `GET /api/chat/harness/:gstin` | `WORKING` | Defensive property resolution & safe fallback defaults |

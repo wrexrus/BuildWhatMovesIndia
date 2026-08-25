@@ -139,7 +139,7 @@ Connected SearchGSTIN, SearchPAN pages, and ChatbotWidget to Express backend via
 ## Decision 012: Full Backend Modularization & Layer Separation (Priority 1 Complete)
 
 - **Date**: 2026-08-24
-- **Status**: Approved, Implemented & Verified (18/18 Backend Tests Passing + 0 Build Errors)
+- **Status**: Approved, Implemented & Verified
 
 ### Decision
 Refactored backend into config, constants, middleware, and domain routes (`authRoutes`, `invoiceRoutes`, `reconciliationRoutes`, `chatRoutes`, `portalServiceRoutes`, `filingRoutes`).
@@ -159,11 +159,98 @@ Implemented strict language matching, bullet formatting for action steps (`• `
 ## Decision 014: Industry-Standard Chatbot UI Overhaul — Devanagari/Native Scripts, Non-Overlapping Quick Toolbar & Body Scroll Lock
 
 - **Date**: 2026-08-25
-- **Status**: Approved, Implemented & Verified (18/18 Tests Passing + Production Build in 5.64s)
+- **Status**: Approved, Implemented & Verified
+
+### Decision
+Added native script multilingual support, body scroll lock, auto-scroll to bottom, and dynamic quick tap action pills.
+
+---
+
+## Decision 015: Complete Authentication System, JWT 10-Min Session Timeout & Personalized Chatbot Integration
+
+- **Date**: 2026-08-25
+- **Status**: Approved, Implemented & Verified
+
+### Decision
+Added full taxpayer authentication with JWT 10-minute session timeout, Login/Register pages, Navbar profile badge, and personalized chatbot greetings.
+
+---
+
+## Decision 016: Session-Aware Welcome Message Fix, Scrollbar Hiding & Chatbot Styling Refinements
+
+- **Date**: 2026-08-25
+- **Status**: Approved, Implemented & Verified
+
+### Decision
+Refined guest vs logged-in chatbot greetings, applied cross-browser scrollbar hiding, and enhanced padding & typography.
+
+---
+
+## Decision 017: Website-Wide Premium CSS Alert Component & Floating Toast System
+
+- **Date**: 2026-08-25
+- **Status**: Approved, Implemented & Verified
+
+### Decision
+Added reusable Alert component (`Alert.jsx`) and global Toast Provider (`ToastContext.jsx`) replacing native browser `alert()` calls.
+
+---
+
+## Decision 018: Account Context Harness Engine & Dynamic Language-Aware Quick Action Chips
+
+- **Date**: 2026-08-25
+- **Status**: Approved, Implemented & Verified
+
+### Decision
+Implemented real-time Account Context Harness (`accountHarnessService.js`) generating dynamic, account-specific quick action chips in native regional scripts.
+
+---
+
+## Decision 019: Chatbot Hackathon Differentiation Suite — Voice Read-Aloud, Interactive Action Cards, Safety Score & Mode Switcher
+
+- **Date**: 2026-08-25
+- **Status**: Approved, Implemented & Verified
+
+### Decision
+Implemented 4 hackathon differentiation features in `ChatbotWidget.jsx` and `gstKnowledgeService.js` (Web Speech API narration, 1-click action cards, live safety score badge, mode switcher).
+
+---
+
+## Decision 020: Chatbot UI Executive Overhaul, Full Multilingual UI Dictionary & Narration Voice Engine Fixes
+
+- **Date**: 2026-08-25
+- **Status**: Approved, Implemented & Verified
+
+### Decision
+Executed comprehensive UI redesign, added full `UI_LABELS` translation dictionary for 5 regional languages, and fixed voice accent matching.
+
+---
+
+## Decision 021: Context-Aware GST Copilot ("Understand. Fix. File.") & Landing Page Service Card
+
+- **Date**: 2026-08-25
+- **Status**: Approved, Implemented & Verified
+
+### Decision
+Transformed generic chatbot into a State-Aware & Contextual GST Copilot Action Assistant with Landing Page Copilot Service Card (`CopilotHeroCard.jsx`), route-aware guidance, and structured copilot payloads (`POST /api/chat/copilot`).
+
+---
+
+## Decision 022: Account Harness & GST Copilot Service Defense Fix
+
+- **Date**: 2026-08-25
+- **Status**: Fixed, Tested & Verified (19/19 Backend Tests Passing + 0 Build Errors in 1.24s)
+
+---
+
+## Decision 023: Website-Wide Global Language Toggle & Multilingual Context Engine
+
+- **Date**: 2026-08-26
+- **Status**: Approved, Implemented & Verified (19/19 Backend Tests Passing + 0 Build Errors in 4.02s)
 
 ### Context & Decision
-Complete UI & architecture overhaul of the ChatbotWidget (`ChatbotWidget.jsx` & `chatbotConfig.js`):
-1. **Body Scroll Lock**: Added `document.body.style.overflow = 'hidden'` when the chatbot is open, preventing background page scrolling.
-2. **Auto-Scroll to Latest Message**: Implemented `messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })` triggering on every new message or bot response.
-3. **Native Regional Language Support**: Replaced Hinglish with native Devanagari Hindi (`HI`), Marathi (`MR`), Tamil (`TA`), Punjabi (`PA`), and English (`EN`). All system prompts, knowledge bases, and quick action chips utilize native scripts.
-4. **Non-Overlapping Quick Tap Toolbar**: Created a collapsible top quick-action toolbar positioned outside the message history area, ensuring tap action chips never overlap or obscure bot responses.
+Built a website-wide global language context engine (`LanguageContext.jsx`) and mounted an accessible language selector dropdown in the Navbar:
+1. **Global Language State (`LanguageContext.jsx`)**: Persists taxpayer language selection (`EN`, `HI`, `MR`, `TA`, `PA`) in `localStorage`.
+2. **Site Translation Dictionary (`siteTranslations.js`)**: Multi-script dictionary covering Navbar links, Hero sections, Notice Bar, Copilot Hero Card, Search Taxpayer tools, and Auth forms.
+3. **Navbar Integration (`Navbar.jsx`)**: Added global language dropdown (`🌐 English / हिंदी / मराठी / தமிழ் / ਪੰਜਾਬੀ`) in the top accessibility bar.
+4. **Chatbot Bi-Directional Synchronization (`ChatbotWidget.jsx`)**: Synchronized ChatbotWidget language state directly with `LanguageContext` so changing language in the Navbar updates the chatbot seamlessly.

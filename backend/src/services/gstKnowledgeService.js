@@ -47,15 +47,16 @@ function isGstDomainQuery(query) {
     "hsn", "cgst", "sgst", "igst", "penalty", "notice", "filing", "portal", "credit",
     "pan", "gstin", "ramesh", "hardware", "asian paints", "ultratech", "jaquar", "polycab",
     "late fee", "interest", "reconciliation", "claim", "defer", "turnover", "ca", "return",
-    "date", "due", "last date", "tareekh", "red", "lal", "pay", "kitna", "kiti", "bharaycha"
+    "date", "due", "last date", "tareekh", "red", "lal", "pay", "kitna", "kiti", "bharaycha",
+    "score", "100%", "safety"
   ];
   return gstKeywords.some(keyword => q.includes(keyword));
 }
 
 /**
- * Process GST Chatbot Query with Strict Multilingual Matching & Bullet Formatting
+ * Process GST Chatbot Query with Mode Switcher (Shopkeeper Mode vs CA Technical Mode)
  */
-async function processGstChatbotQuery(userQuery, language = 'EN', activeContext = null) {
+async function processGstChatbotQuery(userQuery, language = 'EN', activeContext = null, explanationMode = 'SHOPKEEPER') {
   if (!userQuery || userQuery.trim().length === 0) {
     return {
       status: "INVALID_QUERY",
@@ -65,6 +66,7 @@ async function processGstChatbotQuery(userQuery, language = 'EN', activeContext 
 
   const query = userQuery.trim();
   const langKey = (language || 'EN').toUpperCase();
+  const mode = (explanationMode || 'SHOPKEEPER').toUpperCase();
 
   // 1. Domain Guardrail Check
   if (!isGstDomainQuery(query)) {
@@ -87,15 +89,24 @@ async function processGstChatbotQuery(userQuery, language = 'EN', activeContext 
   }
 
   const langInstruction = getLanguageName(langKey);
+  let modeInstruction = "Explain in simple, friendly, practical terms for a shopkeeper (Ramesh). Avoid confusing legal jargon.";
+
+  if (mode === 'CA_TECHNICAL') {
+    modeInstruction = "Provide exact Chartered Accountant (CA) technical analysis. Cite relevant GST Act Sections (e.g., Section 16(2)(aa), Section 37, Rule 36(4), Rule 37A of CGST Rules 2017) and formal legal compliance terms.";
+  }
+
   const systemInstruction = `You are a friendly Indian Chartered Accountant (CA) helping Ramesh, a hardware shop owner.
 
 STRICT LANGUAGE RULE:
 You MUST respond EXCLUSIVELY in ${langInstruction}. Use proper native scripts for Hindi, Marathi, Tamil, Punjabi, or English as requested.
 
+EXPLANATION MODE:
+${modeInstruction}
+
 STRICT FORMATTING RULE:
 1. For procedures, actions, tax breakdowns, or steps, use clean bullet points (• ).
 2. For general explanations, use short 1-2 sentence paragraphs.
-3. Keep output practical, clear, and readable.`;
+3. Keep output clear, actionable, and readable.`;
 
   // Priority 1: Google Gemini 1.5 Flash API (Free Tier)
   if (hasGeminiKey()) {
@@ -106,6 +117,7 @@ STRICT FORMATTING RULE:
         isGstRelated: true,
         answer: textOutput,
         language: langKey,
+        explanationMode: mode,
         isAiGenerated: true,
         source: "Google Gemini 1.5 Flash"
       };
@@ -133,6 +145,7 @@ STRICT FORMATTING RULE:
         isGstRelated: true,
         answer: response.choices[0].message.content.trim(),
         language: langKey,
+        explanationMode: mode,
         isAiGenerated: true,
         source: "OpenAI GPT-4o-mini"
       };
@@ -157,12 +170,18 @@ STRICT FORMATTING RULE:
 
   if (matchedKey && KNOWLEDGE_BASE_MULTILINGUAL[matchedKey]) {
     const langData = KNOWLEDGE_BASE_MULTILINGUAL[matchedKey];
-    const answerText = langData[langKey] || langData['HI'] || langData['EN'];
+    let answerText = langData[langKey] || langData['HI'] || langData['EN'];
+
+    if (mode === 'CA_TECHNICAL') {
+      answerText += "\n\n• Legal Citation: Section 16(2)(aa) of CGST Act, 2017 & Rule 36(4) of CGST Rules.";
+    }
+
     return {
       status: "SUCCESS",
       isGstRelated: true,
       answer: answerText,
       language: langKey,
+      explanationMode: mode,
       isAiGenerated: false,
       source: "Multilingual Knowledge Base"
     };
@@ -180,11 +199,16 @@ STRICT FORMATTING RULE:
     defaultAns = "ਆਪਣੀ GST ਰਿਟਰਨ ਸੁਰੱਖਿਅਤ ਫਾਈਲ ਕਰਨ ਲਈ, ਹਮੇਸ਼ਾ ਆਪਣੇ ਬਿੱਲਾਂ ਦਾ GSTR-2B ਨਾਲ ਮਿਲਾਨ ਕਰੋ।";
   }
 
+  if (mode === 'CA_TECHNICAL') {
+    defaultAns += " (Compliance reference: Section 16(2)(aa) of CGST Act).";
+  }
+
   return {
     status: "SUCCESS",
     isGstRelated: true,
     answer: defaultAns,
     language: langKey,
+    explanationMode: mode,
     isAiGenerated: false,
     source: "Default Multilingual Rule"
   };
