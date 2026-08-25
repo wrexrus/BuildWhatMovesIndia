@@ -25,6 +25,9 @@ import HelpTaxpayerFacilities from "./pages/HelpTaxPayerFacilities";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import Footer from "./components/Footer";
+import Registration from "./pages/register/Registration";
+import TrackApplicationStatus from "./pages/register/TrackApplicationStatus";
+import HomeStateGSK from "./pages/register/HomeStategGSK";
 
 const MainLayout = () => {
   return (
@@ -80,6 +83,18 @@ const router = createBrowserRouter([
       {
         path: "/help-taxpayer-facilities",
         element: <HelpTaxpayerFacilities />,
+      },
+      {
+        path: "/registration",
+        element: <Registration />,
+      },
+      {
+        path: "/registration/track-status",
+        element: <TrackApplicationStatus />,
+      },
+      {
+        path: "/registration/home-state-gsk",
+        element: <HomeStateGSK />,
       },
       {
         path: "*",
