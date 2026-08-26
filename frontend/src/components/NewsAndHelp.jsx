@@ -36,10 +36,9 @@ const NewsAndHelp = () => {
   return (
     <section className="bg-paper">
       <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-8 px-6 py-12 lg:grid-cols-[1.2fr_1fr]">
-        {/* News and updates — filterable by category, real state not static tags */}
         <div>
           <div className="mb-4 flex items-end justify-between">
-            <h2 className="text-[1.4rem] font-bold tracking-tight text-ink">Latest updates</h2>
+            <h2 className="text-2xl font-bold tracking-tight text-ink sm:text-[1.65rem]">Latest updates</h2>
             <a
               href="#"
               className="group inline-flex items-center gap-1 text-[0.87rem] font-medium text-navy focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2"
@@ -92,9 +91,8 @@ const NewsAndHelp = () => {
           </div>
         </div>
 
-        {/* Help topics — live search instead of a static list you have to scan */}
         <div>
-          <h2 className="mb-4 text-[1.4rem] font-bold tracking-tight text-ink">Popular help topics</h2>
+          <h2 className="mb-4 text-2xl font-bold tracking-tight text-ink sm:text-[1.65rem]">Popular help topics</h2>
 
           <label className="relative mb-4 block">
             <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted" />

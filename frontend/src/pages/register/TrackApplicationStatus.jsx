@@ -58,19 +58,15 @@ const TrackApplicationStatus = () => {
           ]}
         />
 
-        <div className="mx-auto max-w-[1180px] px-5 pb-20 pt-8 sm:px-8">
-          {/* =====================================================
-              INTRO
-          ===================================================== */}
-
-          <header className="border-b border-[#eaeaea] pb-10">
+        <div className="mx-auto max-w-[1180px] px-5 pb-14 pt-8 sm:px-8">
+          <header className="border-b border-[#eaeaea] pb-7">
             <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <p className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#1f6c9f]">
                   Registration
                 </p>
 
-                <h1 className="text-3xl font-semibold tracking-[-0.03em] text-[#20282d] sm:text-4xl">
+                <h1 className="text-2xl font-semibold tracking-[-0.02em] text-balance text-[#20282d] sm:text-[1.75rem]">
                   Track application status
                 </h1>
 
@@ -101,18 +97,14 @@ const TrackApplicationStatus = () => {
             </div>
           </header>
 
-          {/* =====================================================
-              SEARCH FORM
-          ===================================================== */}
-
-          <section className="max-w-3xl pt-10">
+          <section className="max-w-3xl pt-8">
             <div className="mb-8 flex items-end justify-between border-b border-[#eaeaea] pb-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#787774]">
                   Application lookup
                 </p>
 
-                <h2 className="mt-1 text-xl font-semibold text-[#293238]">
+                <h2 className="mt-1 text-xl font-semibold tracking-[-0.01em] text-[#293238]">
                   Select a reference type
                 </h2>
               </div>
@@ -124,7 +116,6 @@ const TrackApplicationStatus = () => {
             </div>
 
             <form onSubmit={handleSubmit} noValidate>
-              {/* Reference type */}
               <fieldset>
                 <legend className="mb-4 text-sm font-medium text-[#394247]">
                   Application reference
@@ -202,7 +193,6 @@ const TrackApplicationStatus = () => {
                 </div>
               </fieldset>
 
-              {/* Reference number */}
               <div className="mt-8">
                 <label
                   htmlFor="referenceNumber"
@@ -238,6 +228,7 @@ const TrackApplicationStatus = () => {
                     bg-white
                     px-3
                     text-sm
+                    font-mono
                     uppercase
                     tracking-[0.03em]
                     text-[#293238]
@@ -259,7 +250,6 @@ const TrackApplicationStatus = () => {
                 )}
               </div>
 
-              {/* Action */}
               <div className="mt-8 flex items-center justify-between border-t border-[#eaeaea] pt-6">
                 <p className="max-w-md text-xs leading-5 text-[#787774]">
                   Enter the reference exactly as provided in your

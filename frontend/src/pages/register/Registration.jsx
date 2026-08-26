@@ -163,19 +163,15 @@ const Registration = () => {
           ]}
         />
 
-        <div className="mx-auto max-w-[1180px] px-5 pb-20 pt-8 sm:px-8">
-          {/* ==================================================
-              PAGE HEADER
-          ================================================== */}
-
-          <header className="border-b border-[#eaeaea] pb-8">
+        <div className="mx-auto max-w-[1180px] px-5 pb-14 pt-8 sm:px-8">
+          <header className="border-b border-[#eaeaea] pb-7">
             <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
               <div>
                 <p className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#1f6c9f]">
                   GST registration
                 </p>
 
-                <h1 className="text-3xl font-semibold tracking-[-0.03em] text-[#20282d] sm:text-4xl">
+                <h1 className="text-2xl font-semibold tracking-[-0.02em] text-balance text-[#20282d] sm:text-[1.75rem]">
                   New registration
                 </h1>
 
@@ -206,11 +202,7 @@ const Registration = () => {
             </div>
           </header>
 
-          {/* ==================================================
-              STEP INDICATOR
-          ================================================== */}
-
-          <section className="border-b border-[#eaeaea] py-7">
+          <section className="border-b border-[#eaeaea] py-6">
             <div className="flex max-w-xl items-start">
               {steps.map((step, index) => {
                 const active = index === 0;
@@ -262,23 +254,18 @@ const Registration = () => {
             </div>
           </section>
 
-          {/* ==================================================
-              FORM
-          ================================================== */}
-
           <form
             onSubmit={handleSubmit}
             noValidate
-            className="pt-10"
+            className="pt-8"
           >
-            {/* Form heading */}
-            <div className="mb-9 flex items-end justify-between gap-4 border-b border-[#eaeaea] pb-4">
+            <div className="mb-7 flex items-end justify-between gap-4 border-b border-[#eaeaea] pb-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#787774]">
-                  Step 01
+                  Account setup
                 </p>
 
-                <h2 className="mt-1 text-xl font-semibold text-[#293238]">
+                <h2 className="mt-1 text-xl font-semibold tracking-[-0.01em] text-[#293238]">
                   User credentials
                 </h2>
               </div>
@@ -289,11 +276,7 @@ const Registration = () => {
               </p>
             </div>
 
-            {/* ==================================================
-                REGISTRATION TYPE
-            ================================================== */}
-
-            <section className="border-b border-[#eaeaea] pb-9">
+            <section className="border-b border-[#eaeaea] pb-7">
               <p className="mb-4 text-sm font-semibold text-[#293238]">
                 Registration method
               </p>
@@ -370,11 +353,7 @@ const Registration = () => {
               </div>
             </section>
 
-            {/* ==================================================
-                BUSINESS DETAILS
-            ================================================== */}
-
-            <section className="border-b border-[#eaeaea] py-9">
+            <section className="border-b border-[#eaeaea] py-6">
               <div className="mb-7">
                 <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#787774]">
                   Business details
@@ -385,8 +364,7 @@ const Registration = () => {
                 </h3>
               </div>
 
-              <div className="grid gap-x-8 gap-y-7 md:grid-cols-2">
-                {/* Entity */}
+              <div className="grid gap-x-8 gap-y-6 md:grid-cols-2">
                 <div>
                   <label
                     htmlFor="entityType"
@@ -441,7 +419,6 @@ const Registration = () => {
                   )}
                 </div>
 
-                {/* State */}
                 <div>
                   <label
                     htmlFor="state"
@@ -496,7 +473,6 @@ const Registration = () => {
                   )}
                 </div>
 
-                {/* District */}
                 <div>
                   <label
                     htmlFor="district"
@@ -551,7 +527,6 @@ const Registration = () => {
                   )}
                 </div>
 
-                {/* Legal name */}
                 <div>
                   <label
                     htmlFor="legalName"
@@ -604,7 +579,6 @@ const Registration = () => {
                   )}
                 </div>
 
-                {/* PAN */}
                 <div>
                   <label
                     htmlFor="pan"
@@ -637,6 +611,7 @@ const Registration = () => {
                       bg-white
                       px-3
                       text-sm
+                      font-mono
                       uppercase
                       tracking-[0.04em]
                       text-[#293238]
@@ -660,11 +635,7 @@ const Registration = () => {
               </div>
             </section>
 
-            {/* ==================================================
-                CONTACT DETAILS
-            ================================================== */}
-
-            <section className="border-b border-[#eaeaea] py-9">
+            <section className="border-b border-[#eaeaea] py-6">
               <div className="mb-7">
                 <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#787774]">
                   Contact details
@@ -675,7 +646,7 @@ const Registration = () => {
                 </h3>
               </div>
 
-              <div className="grid gap-x-8 gap-y-7 md:grid-cols-2">
+              <div className="grid gap-x-8 gap-y-6 md:grid-cols-2">
                 <div>
                   <label
                     htmlFor="email"
@@ -771,6 +742,7 @@ const Registration = () => {
                         bg-white
                         px-3
                         text-sm
+                        font-mono
                         text-[#293238]
                         placeholder:text-[#a2a4a5]
                         outline-none
@@ -795,10 +767,6 @@ const Registration = () => {
                 </div>
               </div>
             </section>
-
-            {/* ==================================================
-                ACTION
-            ================================================== */}
 
             <div className="flex flex-col gap-4 pt-8 sm:flex-row sm:items-center sm:justify-between">
               <p className="max-w-xl text-xs leading-5 text-[#787774]">

@@ -94,7 +94,6 @@ const SearchComposition = () => {
                 ]}
             >
                 <form onSubmit={handleSubmit} noValidate>
-                    {/* Composition status */}
                     <div className="max-w-2xl">
                         <label
                             htmlFor="composition-option"
@@ -125,7 +124,6 @@ const SearchComposition = () => {
                         </select>
                     </div>
 
-                    {/* Search method */}
                     <div className="mt-7">
                         <p className="mb-3 text-[0.95rem] font-semibold text-[#112f58]">
                             Search using
@@ -186,7 +184,6 @@ const SearchComposition = () => {
                         </div>
                     </div>
 
-                    {/* Conditional field */}
                     <div className="mt-7 max-w-2xl">
                         {searchType === "gstin" && (
                             <FormField

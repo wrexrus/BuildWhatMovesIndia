@@ -17,7 +17,7 @@ const FormField = ({
     <div className={className}>
       <label
         htmlFor={id}
-        className="mb-2 block text-[0.95rem] font-semibold text-[#112f58]"
+        className="mb-2 block text-[0.95rem] font-semibold text-navy"
       >
         {label}
         {required && (
@@ -49,7 +49,7 @@ const FormField = ({
           ${
             error
               ? "border-red-400 ring-2 ring-red-100"
-              : "border-slate-300 focus:border-[#2e659d] focus:ring-4 focus:ring-[#2e659d]/10"
+              : "border-slate-300 focus:border-navy focus:ring-4 focus:ring-navy/10"
           }
         `}
       />

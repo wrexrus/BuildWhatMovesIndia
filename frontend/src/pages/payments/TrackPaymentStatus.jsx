@@ -51,17 +51,13 @@ const TrackPaymentStatus = () => {
           ]}
         />
 
-        <div className="mx-auto max-w-[1400px] px-5 pb-24 pt-8 sm:px-8 lg:px-10">
-          {/* =====================================================
-              HEADER
-          ===================================================== */}
-
-          <header className="border-b border-[#eaeaea] pb-10">
+        <div className="mx-auto max-w-[1400px] px-5 pb-16 pt-8 sm:px-8 lg:px-10">
+          <header className="border-b border-[#eaeaea] pb-7">
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#1f6c9f]">
               Payments
             </p>
 
-            <h1 className="text-3xl font-semibold tracking-[-0.03em] text-[#20282d] sm:text-4xl">
+            <h1 className="text-2xl font-semibold tracking-[-0.02em] text-balance text-[#20282d] sm:text-[1.75rem]">
               Track Payment Status
             </h1>
 
@@ -71,11 +67,7 @@ const TrackPaymentStatus = () => {
             </p>
           </header>
 
-          {/* =====================================================
-              SEARCH
-          ===================================================== */}
-
-          <section className="pt-10">
+          <section className="pt-8">
             <form onSubmit={handleSubmit} noValidate>
               <div className="grid gap-7 md:grid-cols-2">
                 <div>
@@ -109,6 +101,7 @@ const TrackPaymentStatus = () => {
                       bg-white
                       px-3
                       text-sm
+                      font-mono
                       uppercase
                       tracking-[0.03em]
                       text-[#293238]
@@ -159,6 +152,7 @@ const TrackPaymentStatus = () => {
                       bg-white
                       px-3
                       text-sm
+                      font-mono
                       text-[#293238]
                       placeholder:text-[#a2a4a5]
                       outline-none
@@ -197,10 +191,6 @@ const TrackPaymentStatus = () => {
               </div>
             </form>
           </section>
-
-          {/* =====================================================
-              RESULT ACTIONS
-          ===================================================== */}
 
           <section className="mt-10 border-t border-[#eaeaea] pt-8">
             <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
@@ -265,10 +255,6 @@ const TrackPaymentStatus = () => {
               </div>
             </div>
           </section>
-
-          {/* =====================================================
-              PAYMENT NOTES
-          ===================================================== */}
 
           <section className="mt-10 border-t border-[#eaeaea] pt-8">
             <div className="max-w-4xl space-y-5 text-sm leading-6 text-[#5e6467]">

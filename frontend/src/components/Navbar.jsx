@@ -8,16 +8,13 @@ import {
   User,
   LogOut,
   ShieldCheck,
-  Globe
+  Globe,
+  Contrast
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
 import logo from "../assets/logo.png";
-
-/* =========================================================
-   MEGA MENU DATA
-========================================================= */
 
 const megaMenus = {
   Services: {
@@ -158,10 +155,6 @@ const megaMenus = {
   },
 };
 
-/* =========================================================
-   SEARCH TAXPAYER ROUTES
-========================================================= */
-
 const taxpayerSearchLinks = [
   {
     label: "Search by GSTIN/UIN",
@@ -180,10 +173,6 @@ const taxpayerSearchLinks = [
     path: "/search-taxpayer/composition",
   },
 ];
-
-/* =========================================================
-   MAIN NAVIGATION
-========================================================= */
 
 const navLinks = [
   {
@@ -224,18 +213,10 @@ const navLinks = [
   },
 ];
 
-/* =========================================================
-   CONFIG
-========================================================= */
-
 const FONT_STEPS = [0.9, 1, 1.1, 1.2];
 
 const HOVER_OPEN_DELAY = 90;
 const HOVER_CLOSE_DELAY = 200;
-
-/* =========================================================
-   MEGA PANEL
-========================================================= */
 
 function MegaPanel({ menu, onSelect }) {
   const [previewTab, setPreviewTab] = useState(null);
@@ -262,16 +243,15 @@ function MegaPanel({ menu, onSelect }) {
         lg:w-[min(760px,90vw)]
       "
     >
-      {/* =====================================================
-          LEFT CATEGORY PANEL
-      ===================================================== */}
+      {
+}
 
       <div
         className="
           w-full
           shrink-0
           border-r border-line
-          bg-[#f7f8fa]
+          bg-slate-50
           py-1.5
 
           lg:w-55
@@ -321,9 +301,8 @@ function MegaPanel({ menu, onSelect }) {
         ))}
       </div>
 
-      {/* =====================================================
-          RIGHT CONTENT PANEL — DESKTOP
-      ===================================================== */}
+      {
+}
 
       <div className="hidden max-h-[55vh] flex-1 overflow-y-auto p-4 lg:block">
         {previewTab ? (
@@ -356,9 +335,9 @@ function MegaPanel({ menu, onSelect }) {
         leading-5
         text-navy
         transition-colors
-        hover:bg-[#eef5fb]
-        hover:text-[#174d82]
-        focus-visible:bg-[#eef5fb]
+        hover:bg-navy/5
+        hover:text-navy-hover
+        focus-visible:bg-navy/5
         focus-visible:outline-none
       "
                 >
@@ -387,9 +366,8 @@ function MegaPanel({ menu, onSelect }) {
         )}
       </div>
 
-      {/* =====================================================
-          MOBILE CONTENT
-      ===================================================== */}
+      {
+}
 
       {previewTab && (
         <div
@@ -425,8 +403,8 @@ function MegaPanel({ menu, onSelect }) {
         text-[0.87rem]
         text-navy
         transition-colors
-        hover:bg-[#eef5fb]
-        hover:text-[#174d82]
+        hover:bg-navy/5
+        hover:text-navy-hover
       "
                 >
                   {label}
@@ -439,10 +417,6 @@ function MegaPanel({ menu, onSelect }) {
     </div>
   );
 }
-
-/* =========================================================
-   NAVBAR
-========================================================= */
 
 const Navbar = () => {
   const location = useLocation();
@@ -461,16 +435,8 @@ const Navbar = () => {
   const closeTimeoutRef = useRef(null);
   const openTimeoutRef = useRef(null);
 
-  /* =========================================================
-     SEARCH TAXPAYER ACTIVE STATE
-  ========================================================= */
-
   const isTaxpayerRoute =
     location.pathname.startsWith("/search-taxpayer/");
-
-  /* =========================================================
-     CURRENT ACTIVE MAIN NAV ITEM
-  ========================================================= */
 
   const getActiveNav = () => {
     if (isTaxpayerRoute) {
@@ -485,10 +451,6 @@ const Navbar = () => {
   };
 
   const currentActiveNav = getActiveNav();
-
-  /* =========================================================
-     TIMERS
-  ========================================================= */
 
   const clearTimers = () => {
     if (closeTimeoutRef.current) {
@@ -516,10 +478,6 @@ const Navbar = () => {
     }, HOVER_CLOSE_DELAY);
   };
 
-  /* =========================================================
-     DROPDOWN CLICK
-  ========================================================= */
-
   const handleClick = (label) => {
     clearTimers();
 
@@ -527,10 +485,6 @@ const Navbar = () => {
       current === label ? null : label
     );
   };
-
-  /* =========================================================
-     ACCESSIBILITY
-  ========================================================= */
 
   useEffect(() => {
     document.documentElement.style.fontSize =
@@ -543,10 +497,6 @@ const Navbar = () => {
       highContrast
     );
   }, [highContrast]);
-
-  /* =========================================================
-     OUTSIDE CLICK
-  ========================================================= */
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -571,10 +521,6 @@ const Navbar = () => {
     };
   }, []);
 
-  /* =========================================================
-     ESCAPE
-  ========================================================= */
-
   useEffect(() => {
     const handleKey = (event) => {
       if (event.key === "Escape") {
@@ -590,19 +536,11 @@ const Navbar = () => {
     };
   }, []);
 
-  /* =========================================================
-     CLEANUP
-  ========================================================= */
-
   useEffect(() => {
     return () => {
       clearTimers();
     };
   }, []);
-
-  /* =========================================================
-     LINK SELECT
-  ========================================================= */
 
   const selectLink = (label) => {
     setActiveLink(label);
@@ -612,15 +550,13 @@ const Navbar = () => {
 
   return (
     <header className="w-full text-white">
-      {/* =====================================================
-          HEADER
-      ===================================================== */}
+      {
+}
 
       <div className="bg-navy">
         <div className="mx-auto max-w-360 px-6">
-          {/* =================================================
-              ACCESSIBILITY ROW
-          ================================================= */}
+          {
+}
 
           <div className="flex h-9 items-center justify-between border-b border-white/10 text-[0.8rem]">
             <a
@@ -640,7 +576,8 @@ const Navbar = () => {
             </a>
 
             <div className="flex items-center gap-3">
-              {/* Global Website Language Selector */}
+              {
+}
               <div className="flex items-center gap-1.5 bg-white/10 hover:bg-white/20 border border-white/25 rounded px-2 py-0.5 text-xs text-white transition-colors">
                 <Globe className="w-3.5 h-3.5 text-amber shrink-0" />
                 <select
@@ -657,7 +594,8 @@ const Navbar = () => {
                 </select>
               </div>
 
-              {/* High Contrast */}
+              {
+}
               <button
                 type="button"
                 aria-pressed={highContrast}
@@ -683,10 +621,11 @@ const Navbar = () => {
                   }
                 `}
               >
-                ◐
+                <Contrast size={13} strokeWidth={2.25} />
               </button>
 
-              {/* Font Size */}
+              {
+}
               <div
                 className="flex items-center gap-1"
                 role="group"
@@ -759,12 +698,12 @@ const Navbar = () => {
             </div>
           </div>
 
-          {/* =================================================
-              BRANDING ROW
-          ================================================= */}
+          {
+}
 
           <div className="flex min-h-19.5 items-center justify-between gap-6">
-            {/* Logo + Branding */}
+            {
+}
             <div className="flex items-center gap-4">
               <img
                 src={logo}
@@ -778,7 +717,7 @@ const Navbar = () => {
               />
 
               <div>
-                <h1 className="text-[1.4rem] font-semibold leading-tight tracking-tight">
+                <h1 className="text-[1.55rem] font-bold leading-tight tracking-tight">
                   Goods and Services Tax
                 </h1>
 
@@ -788,7 +727,8 @@ const Navbar = () => {
               </div>
             </div>
 
-            {/* Actions / Logged In Taxpayer Profile */}
+            {
+}
             <div className="flex items-center gap-2.5">
               {!isLoggedIn ? (
                 <>
@@ -866,7 +806,8 @@ const Navbar = () => {
                 </div>
               )}
 
-              {/* Mobile Menu */}
+              {
+}
               <button
                 type="button"
                 aria-label={
@@ -899,9 +840,8 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* =====================================================
-          NAVIGATION
-      ===================================================== */}
+      {
+}
 
       <nav
         ref={navRef}
@@ -921,10 +861,6 @@ const Navbar = () => {
 
               const isActive =
                 currentActiveNav === link.label;
-
-              /* =================================================
-                 SEARCH TAXPAYER
-              ================================================= */
 
               if (isSearchTaxpayer) {
                 return (
@@ -957,7 +893,7 @@ const Navbar = () => {
                         duration-150
 
                         ${isActive || isOpen
-                          ? "bg-[#3F6F9F] text-white"
+                          ? "bg-navy-hover text-white"
                           : "text-white/90 hover:bg-navy-hover hover:text-white"
                         }
 
@@ -983,7 +919,8 @@ const Navbar = () => {
                       />
                     </button>
 
-                    {/* Search Taxpayer Dropdown */}
+                    {
+}
                     {isOpen && (
                       <div
                         className="
@@ -1025,10 +962,10 @@ const Navbar = () => {
                                   text-navy
                                   transition-colors
 
-                                  hover:bg-[#eef5fb]
-                                  hover:text-[#174d82]
+                                  hover:bg-navy/5
+                                  hover:text-navy-hover
 
-                                  focus-visible:bg-[#eef5fb]
+                                  focus-visible:bg-navy/5
                                   focus-visible:outline-none
                                 "
                               >
@@ -1045,7 +982,7 @@ const Navbar = () => {
                                     duration-150
 
                                     group-hover:translate-x-0.5
-                                    group-hover:text-[#315b91]
+                                    group-hover:text-navy-hover
                                   "
                                 />
                               </Link>
@@ -1057,10 +994,6 @@ const Navbar = () => {
                   </div>
                 );
               }
-
-              /* =================================================
-                 MEGA MENU
-              ================================================= */
 
               if (link.mega) {
                 const menu = megaMenus[link.label];
@@ -1131,10 +1064,6 @@ const Navbar = () => {
                 );
               }
 
-              /* =================================================
-                 NORMAL NAV LINK
-              ================================================= */
-
               return (
                 <div
                   key={link.label}
@@ -1155,7 +1084,7 @@ const Navbar = () => {
     duration-150
 
     ${isActive
-                        ? "border-b-2 border-amber bg-[#3F6F9F] text-white"
+                        ? "border-b-2 border-amber bg-navy-hover text-white"
                         : "text-white/90 hover:bg-navy-hover hover:text-white"
                       }
 

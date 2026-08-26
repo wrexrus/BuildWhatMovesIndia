@@ -46,13 +46,12 @@ import TaxpayerProfilePage from "./pages/TaxpayerProfilePage";
 
 const MainLayout = () => {
   return (
-    <div className="min-h-screen bg-[#eef2f6]">
+    <div className="min-h-dvh bg-shell">
       <PageTransition />
       <Navbar />
       <main id="main">
         <Outlet />
       </main>
-      {/* Floating Citizen Assistant Chatbot */}
       <ChatbotWidget />
       <Footer />
     </div>

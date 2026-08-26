@@ -47,13 +47,13 @@ const SearchHSNCode = () => {
           ]}
         />
 
-        <div className="mx-auto max-w-[1400px] px-5 pb-24 pt-8 sm:px-8 lg:px-10">
-          <header className="max-w-4xl border-b border-[#eaeaea] pb-10">
+        <div className="mx-auto max-w-[1400px] px-5 pb-16 pt-8 sm:px-8 lg:px-10">
+          <header className="max-w-4xl border-b border-[#eaeaea] pb-7">
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#1f6c9f]">
               User service
             </p>
 
-            <h1 className="text-3xl font-semibold tracking-[-0.03em] text-[#20282d] sm:text-4xl">
+            <h1 className="text-2xl font-semibold tracking-[-0.02em] text-balance text-[#20282d] sm:text-[1.75rem]">
               Search HSN Code
             </h1>
 
@@ -63,7 +63,7 @@ const SearchHSNCode = () => {
             </p>
           </header>
 
-          <section className="max-w-4xl pt-10">
+          <section className="max-w-4xl pt-8">
             <form onSubmit={handleSubmit} noValidate>
               <fieldset>
                 <legend className="text-sm font-semibold text-[#293238]">
