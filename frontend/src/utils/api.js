@@ -129,3 +129,13 @@ export async function getVoiceExplanation(invoiceNumber = 'AP/2026/045', languag
     body: JSON.stringify({ invoiceNumber, language }),
   });
 }
+
+// 13. Scraped GST Offline Tools
+export async function fetchOfflineTools() {
+  return fetchApi('/services/offline-tools');
+}
+
+// 14. Scraped GST Statistics & Analytics
+export async function fetchGstStatistics() {
+  return fetchApi('/services/gst-statistics');
+}

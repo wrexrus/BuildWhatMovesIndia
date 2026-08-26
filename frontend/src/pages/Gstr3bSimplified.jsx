@@ -4,6 +4,7 @@ import Alert from '../components/Alert';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { useLanguage } from '../context/LanguageContext';
+import { speakTextInLanguage, stopSpeech } from '../utils/speechUtils';
 import { 
   runReconciliation, 
   resolveMismatch, 
@@ -271,9 +272,7 @@ const Gstr3bSimplified = () => {
   // Speak SSML Voice Explainer out loud
   const handleVoicePlayback = async () => {
     if (isPlayingAudio) {
-      if (window.speechSynthesis) {
-        window.speechSynthesis.cancel();
-      }
+      stopSpeech();
       setIsPlayingAudio(false);
       return;
     }
@@ -285,23 +284,11 @@ const Gstr3bSimplified = () => {
       
       const cleanText = textToSpeak.replace(/<[^>]*>/g, '').trim();
 
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        window.speechSynthesis.resume();
-
-        const utterance = new SpeechSynthesisUtterance(cleanText);
-        const localeMap = { HI: 'hi-IN', MR: 'mr-IN', TA: 'ta-IN', PA: 'pa-IN', EN: 'en-IN' };
-        utterance.lang = localeMap[language] || 'hi-IN';
-        utterance.rate = 0.92;
-
-        utterance.onend = () => setIsPlayingAudio(false);
-        utterance.onerror = () => setIsPlayingAudio(false);
-
-        window.speechSynthesis.speak(utterance);
-      } else {
-        if (showToast) showToast("Web Speech API not supported on this browser.", "info");
+      speakTextInLanguage(cleanText, language, () => {
         setIsPlayingAudio(false);
-      }
+      }, () => {
+        setIsPlayingAudio(false);
+      });
     } catch (err) {
       setIsPlayingAudio(false);
     }

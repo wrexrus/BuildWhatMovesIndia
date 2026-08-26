@@ -1,12 +1,7 @@
-const { OpenAI } = require('openai');
 const { generateGeminiContent, hasGeminiKey } = require('./geminiService');
 
-const openai = process.env.OPENAI_API_KEY
-  ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
-  : null;
-
 /**
- * Deterministic fallback templates for Ramesh across languages
+ * Deterministic fallback templates for small business taxpayers across languages
  */
 const TEMPLATE_EXPLANATIONS = {
   ERR_SUPPLIER_UNFILED: {
@@ -144,9 +139,9 @@ async function generateExplanation(mismatchItem, language = 'EN') {
 Explain the mismatch in ${getLanguageName(langUpper)} without complex jargon.
 Respond ONLY in valid JSON format:
 {
-  "problem": "One sentence explaining what went wrong",
-  "whyItHappened": "Simple explanation of why it happened",
-  "impact": "Financial/penalty consequence if filed as is",
+  "problem": "One sentence explaining what went wrong with supplier ${mismatchItem.supplierName || 'Asian Paints'}",
+  "whyItHappened": "Simple explanation of why invoice ${mismatchItem.invoiceNumber} failed GSTR-2B matching",
+  "impact": "Financial/penalty consequence of claiming ₹${mismatchItem.claimedTotalTax || 0}",
   "actionSteps": ["Action step 1", "Action step 2"]
 }`;
 
@@ -166,45 +161,21 @@ Respond ONLY in valid JSON format:
       const parsed = JSON.parse(jsonMatch ? jsonMatch[0] : rawOutput);
       return {
         isAiGenerated: true,
-        source: "Google Gemini 1.5 Flash (Free Tier)",
+        source: "Google Gemini 2.0 / 1.5 Flash",
         ...parsed
       };
     } catch (err) {
-      console.warn("Gemini API call failed, trying OpenAI or local fallback:", err.message);
+      console.warn("Gemini API call failed, using deterministic rule explainer fallback:", err.message);
     }
   }
 
-  // Priority 2: OpenAI API
-  if (openai) {
-    try {
-      const response = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
-        messages: [
-          { role: "system", content: systemInstruction },
-          { role: "user", content: promptText }
-        ],
-        response_format: { type: "json_object" },
-        temperature: 0.2
-      });
-
-      const parsed = JSON.parse(response.choices[0].message.content);
-      return {
-        isAiGenerated: true,
-        source: "OpenAI GPT-4o-mini",
-        ...parsed
-      };
-    } catch (err) {
-      console.warn("OpenAI API call failed, using static fallback:", err.message);
-    }
-  }
-
-  // Priority 3: Static Local Template Engine (Zero Cost & Offline Guarantee)
+  // Priority 2: Static Local Template Engine (Zero Cost & Offline Guarantee)
   return {
     isAiGenerated: false,
     source: "Rule Explainer Engine (Offline Safe)",
     ...(fallback || {
-      problem: mismatchItem.errorTitle || "Tax mismatch detected",
-      whyItHappened: "Invoice data differs from supplier portal filing.",
+      problem: `Your supplier (${mismatchItem.supplierName || 'Asian Paints'}) has not uploaded invoice #${mismatchItem.invoiceNumber || 'AP/2026/045'} to the GST portal yet.`,
+      whyItHappened: "Invoice data differs from GSTR-2B portal record.",
       impact: "May affect input tax credit eligibility.",
       actionSteps: ["Check physical bill and contact supplier."]
     })

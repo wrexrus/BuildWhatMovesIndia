@@ -2,6 +2,7 @@ require('dotenv').config();
 
 /**
  * Google Gemini Integration (100% Free Tier API)
+ * Latest Gemini Flash & Flash-Lite model fallback chain
  */
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
@@ -15,8 +16,15 @@ async function generateGeminiContent(promptText, systemInstruction = "") {
     throw new Error("GEMINI_API_KEY is not set in environment.");
   }
 
-  // Model fallback chain: gemini-2.0-flash -> gemini-1.5-flash-latest -> gemini-1.5-flash
-  const models = ['gemini-2.0-flash', 'gemini-1.5-flash-latest', 'gemini-1.5-flash'];
+  // Latest Gemini Free Tier model fallback chain (Flash 2.0, Flash-Lite, Flash 1.5)
+  const models = [
+    'gemini-2.0-flash',
+    'gemini-2.0-flash-lite-preview-02-05',
+    'gemini-1.5-flash',
+    'gemini-1.5-flash-8b',
+    'gemini-1.5-pro'
+  ];
+
   let lastError = null;
 
   for (const modelName of models) {
@@ -28,13 +36,13 @@ async function generateGeminiContent(promptText, systemInstruction = "") {
           {
             role: "user",
             parts: [
-              { text: systemInstruction ? `${systemInstruction}\n\nUser Question: ${promptText}` : promptText }
+              { text: systemInstruction ? `${systemInstruction}\n\nUser Prompt: ${promptText}` : promptText }
             ]
           }
         ],
         generationConfig: {
           temperature: 0.2,
-          maxOutputTokens: 500
+          maxOutputTokens: 600
         }
       };
 
