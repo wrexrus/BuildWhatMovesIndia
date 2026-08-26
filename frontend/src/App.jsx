@@ -28,6 +28,16 @@ import Footer from "./components/Footer";
 import Registration from "./pages/register/Registration";
 import TrackApplicationStatus from "./pages/register/TrackApplicationStatus";
 import HomeStateGSK from "./pages/register/HomeStategGSK";
+import VerifyRFN from "./pages/userServices/VerifyRFN";
+import HolidayList from "./pages/userServices/HolidayList";
+import CauseList from "./pages/userServices/CauseList";
+import LocateGSTP from "./pages/userServices/LocateGSTP";
+import GenerateUserID from "./pages/userServices/GenerateUserID";
+import SearchHSNCode from "./pages/userServices/SearchHSNCode";
+import CreateChallan from "./pages/payments/CreateChallan";
+import TrackPaymentStatus from "./pages/payments/TrackPaymentStatus";
+import PaymentGrievance from "./pages/payments/PaymentGrievance";
+import EWayBill from "./pages/EWayBill";
 
 const MainLayout = () => {
   return (
@@ -95,6 +105,56 @@ const router = createBrowserRouter([
       {
         path: "/registration/home-state-gsk",
         element: <HomeStateGSK />,
+      },
+      {
+        path: "/services/user-services/verify-rfn",
+        element: <VerifyRFN />,
+      },
+      {
+        path: "/services/user-services/search-hsn",
+        element: <SearchHSNCode />,
+      },
+      {
+        path: "/services/user-services/holiday-list",
+        element: <HolidayList />,
+      },
+      {
+        path: "/services/user-services/cause-list",
+        element: <CauseList />,
+      },
+      {
+        path: "/services/user-services/locate-gstp",
+        element: <LocateGSTP />,
+      },
+      {
+        path: "/services/user-services/generate-user-id",
+        element: <GenerateUserID />,
+      },
+      {
+        path: "/services/payments/create-challan",
+        element: <CreateChallan />,
+      },
+
+      {
+        path: "/services/payments/track-status",
+        element: <TrackPaymentStatus />,
+      },
+
+      {
+        path: "/services/payments/grievance",
+        element: <PaymentGrievance />,
+      },
+      {
+        path: "/refunds/track-application-status",
+        element: <TrackApplicationStatus />,
+      },
+      {
+        path: "/services/track-application-status",
+        element: <TrackApplicationStatus />,
+      },
+      {
+        path: "/services/eway-bill",
+        element: <EWayBill />,
       },
       {
         path: "*",
