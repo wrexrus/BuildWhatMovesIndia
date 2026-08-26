@@ -21,7 +21,14 @@ import logo from "../assets/logo.png";
 
 const megaMenus = {
   Services: {
-    tabs: ["Registration", "Payments", "User Services", "Refunds"],
+    tabs: [
+      "Registration",
+      "Payments",
+      "User Services",
+      "Refunds",
+      "e-Way Bill System",
+      "Track Application Status",
+    ],
 
     content: {
       Registration: [
@@ -45,22 +52,71 @@ const megaMenus = {
       ],
 
       Payments: [
-        "Create Challan",
-        "Track Payment Status",
-        "Grievance against Payment (GST PMT-07)",
+        {
+          label: "Create Challan",
+          to: "/services/payments/create-challan",
+        },
+        {
+          label: "Track Payment Status",
+          to: "/services/payments/track-status",
+        },
+        {
+          label: "Grievance against Payment (GST PMT-07)",
+          to: "/services/payments/grievance",
+        },
       ],
 
       "User Services": [
-        "Search HSN Code",
-        "Generate User ID for Unregistered Applicant",
-        "Cause List",
-        "Verify RFN",
-        "Holiday List",
-        "Locate GST Practitioner (GSTP)",
-        "Search Advance Ruling",
+        {
+          label: "Search HSN Code",
+          to: "/services/user-services/search-hsn",
+        },
+        {
+          label: "Generate User ID for Unregistered Applicant",
+          to: "/services/user-services/generate-user-id",
+        },
+        {
+          label: "Cause List",
+          to: "/services/user-services/cause-list",
+        },
+        {
+          label: "Verify RFN",
+          to: "/services/user-services/verify-rfn",
+        },
+        {
+          label: "Holiday List",
+          to: "/services/user-services/holiday-list",
+        },
+        {
+          label: "Locate GST Practitioner (GSTP)",
+          to: "/services/user-services/locate-gstp",
+        },
+        {
+          label: "Search Advance Ruling",
+          to: "#",
+        },
       ],
 
-      Refunds: ["Track Application Status"],
+      Refunds: [
+        {
+          label: "Track Application Status",
+          to: "/refunds/track-application-status",
+        },
+      ],
+
+      "e-Way Bill System": [
+        {
+          label: "e-Way Bill System",
+          to: "/services/eway-bill",
+        },
+      ],
+
+      "Track Application Status": [
+        {
+          label: "Track Application Status",
+          to: "/services/track-application-status",
+        },
+      ],
     },
   },
 
