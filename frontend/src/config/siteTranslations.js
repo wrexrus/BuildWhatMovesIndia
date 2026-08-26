@@ -33,12 +33,13 @@ export const SITE_TRANSLATIONS = {
     noticeText: "GSTR-3B Filing Cutoff for July 2026 is 20th August. Reconcile supplier GSTR-2B before filing to prevent penalty notices.",
 
     // Copilot Service Card
-    copilotBadge: "✦ GST COPILOT SERVICE — UNDERSTAND. FIX. FILE.",
+    copilotBadge: "GST COPILOT SERVICE — UNDERSTAND. FIX. FILE.",
     copilotTitle: "Not sure what to do next? Let GST Copilot guide you.",
     copilotSubtitle: "Tell me what you're trying to accomplish on the GST portal, and I'll explain the process and guide you directly.",
     copilotWelcome: "Welcome back",
     copilotPlaceholder: "e.g. 'I received a notice about GSTR-2B mismatch and don't know what to do next...'",
-    copilotButton: "✦ Get Copilot Guidance",
+    copilotButton: "Get Copilot Guidance",
+    copilotWhatNext: "What Should I Do Next?",
     copilotQuickTitle: "QUICK ACTIONS FOR RAMESH",
     copilotChip1: "Review 3 Filing Issues",
     copilotChip2: "Calculate Net Tax Payable",
@@ -94,12 +95,13 @@ export const SITE_TRANSLATIONS = {
     noticeText: "जुलाई 2026 के लिए GSTR-3B दाखिल करने की अंतिम तिथि 20 अगस्त है। नोटिस से बचने के लिए फाइल करने से पहले GSTR-2B का मिलान करें।",
 
     // Copilot Service Card
-    copilotBadge: "✦ GST साथी COPILOT — समझें। सुधारें। फाइल करें।",
+    copilotBadge: "GST साथी COPILOT — समझें। सुधारें। फाइल करें।",
     copilotTitle: "समझ नहीं आ रहा आगे क्या करें? GST Copilot से मार्गदर्शन लें।",
     copilotSubtitle: "मुझे बताएं कि आप GST पोर्टल पर क्या करना चाहते हैं, और मैं आपको सही प्रक्रिया समझाऊंगा।",
     copilotWelcome: "वापसी पर स्वागत है",
     copilotPlaceholder: "जैसे: 'मुझे GSTR-2B में अंतर का नोटिस मिला है, आगे क्या करूँ...'",
-    copilotButton: "✦ Copilot मार्गदर्शन प्राप्त करें",
+    copilotButton: "Copilot मार्गदर्शन प्राप्त करें",
+    copilotWhatNext: "आगे क्या करें?",
     copilotQuickTitle: "रमेश जी के लिए त्वरित कार्य",
     copilotChip1: "3 फाइलिंग समस्याओं की समीक्षा करें",
     copilotChip2: "शुद्ध देय टैक्स की गणना करें",
@@ -155,12 +157,12 @@ export const SITE_TRANSLATIONS = {
     noticeText: "जुलै २०२६ साठी GSTR-3B भरण्याची शेवटची तारीख २० ऑगस्ट आहे. नोटीस टाळण्यासाठी GSTR-2B जुळवून घ्या.",
 
     // Copilot Service Card
-    copilotBadge: "✦ GST साथी COPILOT — समजा. सुधारा. दाखल करा.",
+    copilotBadge: "GST साथी COPILOT — समजा. सुधारा. दाखल करा.",
     copilotTitle: "पुढे काय करावे सुचत नाही? GST Copilot कडून मार्गदर्शन घ्या.",
     copilotSubtitle: "तुम्हाला GST पोर्टलवर काय करायचे आहे ते सांगा, मी योग्य मार्गदर्शन करेन.",
     copilotWelcome: "पुन्हा स्वागत आहे",
     copilotPlaceholder: "उदा: 'मला GSTR-2B फरकाची नोटीस आली आहे, पुढे काय करू...'",
-    copilotButton: "✦ Copilot मार्गदर्शन मिळवा",
+    copilotButton: "Copilot मार्गदर्शन मिळवा",
     copilotQuickTitle: "रमेश जी यांच्यासाठी त्वरित कृती",
     copilotChip1: "३ फाइलिंग समस्या तपासा",
     copilotChip2: "निव्वळ देय टॅक्स मोजा",
@@ -216,12 +218,12 @@ export const SITE_TRANSLATIONS = {
     noticeText: "ஜூலை 2026க்கான GSTR-3B தாக்கல் செய்ய கடைசி நாள் ஆகஸ்ட் 20. அபராதத்தைத் தவிர்க்க GSTR-2B ஐ ஒப்பிட்டுப் பாருங்கள்.",
 
     // Copilot Service Card
-    copilotBadge: "✦ ஜிஎஸ்டி காப்பிலட் — புரிந்துகொள். சரிசெய். தாக்கல் செய்.",
+    copilotBadge: "ஜிஎஸ்டி காப்பிலட் — புரிந்துகொள். சரிசெய். தாக்கல் செய்.",
     copilotTitle: "அடுத்து என்ன செய்வது என்று தெரியவில்லையா? ஜிஎஸ்டி காப்பிலட் வழிகாட்டும்.",
     copilotSubtitle: "நீங்கள் என்ன செய்ய விரும்புகிறீர்கள் என்று சொல்லுங்கள், நான் உங்களுக்கு வழிகாட்டுகிறேன்.",
     copilotWelcome: "மீண்டும் வருக",
     copilotPlaceholder: "எ.கா. 'எனக்கு GSTR-2B அறிவிப்பு வந்துள்ளது, அடுத்து என்ன செய்ய வேண்டும்...'",
-    copilotButton: "✦ காப்பிலட் வழிகாட்டுதலைப் பெறுங்கள்",
+    copilotButton: "காப்பிலட் வழிகாட்டுதலைப் பெறுங்கள்",
     copilotQuickTitle: "ரமேஷுக்கான விரைவுச் செயல்கள்",
     copilotChip1: "3 சிக்கல்களைச் சரிபார்க்கவும்",
     copilotChip2: "செலுத்தவேண்டிய வரியைக் கணக்கிடுங்கள்",
@@ -276,13 +278,14 @@ export const SITE_TRANSLATIONS = {
     noticeTitle: "ਤਾਜ਼ਾ ਪੋਰਟਲ ਨੋਟਿਸ:",
     noticeText: "ਜੁਲਾਈ 2026 ਲਈ GSTR-3B ਭਰਨ ਦੀ ਆਖਰੀ ਮਿਤੀ 20 ਅਗਸਤ ਹੈ। ਨੋਟਿਸ ਤੋਂ ਬਚਣ ਲਈ ਫਾਈਲ ਕਰਨ ਤੋਂ ਪਹਿਲਾਂ GSTR-2B ਦਾ ਮਿਲਾਨ ਕਰੋ।",
 
+
     // Copilot Service Card
-    copilotBadge: "✦ GST ਸਾਥੀ COPILOT — ਸਮਝੋ। ਸੁਧਾਰੋ। ਫਾਈਲ ਕਰੋ।",
+    copilotBadge: "GST ਸਾਥੀ COPILOT — ਸਮਝੋ। ਸੁਧਾਰੋ। ਫਾਈਲ ਕਰੋ।",
     copilotTitle: "ਸਮਝ ਨਹੀਂ ਆ ਰਿਹਾ ਅੱਗੇ ਕੀ ਕਰੀਏ? GST Copilot ਤੋਂ ਮਾਰਗਦਰਸ਼ਨ ਲਵੋ।",
     copilotSubtitle: "ਮੈਨੂੰ ਦੱਸੋ ਕਿ ਤੁਸੀਂ GST ਪੋਰਟਲ 'ਤੇ ਕੀ ਕਰਨਾ ਚਾਹੁੰਦੇ ਹੋ, ਅਤੇ ਮੈਂ ਤੁਹਾਨੂੰ ਸਹੀ ਪ੍ਰਕਿਰਿਆ ਸਮਝਾਵਾਂਗਾ।",
     copilotWelcome: "ਜੀ ਆਇਆਂ ਨੂੰ",
     copilotPlaceholder: "ਜਿਵੇਂ: 'ਮੈਨੂੰ GSTR-2B ਨੋਟਿਸ ਮਿਲਿਆ ਹੈ, ਅੱਗੇ ਕੀ ਕਰਾਂ...'",
-    copilotButton: "✦ Copilot ਮਾਰਗਦਰਸ਼ਨ ਪ੍ਰਾਪਤ ਕਰੋ",
+    copilotButton: "Copilot ਮਾਰਗਦਰਸ਼ਨ ਪ੍ਰਾਪਤ ਕਰੋ",
     copilotQuickTitle: "ਰਮੇਸ਼ ਜੀ ਲਈ ਤੁਰੰਤ ਕੰਮ",
     copilotChip1: "3 ਫਾਈਲਿੰਗ ਸਮੱਸਿਆਵਾਂ ਦੀ ਸਮੀਖਿਆ ਕਰੋ",
     copilotChip2: "ਸ਼ੁੱਧ ਦੇਣਯੋਗ ਟੈਕਸ ਦੀ ਗਣਨਾ ਕਰੋ",

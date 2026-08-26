@@ -16,6 +16,7 @@ import ChatbotWidget from "./components/ChatbotWidget";
 
 import Home from "./pages/Home";
 
+import Gstr3bSimplified from "./pages/Gstr3bSimplified";
 import SearchGSTIN from "./pages/searchTaxpayer/SearchGSTIN";
 import SearchPAN from "./pages/searchTaxpayer/SearchPAN";
 import SearchTemporaryID from "./pages/searchTaxpayer/SearchTemporaryID";
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/gstr3b-simplified",
+        element: <Gstr3bSimplified />,
       },
       {
         path: "/login",

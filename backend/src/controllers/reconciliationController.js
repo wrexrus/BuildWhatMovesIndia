@@ -5,10 +5,11 @@ const { getCurrentInvoices } = require('./invoiceController');
 async function reconcile(req, res) {
   try {
     const language = req.query.lang || req.body.language || 'EN';
+    const gstin = req.query.gstin || req.body.gstin || null;
     const activeInvoices = req.body.invoices || getCurrentInvoices();
 
-    // 1. Run Rule Engine
-    const reconciliationData = reconcileInvoices(activeInvoices);
+    // 1. Run Rule Engine with Persona GSTIN filtering
+    const reconciliationData = reconcileInvoices(activeInvoices, gstin);
 
     // 2. Attach Plain Language AI Explanations to all Mismatches/Deferred Items
     const enrichedResults = await Promise.all(

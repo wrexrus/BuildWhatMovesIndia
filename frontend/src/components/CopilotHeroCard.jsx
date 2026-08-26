@@ -118,14 +118,26 @@ const CopilotHeroCard = () => {
                 className="w-full text-sm sm:text-base p-3.5 rounded-xl border border-slate-300 focus:border-navy focus:ring-2 focus:ring-navy/20 font-medium placeholder-slate-400 bg-white text-slate-800 shadow-inner resize-none font-sans"
               />
 
-              <button
-                type="submit"
-                disabled={!userGoal.trim()}
-                className="w-full bg-navy hover:bg-[#1a3f6e] disabled:opacity-50 text-white font-bold text-sm sm:text-base py-3 px-6 rounded-xl shadow-sm transition-all cursor-pointer flex items-center justify-center gap-2 hover:scale-[1.01]"
-              >
-                <span>{t('copilotButton')}</span>
-                <ArrowRight className="w-4 h-4 text-amber" />
-              </button>
+              <div className="flex flex-col sm:flex-row gap-2.5 mt-1">
+                <button
+                  type="submit"
+                  disabled={!userGoal.trim()}
+                  className="flex-1 bg-navy hover:bg-[#1a3f6e] disabled:opacity-50 text-white font-bold text-xs sm:text-sm py-3 px-4 rounded-xl shadow-sm transition-all cursor-pointer flex items-center justify-center gap-2 hover:scale-[1.01]"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  <span>{t('copilotButton')}</span>
+                  <ArrowRight className="w-4 h-4 text-amber" />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => handleLaunchGoal("What should I do next for my GSTR-3B filing and pending actions?")}
+                  className="bg-amber hover:bg-amber-500 text-navy font-black text-xs sm:text-sm py-3 px-4 rounded-xl shadow-sm transition-all cursor-pointer flex items-center justify-center gap-1.5 hover:scale-[1.01] shrink-0"
+                >
+                  <Sparkles className="w-4 h-4 text-navy shrink-0 fill-navy" />
+                  <span>{t('copilotWhatNext')}</span>
+                </button>
+              </div>
             </form>
           </div>
         </div>

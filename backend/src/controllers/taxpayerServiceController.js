@@ -11,6 +11,11 @@ function loadHsnData() {
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }
 
+function loadPersonasData() {
+  const filePath = path.join(__dirname, '../../data/personas_cases_mock.json');
+  return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+}
+
 /**
  * Service: Search Taxpayer by GSTIN/UIN
  */
@@ -21,7 +26,6 @@ function searchTaxpayer(req, res) {
   const match = taxpayers.find(t => t.gstin === gstin);
 
   if (!match) {
-    // Generate synthetic response for unknown GSTIN
     return res.status(200).json({
       success: true,
       found: true,
@@ -104,8 +108,21 @@ function hsnLookup(req, res) {
   });
 }
 
+/**
+ * Service: Get All 10 Taxpayer Demo Personas & Case Studies
+ */
+function getTaxpayerPersonas(req, res) {
+  const personas = loadPersonasData();
+  return res.status(200).json({
+    success: true,
+    totalPersonas: personas.length,
+    personas
+  });
+}
+
 module.exports = {
   searchTaxpayer,
   trackReturnStatus,
-  hsnLookup
+  hsnLookup,
+  getTaxpayerPersonas
 };

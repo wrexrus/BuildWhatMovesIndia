@@ -78,10 +78,10 @@ export async function fetchInvoices() {
 }
 
 // 6. Run Reconciliation Engine
-export async function runReconciliation(language = 'EN') {
+export async function runReconciliation(language = 'EN', gstin = '27AAAAA1234A1Z5') {
   return fetchApi('/reconcile', {
     method: 'POST',
-    body: JSON.stringify({ language }),
+    body: JSON.stringify({ language, gstin }),
   });
 }
 
@@ -120,4 +120,12 @@ export async function sendCopilotQuery(query, language = 'HI', pageContext = 'HO
 export async function fetchAccountHarness(gstin = '', language = 'HI') {
   const gstinParam = gstin ? encodeURIComponent(gstin) : '';
   return fetchApi(`/chat/harness/${gstinParam}?lang=${encodeURIComponent(language)}`);
+}
+
+// 12. Multi-Language Voice Audio SSML Payload
+export async function getVoiceExplanation(invoiceNumber = 'AP/2026/045', language = 'HI') {
+  return fetchApi('/explain-voice', {
+    method: 'POST',
+    body: JSON.stringify({ invoiceNumber, language }),
+  });
 }

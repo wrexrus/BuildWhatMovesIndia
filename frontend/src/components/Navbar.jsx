@@ -136,6 +136,10 @@ const navLinks = [
     href: "/",
   },
   {
+    label: "GSTR-3B Simplified",
+    to: "/gstr3b-simplified",
+  },
+  {
     label: "Services",
     mega: true,
   },

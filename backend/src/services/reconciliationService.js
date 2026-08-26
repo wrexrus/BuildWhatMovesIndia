@@ -14,9 +14,44 @@ function loadGstr2b() {
 /**
  * Core Rule Engine for GSTR-1 vs GSTR-2B Mismatch Detection
  */
-function reconcileInvoices(customInvoices = null) {
-  const taxpayerInvoices = customInvoices || loadInvoices();
+function reconcileInvoices(customInvoices = null, targetGstin = null) {
+  let taxpayerInvoices = customInvoices || loadInvoices();
   const gstr2b = loadGstr2b();
+
+  if (targetGstin) {
+    const target = targetGstin.toUpperCase().trim();
+    let priorityInvoiceNo = null;
+
+    if (target === "08BBBBS5678C1Z6") {
+      priorityInvoiceNo = "JQ/2026/089"; // Sunita Sharma (Jaipur) - Tax Mismatch
+    } else if (target === "03CCCCG9012D1Z7") {
+      priorityInvoiceNo = "UT/2026/112"; // Gurpreet Singh (Ludhiana) - Late Filing Cutoff
+    } else if (target === "36DDDDK3456E1Z8") {
+      priorityInvoiceNo = "POLY/2026/178"; // Kavita Reddy (Hyderabad) - Duplicate Claim
+    } else if (target === "24EEEEV7890F1Z9") {
+      priorityInvoiceNo = "LHW/2026/144"; // Vikram Patel (Ahmedabad) - Cancelled GSTIN Supplier
+    } else if (target === "33FFFFF1234G1Z0") {
+      priorityInvoiceNo = "AP/2026/045"; // Meenakshi Sundaram (Madurai) - Tamil Audio Narration
+    } else if (target === "27GGGGG5678H1Z1") {
+      priorityInvoiceNo = "JQ/2026/089"; // Aniket Deshmukh (Pune) - HSN Lookup
+    } else if (target === "32HHHHH9012I1Z2") {
+      priorityInvoiceNo = "AP/2026/001"; // Priya Nair (Kochi) - Net Tax Payable Engine
+    } else if (target === "23IIIII3456J1Z3") {
+      priorityInvoiceNo = "POLY/2026/178"; // Rajesh Varma (Indore) - Tally CSV Parser
+    } else if (target === "19JJJJJ7890K1Z4") {
+      priorityInvoiceNo = "AP/2026/045"; // Amina Begum (Kolkata) - Dukan Mode Switcher
+    } else {
+      priorityInvoiceNo = "AP/2026/045"; // Ramesh Kumar (Nagpur) - Unfiled Supplier
+    }
+
+    if (priorityInvoiceNo) {
+      taxpayerInvoices.sort((a, b) => {
+        if (a.invoiceNumber === priorityInvoiceNo) return -1;
+        if (b.invoiceNumber === priorityInvoiceNo) return 1;
+        return 0;
+      });
+    }
+  }
 
   const gstr2bMap = new Map();
   gstr2b.supplierInvoices.forEach(inv => {

@@ -311,11 +311,11 @@ const ChatbotWidget = () => {
         <button
           onClick={toggleChat}
           className="bg-[#071b30] hover:bg-navy text-white px-4 py-3.5 rounded-full shadow-2xl flex items-center justify-center space-x-2 transition-all duration-300 hover:scale-105 border-2 border-white/20 cursor-pointer group"
-          title="GST Copilot — Understand. Fix. File."
+          title="GST Copilot - Understand. Fix. File."
           aria-label="Open GST Copilot Assistant"
         >
           <Sparkles className="w-5 h-5 text-amber group-hover:rotate-12 transition-transform" />
-          <span className="text-xs font-bold text-white tracking-wide">✦ GST Copilot</span>
+          <span className="text-xs font-bold text-white tracking-wide">GST Copilot</span>
           <span className="bg-amber text-navy text-[10px] font-black px-1.5 py-0.5 rounded-full border border-white">
             AI
           </span>
@@ -423,16 +423,22 @@ const ChatbotWidget = () => {
           </div>
 
           {/* Account Context Harness Status Bar */}
-          {isLoggedIn && harnessContext?.pendingToDos && harnessContext.pendingToDos.length > 0 && (
-            <div className="bg-amber-50/90 border-b border-amber-200/70 px-3.5 py-1.5 flex items-center justify-between text-xs text-amber-900 font-medium">
+          {harnessContext?.pendingToDos && harnessContext.pendingToDos.length > 0 && (
+            <button
+              type="button"
+              onClick={() => handleSendQuery("What are my pending action items and how do I solve them step-by-step?")}
+              className="w-full bg-amber-50/90 hover:bg-amber-100/90 border-b border-amber-200/70 px-3.5 py-1.5 flex items-center justify-between text-xs text-amber-900 font-medium cursor-pointer transition-colors"
+              title="Click to review and resolve pending action items"
+            >
               <div className="flex items-center gap-1.5">
                 <AlertCircle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                <span>{harnessContext.pendingToDos.length} {labels.actionPending}</span>
+                <span className="font-bold hover:underline">{harnessContext.pendingToDos.length} {labels.actionPending}</span>
               </div>
-              <span className="text-[10px] bg-amber-200/60 px-1.5 py-0.5 rounded text-amber-900 font-bold">
+              <span className="text-[10px] bg-amber-200/80 px-1.5 py-0.5 rounded text-amber-900 font-extrabold flex items-center gap-1">
+                <span className="h-1.5 w-1.5 rounded-full bg-amber-600 animate-pulse" />
                 {labels.live}
               </span>
-            </div>
+            </button>
           )}
 
           {/* Quick Action Chips Collapsible Bar */}

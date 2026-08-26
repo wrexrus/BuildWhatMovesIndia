@@ -1,0 +1,122 @@
+[
+  {
+    "id": "PERSONA-001",
+    "name": "Ramesh Kumar",
+    "location": "Nagpur, Maharashtra",
+    "businessType": "Nagpur Hardware & Sanitary Store",
+    "turnover": "₹85 Lakhs",
+    "language": "Hindi / Hinglish",
+    "portalProblem": "Unfiled supplier bill #AP/2026/045 (Asian Paints) for ₹4,500 tax credit. On the official portal, Ramesh would have claimed full ₹4,500 credit, resulting in automated notice under Section 16(2)(aa).",
+    "ourSolution": "System automatically detects missing GSTR-1, blocks ₹4,500 credit safely, and generates a 1-tap WhatsApp/SMS reminder to Asian Paints.",
+    "easeAndImpact": "Prevents ₹10,000 penalty notice & 18% interest charge. Processed in 1 click.",
+    "datasetUsed": "invoices.json & gstr2b_mock.json (Rule 101: ERR_SUPPLIER_UNFILED)"
+  },
+  {
+    "id": "PERSONA-002",
+    "name": "Sunita Sharma",
+    "location": "Jaipur, Rajasthan",
+    "businessType": "Jaipur Handicrafts & Textiles",
+    "turnover": "₹45 Lakhs",
+    "language": "Hindi",
+    "portalProblem": "Tax amount mismatch: Physical bill shows ₹18,000 tax, but Jaquar filed only ₹12,000 on GSTR-2B. Portal threw cryptic mismatch error.",
+    "ourSolution": "Rule 102 caps claim at portal limit (₹12,000) for safe filing and generates a 1-click amendment request for the remaining ₹6,000.",
+    "easeAndImpact": "Saved ₹6,000 over-claim penalty notice while allowing immediate return filing.",
+    "datasetUsed": "invoices.json & gstr2b_mock.json (Rule 102: ERR_TAX_AMOUNT_MISMATCH)"
+  },
+  {
+    "id": "PERSONA-003",
+    "name": "Gurpreet Singh",
+    "location": "Ludhiana, Punjab",
+    "businessType": "Ludhiana Auto Parts Traders",
+    "turnover": "₹1.2 Crore",
+    "language": "Punjabi",
+    "portalProblem": "Supplier uploaded UltraTech invoice #UT/2026/112 late on August 18th (after the 11th monthly cutoff date).",
+    "ourSolution": "Rule 105 flags late upload and defers ₹9,800 ITC to next month automatically without human error.",
+    "easeAndImpact": "Zero portal rejection. Credit is 100% preserved for next month's return.",
+    "datasetUsed": "gstr2b_mock.json (Rule 105: ERR_DEFERRED_ITC_LATE_UPLOAD)"
+  },
+  {
+    "id": "PERSONA-004",
+    "name": "Kavita Reddy",
+    "location": "Hyderabad, Telangana",
+    "businessType": "Hyderabad Electricals & Lighting",
+    "turnover": "₹60 Lakhs",
+    "language": "English / Telugu",
+    "portalProblem": "Accidental duplicate entry of Polycab invoice #POLY/2026/178 in accounting software.",
+    "ourSolution": "Rule 103 detects duplicate GSTIN + invoice combination and rejects duplicate entry.",
+    "easeAndImpact": "Avoided double ITC claim rejection, audit investigation, and interest penalty.",
+    "datasetUsed": "invoices.json (Rule 103: ERR_DUPLICATE_CLAIM)"
+  },
+  {
+    "id": "PERSONA-005",
+    "name": "Vikram Patel",
+    "location": "Ahmedabad, Gujarat",
+    "businessType": "Ahmedabad Industrial Chemicals",
+    "turnover": "₹1.8 Crore",
+    "language": "Gujarati / English",
+    "portalProblem": "Purchased goods from a local wholesaler whose GSTIN was cancelled suo-moto by tax authorities.",
+    "ourSolution": "Rule 104 verifies supplier registration status on live portal API, completely blocking ₹2,700 ineligible credit.",
+    "easeAndImpact": "Protected from illicit credit utilization audit under Section 16(2)(aa).",
+    "datasetUsed": "taxpayers_mock.json (Rule 104: ERR_SUPPLIER_CANCELLED)"
+  },
+  {
+    "id": "PERSONA-006",
+    "name": "Meenakshi Sundaram",
+    "location": "Madurai, Tamil Nadu",
+    "businessType": "Madurai Handloom Cotton Weavers",
+    "turnover": "₹35 Lakhs",
+    "language": "Tamil (தமிழ்)",
+    "portalProblem": "Cryptic portal error codes in English created extreme confusion. Speaks only Tamil.",
+    "ourSolution": "Native Tamil script UI + Web Speech API 1-Tap Tamil Audio Narration explaining exact fix out loud.",
+    "easeAndImpact": "100% comprehension without paying external CA fees.",
+    "datasetUsed": "siteTranslations.js & voiceService.js (Language: TA)"
+  },
+  {
+    "id": "PERSONA-007",
+    "name": "Aniket Deshmukh",
+    "location": "Pune, Maharashtra",
+    "businessType": "Pune Electronics & Mobile Hub",
+    "turnover": "₹50 Lakhs",
+    "language": "Marathi (मराठी)",
+    "portalProblem": "Unsure about correct HSN code and GST tax rate for industrial paints and emulsions.",
+    "ourSolution": "Built-in HSN Lookup Service (GET /api/services/hsn-lookup) instantly provides HSN 3208 and 18% rate.",
+    "easeAndImpact": "Saved ₹5,000 over-taxation per invoice order.",
+    "datasetUsed": "hsn_mock.json (HSN Lookup API)"
+  },
+  {
+    "id": "PERSONA-008",
+    "name": "Priya Nair",
+    "location": "Kochi, Kerala",
+    "businessType": "Kochi Spices & Dry Fruits Wholesale",
+    "turnover": "₹75 Lakhs",
+    "language": "English",
+    "portalProblem": "Confused about net cash tax liability vs eligible input tax credit before filing deadline.",
+    "ourSolution": "Real-time Net Tax Payable Calculation Engine (Sales Tax ₹42,500 - Eligible ITC ₹18,200 = Net Cash ₹24,300) + Printable HTML Receipt Generator.",
+    "easeAndImpact": "On-time filing, saved ₹50/day late fee.",
+    "datasetUsed": "reconciliationService.js & filingRoutes.js"
+  },
+  {
+    "id": "PERSONA-009",
+    "name": "Rajesh Varma",
+    "location": "Indore, Madhya Pradesh",
+    "businessType": "Indore Sanitary & Bath Ware",
+    "turnover": "₹90 Lakhs",
+    "language": "Hindi",
+    "portalProblem": "Struggled to import raw Tally/Excel sales invoices into portal-compatible format.",
+    "ourSolution": "Custom Raw Invoice Array Parser (POST /api/invoices/parse-raw) ingests raw CSV/Excel rows and computes CGST, SGST, IGST automatically.",
+    "easeAndImpact": "Filing time reduced from 4 hours to 30 seconds.",
+    "datasetUsed": "exportController.js (parseRawInvoices)"
+  },
+  {
+    "id": "PERSONA-010",
+    "name": "Amina Begum",
+    "location": "Kolkata, West Bengal",
+    "businessType": "Kolkata Leather Goods & Store",
+    "turnover": "₹30 Lakhs",
+    "language": "English / Hindi",
+    "portalProblem": "CA legal jargon (e.g. 'Section 17(5) Blocked Credit', 'Rule 36(4)') caused fear and anxiety.",
+    "ourSolution": "Shopkeeper Mode vs CA Technical Mode Switcher ('Dukan Mode'). Converts legal jargon into simple everyday advice.",
+    "easeAndImpact": "Complete peace of mind and confident self-filing.",
+    "datasetUsed": "gstKnowledgeService.js (Shopkeeper Explanation Mode)"
+  }
+]

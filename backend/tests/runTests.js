@@ -125,6 +125,12 @@ async function runTestSuite() {
     "Account Harness & GST Copilot engine correctly parsed live reconciliation results"
   );
 
+  // TEST-080: 10 Taxpayer Demo Personas & Case Studies Dataset
+  const fs = require('fs');
+  const path = require('path');
+  const personasData = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/personas_cases_mock.json'), 'utf8'));
+  assert(personasData && personasData.length === 10 && personasData[0].name === "Ramesh Kumar", "TEST-080", "10 Taxpayer Demo Personas & Case Studies dataset loaded successfully");
+
   console.log("\n-------------------------------------------------------");
   console.log(` TEST SUMMARY: ${passedCount} PASSED, ${failedCount} FAILED`);
   console.log("-------------------------------------------------------\n");

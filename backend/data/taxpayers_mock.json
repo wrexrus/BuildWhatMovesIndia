@@ -17,6 +17,141 @@
     ]
   },
   {
+    "gstin": "08BBBBS5678C1Z6",
+    "legalName": "SUNITA SHARMA",
+    "tradeName": "Jaipur Handicrafts & Textiles",
+    "registrationDate": "2018-04-12",
+    "taxpayerType": "Regular",
+    "gstinStatus": "ACTIVE",
+    "stateJurisdiction": "Jaipur Zone, Rajasthan",
+    "centerJurisdiction": "Jaipur Central",
+    "constitutionOfBusiness": "Proprietorship",
+    "natureOfBusiness": "Artisan Textile Export",
+    "filingStatus": [
+      { "period": "062026", "form": "GSTR-3B", "filingDate": "2026-07-20", "status": "FILED", "arn": "AA080626223344V" }
+    ]
+  },
+  {
+    "gstin": "03CCCCG9012D1Z7",
+    "legalName": "GURPREET SINGH",
+    "tradeName": "Ludhiana Auto Parts Traders",
+    "registrationDate": "2017-09-01",
+    "taxpayerType": "Regular",
+    "gstinStatus": "ACTIVE",
+    "stateJurisdiction": "Ludhiana Zone, Punjab",
+    "centerJurisdiction": "Ludhiana Central",
+    "constitutionOfBusiness": "Partnership",
+    "natureOfBusiness": "Automotive Parts Wholesale",
+    "filingStatus": [
+      { "period": "062026", "form": "GSTR-3B", "filingDate": "2026-07-18", "status": "FILED", "arn": "AA030626334455V" }
+    ]
+  },
+  {
+    "gstin": "36DDDDK3456E1Z8",
+    "legalName": "KAVITA REDDY",
+    "tradeName": "Hyderabad Electricals & Lighting",
+    "registrationDate": "2019-01-15",
+    "taxpayerType": "Regular",
+    "gstinStatus": "ACTIVE",
+    "stateJurisdiction": "Hyderabad Zone, Telangana",
+    "centerJurisdiction": "Hyderabad South",
+    "constitutionOfBusiness": "Proprietorship",
+    "natureOfBusiness": "Electrical Supplies Retail",
+    "filingStatus": [
+      { "period": "062026", "form": "GSTR-3B", "filingDate": "2026-07-19", "status": "FILED", "arn": "AA360626445566V" }
+    ]
+  },
+  {
+    "gstin": "24EEEEV7890F1Z9",
+    "legalName": "VIKRAM PATEL",
+    "tradeName": "Ahmedabad Industrial Chemicals",
+    "registrationDate": "2017-08-01",
+    "taxpayerType": "Regular",
+    "gstinStatus": "ACTIVE",
+    "stateJurisdiction": "Ahmedabad Zone, Gujarat",
+    "centerJurisdiction": "Ahmedabad West",
+    "constitutionOfBusiness": "Private Limited Company",
+    "natureOfBusiness": "Chemical Wholesale Distributor",
+    "filingStatus": [
+      { "period": "062026", "form": "GSTR-3B", "filingDate": "2026-07-20", "status": "FILED", "arn": "AA240626556677V" }
+    ]
+  },
+  {
+    "gstin": "33FFFFM1234G1Z0",
+    "legalName": "MEENAKSHI SUNDARAM",
+    "tradeName": "Madurai Handloom Cotton Weavers",
+    "registrationDate": "2020-03-01",
+    "taxpayerType": "Regular",
+    "gstinStatus": "ACTIVE",
+    "stateJurisdiction": "Madurai Zone, Tamil Nadu",
+    "centerJurisdiction": "Madurai Central",
+    "constitutionOfBusiness": "Proprietorship",
+    "natureOfBusiness": "Handloom Cotton Manufacturer",
+    "filingStatus": [
+      { "period": "062026", "form": "GSTR-3B", "filingDate": "2026-07-19", "status": "FILED", "arn": "AA330626667788V" }
+    ]
+  },
+  {
+    "gstin": "27GGGGA5678H1Z1",
+    "legalName": "ANIKET DESHMUKH",
+    "tradeName": "Pune Electronics & Mobile Hub",
+    "registrationDate": "2019-06-10",
+    "taxpayerType": "Regular",
+    "gstinStatus": "ACTIVE",
+    "stateJurisdiction": "Pune Zone, Maharashtra",
+    "centerJurisdiction": "Pune East",
+    "constitutionOfBusiness": "Proprietorship",
+    "natureOfBusiness": "Retail Electronics",
+    "filingStatus": [
+      { "period": "062026", "form": "GSTR-3B", "filingDate": "2026-07-20", "status": "FILED", "arn": "AA270626778899V" }
+    ]
+  },
+  {
+    "gstin": "32HHHHP9012I1Z2",
+    "legalName": "PRIYA NAIR",
+    "tradeName": "Kochi Spices & Dry Fruits Wholesale",
+    "registrationDate": "2018-11-20",
+    "taxpayerType": "Regular",
+    "gstinStatus": "ACTIVE",
+    "stateJurisdiction": "Kochi Zone, Kerala",
+    "centerJurisdiction": "Ernakulam Central",
+    "constitutionOfBusiness": "Proprietorship",
+    "natureOfBusiness": "Wholesale Spice Trade",
+    "filingStatus": [
+      { "period": "062026", "form": "GSTR-3B", "filingDate": "2026-07-19", "status": "FILED", "arn": "AA320626889900V" }
+    ]
+  },
+  {
+    "gstin": "23IIIIR3456J1Z3",
+    "legalName": "RAJESH VARMA",
+    "tradeName": "Indore Sanitary & Bath Ware",
+    "registrationDate": "2017-10-05",
+    "taxpayerType": "Regular",
+    "gstinStatus": "ACTIVE",
+    "stateJurisdiction": "Indore Zone, Madhya Pradesh",
+    "centerJurisdiction": "Indore Central",
+    "constitutionOfBusiness": "Partnership",
+    "natureOfBusiness": "Sanitary Ware Retail",
+    "filingStatus": [
+      { "period": "062026", "form": "GSTR-3B", "filingDate": "2026-07-20", "status": "FILED", "arn": "AA230626990011V" }
+    ]
+  },
+  {
+    "gstin": "19JJJJA7890K1Z4",
+    "legalName": "AMINA BEGUM",
+    "tradeName": "Kolkata Leather Goods & Store",
+    "registrationDate": "2021-02-15",
+    "taxpayerType": "Regular",
+    "gstinStatus": "ACTIVE",
+    "stateJurisdiction": "Kolkata Zone, West Bengal",
+    "centerJurisdiction": "Kolkata North",
+    "constitutionOfBusiness": "Proprietorship",
+    "natureOfBusiness": "Retail Leather Store",
+    "filingStatus": [
+      { "period": "062026", "form": "GSTR-3B", "filingDate": "2026-07-19", "status": "FILED", "arn": "AA190626112233V" }
+    ]
+  },
+  {
     "gstin": "27AAACA1234A1Z1",
     "legalName": "ASIAN PAINTS LIMITED",
     "tradeName": "Asian Paints Industrial Depot",

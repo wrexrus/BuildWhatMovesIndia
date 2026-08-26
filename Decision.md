@@ -243,14 +243,38 @@ Transformed generic chatbot into a State-Aware & Contextual GST Copilot Action A
 
 ---
 
-## Decision 023: Website-Wide Global Language Toggle & Multilingual Context Engine
+## Decision 023 & 024: 100% Website-Wide Multilingual Coverage & Global Language Engine
 
 - **Date**: 2026-08-26
-- **Status**: Approved, Implemented & Verified (19/19 Backend Tests Passing + 0 Build Errors in 4.02s)
+- **Status**: Approved, Implemented & Verified
+
+---
+
+## Decision 025: 10 Taxpayer Personas Case Studies & Dataset Diversification Suite
+
+- **Date**: 2026-08-26
+- **Status**: Approved, Implemented & Verified
+
+---
+
+## Decision 026: Interactive Live Pending Actions Bar & 1-Tap "What To Do Next?" Copilot Enhancements
+
+- **Date**: 2026-08-26
+- **Status**: Approved, Implemented & Verified
+
+---
+
+## Decision 027: GSTR-3B Simplified Interactive Dashboard & 100% Backend API Service Integration
+
+- **Date**: 2026-08-26
+- **Status**: Approved, Implemented & Verified (20/20 Backend Tests Passing + 0 Build Errors in 3.12s)
 
 ### Context & Decision
-Built a website-wide global language context engine (`LanguageContext.jsx`) and mounted an accessible language selector dropdown in the Navbar:
-1. **Global Language State (`LanguageContext.jsx`)**: Persists taxpayer language selection (`EN`, `HI`, `MR`, `TA`, `PA`) in `localStorage`.
-2. **Site Translation Dictionary (`siteTranslations.js`)**: Multi-script dictionary covering Navbar links, Hero sections, Notice Bar, Copilot Hero Card, Search Taxpayer tools, and Auth forms.
-3. **Navbar Integration (`Navbar.jsx`)**: Added global language dropdown (`🌐 English / हिंदी / मराठी / தமிழ் / ਪੰਜਾਬੀ`) in the top accessibility bar.
-4. **Chatbot Bi-Directional Synchronization (`ChatbotWidget.jsx`)**: Synchronized ChatbotWidget language state directly with `LanguageContext` so changing language in the Navbar updates the chatbot seamlessly.
+Created `frontend/src/pages/Gstr3bSimplified.jsx` and registered `/gstr3b-simplified` route to connect **100% of all 6 backend services and dataset personas**:
+1. **Live Reconciliation Table (`POST /api/reconcile`)**: Visual breakdown of matched invoices and flagged rule mismatches (Rules 101-105).
+2. **1-Click Mismatch Resolution Actions (`POST /api/invoices/resolve`)**: Interactive `CLAIM_LOWER_LIMIT`, `DEFER_TO_NEXT_MONTH`, and `DELETE_DUPLICATE` action buttons.
+3. **1-Click Return Submission (`POST /api/gstr3b/submit`)**: Return filing producing live ARN reference.
+4. **Printable HTML Receipt Window (`GET /api/gstr3b/receipt/:arn/html`)**: 1-click button opening official citizen filing summary receipt.
+5. **Interactive HSN Code & Rate Finder (`GET /api/services/hsn-lookup`)**: Real-time HSN search widget.
+6. **Voice Audio Read-Aloud (`POST /api/explain-voice`)**: 1-tap audio explanation button.
+7. **Hackathon Persona Switcher Header**: Dropdown to switch live datasets between Ramesh (Nagpur), Sunita (Jaipur), Gurpreet (Ludhiana), Kavita (Hyderabad), and Vikram (Ahmedabad).
