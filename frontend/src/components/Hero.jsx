@@ -4,7 +4,11 @@ import hero from '../assets/hero.png'
 const Hero = () => {
   return (
     <div>
-        <img src={hero} className='w-full h-[520px] object-cover'/>
+      <img
+        src={hero}
+        alt="Goods and Services Tax portal banner"
+        className="h-[280px] w-full object-cover sm:h-[380px] lg:h-[520px]"
+      />
     </div>
   )
 }

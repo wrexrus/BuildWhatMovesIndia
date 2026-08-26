@@ -139,13 +139,13 @@ const GenerateUserID = () => {
           ]}
         />
 
-        <div className="mx-auto max-w-[1400px] px-5 pb-24 pt-8 sm:px-8 lg:px-10">
-          <header className="border-b border-[#eaeaea] pb-10">
+        <div className="mx-auto max-w-[1400px] px-5 pb-16 pt-8 sm:px-8 lg:px-10">
+          <header className="border-b border-[#eaeaea] pb-7">
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#1f6c9f]">
               User service
             </p>
 
-            <h1 className="max-w-4xl text-3xl font-semibold tracking-[-0.03em] text-[#20282d] sm:text-4xl">
+            <h1 className="max-w-4xl text-2xl font-semibold tracking-[-0.02em] text-balance text-[#20282d] sm:text-[1.75rem]">
               Generate User ID for unregistered applicant
             </h1>
 
@@ -155,14 +155,13 @@ const GenerateUserID = () => {
             </p>
           </header>
 
-          <section className="max-w-4xl pt-10">
-            {/* Purpose */}
-            <div className="border-b border-[#eaeaea] pb-8">
+          <section className="max-w-4xl pt-8">
+            <div className="border-b border-[#eaeaea] pb-7">
               <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#787774]">
-                Step 01
+                Application details
               </p>
 
-              <h2 className="mt-1 text-xl font-semibold text-[#293238]">
+              <h2 className="mt-1 text-xl font-semibold tracking-[-0.01em] text-[#293238]">
                 Purpose of application
               </h2>
 
@@ -241,13 +240,12 @@ const GenerateUserID = () => {
               </div>
             </div>
 
-            {/* E-commerce */}
-            <div className="border-b border-[#eaeaea] py-8">
+            <div className="border-b border-[#eaeaea] py-6">
               <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#787774]">
                 Additional registration
               </p>
 
-              <h2 className="mt-1 text-xl font-semibold text-[#293238]">
+              <h2 className="mt-1 text-xl font-semibold tracking-[-0.01em] text-[#293238]">
                 E-commerce supplier enrolment
               </h2>
 
@@ -288,7 +286,6 @@ const GenerateUserID = () => {
               </label>
             </div>
 
-            {/* Action */}
             <div className="flex justify-end pt-7">
               <button
                 type="button"

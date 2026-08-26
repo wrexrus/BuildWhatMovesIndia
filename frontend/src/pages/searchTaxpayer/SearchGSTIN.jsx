@@ -94,7 +94,6 @@ const SearchGSTIN = () => {
                     </div>
                 </form>
 
-                {/* Connected Backend Results Card */}
                 {result && (
                     <div className="mt-8 max-w-3xl bg-white p-6 rounded-lg shadow-sm border border-gray-200">
                         <div className="flex justify-between items-start mb-4 border-b pb-3 border-gray-100">
@@ -130,7 +129,6 @@ const SearchGSTIN = () => {
                             </div>
                         </div>
 
-                        {/* Return Filing History Table */}
                         {filingHistory && filingHistory.length > 0 && (
                             <div className="mt-6 border-t border-gray-100 pt-4">
                                 <h4 className="text-sm font-bold text-gray-700 mb-3">Recent Return Filing History</h4>

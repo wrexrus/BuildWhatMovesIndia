@@ -142,17 +142,13 @@ const PaymentGrievance = () => {
           ]}
         />
 
-        <div className="mx-auto max-w-[1400px] px-5 pb-24 pt-8 sm:px-8 lg:px-10">
-          {/* =====================================================
-              HEADER
-          ===================================================== */}
-
-          <header className="border-b border-[#eaeaea] pb-8">
+        <div className="mx-auto max-w-[1400px] px-5 pb-16 pt-8 sm:px-8 lg:px-10">
+          <header className="border-b border-[#eaeaea] pb-7">
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#1f6c9f]">
               Payments / Grievance
             </p>
 
-            <h1 className="max-w-4xl text-3xl font-semibold tracking-[-0.03em] text-[#20282d] sm:text-4xl">
+            <h1 className="max-w-4xl text-2xl font-semibold tracking-[-0.02em] text-balance text-[#20282d] sm:text-[1.75rem]">
               Grievance against Payment
             </h1>
 
@@ -165,10 +161,6 @@ const PaymentGrievance = () => {
               the status of an existing payment grievance.
             </p>
           </header>
-
-          {/* =====================================================
-              TABS
-          ===================================================== */}
 
           <div className="border-b border-[#eaeaea] pt-7">
             <div className="flex gap-8">
@@ -219,13 +211,13 @@ const PaymentGrievance = () => {
           </div>
 
           {activeTab === "status" ? (
-            <section className="max-w-3xl pt-10">
+            <section className="max-w-3xl pt-8">
               <div className="border-b border-[#eaeaea] pb-5">
                 <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#787774]">
                   Grievance lookup
                 </p>
 
-                <h2 className="mt-1 text-xl font-semibold text-[#293238]">
+                <h2 className="mt-1 text-xl font-semibold tracking-[-0.01em] text-[#293238]">
                   Check grievance status
                 </h2>
               </div>
@@ -283,24 +275,20 @@ const PaymentGrievance = () => {
                 handleSubmit("EVC");
               }}
               noValidate
-              className="pt-10"
+              className="pt-8"
             >
-              {/* =================================================
-                  GRIEVANCE DETAILS
-              ================================================= */}
-
               <section>
                 <div className="mb-6">
                   <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#787774]">
-                    01 — Grievance details
+                    Grievance details
                   </p>
 
-                  <h2 className="mt-1 text-xl font-semibold text-[#293238]">
+                  <h2 className="mt-1 text-xl font-semibold tracking-[-0.01em] text-[#293238]">
                     Payment issue
                   </h2>
                 </div>
 
-                <div className="grid gap-x-8 gap-y-7 md:grid-cols-2">
+                <div className="grid gap-x-8 gap-y-6 md:grid-cols-2">
                   <div>
                     <label className="mb-2 block text-sm font-medium text-[#394247]">
                       Grievance type
@@ -437,22 +425,18 @@ const PaymentGrievance = () => {
                 </div>
               </section>
 
-              {/* =================================================
-                  TAXPAYER DETAILS
-              ================================================= */}
-
-              <section className="mt-12 border-t border-[#eaeaea] pt-10">
+              <section className="mt-9 border-t border-[#eaeaea] pt-8">
                 <div className="mb-6">
                   <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#787774]">
-                    02 — Taxpayer details
+                    Taxpayer details
                   </p>
 
-                  <h2 className="mt-1 text-xl font-semibold text-[#293238]">
+                  <h2 className="mt-1 text-xl font-semibold tracking-[-0.01em] text-[#293238]">
                     Person reporting the grievance
                   </h2>
                 </div>
 
-                <div className="grid gap-x-8 gap-y-7 md:grid-cols-2">
+                <div className="grid gap-x-8 gap-y-6 md:grid-cols-2">
                   <div>
                     <label
                       htmlFor="gstin"
@@ -483,6 +467,7 @@ const PaymentGrievance = () => {
                         border border-[#d9d9d7]
                         bg-white px-3
                         text-sm
+                        font-mono
                         uppercase
                         placeholder:normal-case
                         outline-none
@@ -660,6 +645,7 @@ const PaymentGrievance = () => {
                           border border-[#d9d9d7]
                           bg-white px-3
                           text-sm
+                          font-mono
                           outline-none
                           focus:border-[#1f6c9f]
                         "
@@ -760,17 +746,13 @@ const PaymentGrievance = () => {
                 </div>
               </section>
 
-              {/* =================================================
-                  DOCUMENT
-              ================================================= */}
-
-              <section className="mt-12 border-t border-[#eaeaea] pt-10">
+              <section className="mt-9 border-t border-[#eaeaea] pt-8">
                 <div className="mb-6">
                   <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#787774]">
-                    03 — Supporting document
+                    Supporting document
                   </p>
 
-                  <h2 className="mt-1 text-xl font-semibold text-[#293238]">
+                  <h2 className="mt-1 text-xl font-semibold tracking-[-0.01em] text-[#293238]">
                     Add supporting documentation
                   </h2>
                 </div>
@@ -803,17 +785,13 @@ const PaymentGrievance = () => {
                 </div>
               </section>
 
-              {/* =================================================
-                  DISCREPANCY
-              ================================================= */}
-
-              <section className="mt-12 border-t border-[#eaeaea] pt-10">
+              <section className="mt-9 border-t border-[#eaeaea] pt-8">
                 <div className="mb-6">
                   <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#787774]">
-                    04 — Discrepancy in payments
+                    Payment reference
                   </p>
 
-                  <h2 className="mt-1 text-xl font-semibold text-[#293238]">
+                  <h2 className="mt-1 text-xl font-semibold tracking-[-0.01em] text-[#293238]">
                     Payment reference
                   </h2>
                 </div>
@@ -846,6 +824,7 @@ const PaymentGrievance = () => {
                       border border-[#d9d9d7]
                       bg-white px-3
                       text-sm
+                      font-mono
                       outline-none
                       focus:border-[#1f6c9f]
                     "
@@ -865,11 +844,7 @@ const PaymentGrievance = () => {
                 </div>
               </section>
 
-              {/* =================================================
-                  ACTIONS
-              ================================================= */}
-
-              <section className="mt-12 border-t border-[#eaeaea] pt-7">
+              <section className="mt-9 border-t border-[#eaeaea] pt-7">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-end">
                   <button
                     type="button"

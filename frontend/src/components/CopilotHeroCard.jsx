@@ -27,13 +27,10 @@ const CopilotHeroCard = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-10 relative z-20 mb-10 font-sans">
-      {/* Website Theme Aligned Copilot Hero Card */}
       <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-md border border-slate-200/90 text-slate-800 relative overflow-hidden">
-        {/* Top Accent Stripe matching Official Government Portal Theme */}
-        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-navy via-blue-600 to-amber" />
+        <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-navy via-navy-hover to-amber" />
 
         <div className="flex flex-col lg:flex-row items-stretch justify-between gap-8 pt-1">
-          {/* Left Column: Heading & Quick Presets */}
           <div className="flex-1 flex flex-col justify-between max-w-xl">
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber/10 border border-amber/30 text-navy text-xs font-bold mb-3">
@@ -56,7 +53,6 @@ const CopilotHeroCard = () => {
               </p>
             </div>
 
-            {/* Quick Preset Goal Chips */}
             <div className="mt-6">
               <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
                 {t('copilotQuickTitle')}
@@ -65,7 +61,7 @@ const CopilotHeroCard = () => {
                 <button
                   type="button"
                   onClick={() => handleLaunchGoal("What are my pending GST filing issues this month?")}
-                  className="bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-400 text-navy text-xs font-semibold px-3 py-2 rounded-xl flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs hover:scale-[1.01]"
+                  className="bg-slate-50 hover:bg-navy/5 border border-slate-200 hover:border-navy/35 text-navy text-xs font-semibold px-3 py-2 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs active:translate-y-px"
                 >
                   <AlertCircle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
                   <span>{t('copilotChip1')}</span>
@@ -74,7 +70,7 @@ const CopilotHeroCard = () => {
                 <button
                   type="button"
                   onClick={() => handleLaunchGoal("Explain my ₹24,300 net tax liability calculation")}
-                  className="bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-400 text-navy text-xs font-semibold px-3 py-2 rounded-xl flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs hover:scale-[1.01]"
+                  className="bg-slate-50 hover:bg-emerald-50 border border-slate-200 hover:border-emerald-400 text-navy text-xs font-semibold px-3 py-2 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs active:translate-y-px"
                 >
                   <Calculator className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                   <span>{t('copilotChip2')}</span>
@@ -83,16 +79,16 @@ const CopilotHeroCard = () => {
                 <button
                   type="button"
                   onClick={() => handleLaunchGoal("Why is Asian Paints bill #AP/2026/045 unfiled?")}
-                  className="bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-400 text-navy text-xs font-semibold px-3 py-2 rounded-xl flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs hover:scale-[1.01]"
+                  className="bg-slate-50 hover:bg-navy/5 border border-slate-200 hover:border-navy/35 text-navy text-xs font-semibold px-3 py-2 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs active:translate-y-px"
                 >
-                  <FileCheck2 className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                  <FileCheck2 className="w-3.5 h-3.5 text-navy shrink-0" />
                   <span>{t('copilotChip3')}</span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => handleLaunchGoal("What is the GSTR-3B filing due date and late fee rules?")}
-                  className="bg-slate-50 hover:bg-amber-50 border border-slate-200 hover:border-amber-400 text-navy text-xs font-semibold px-3 py-2 rounded-xl flex items-center gap-1.5 transition-all cursor-pointer shadow-2xs hover:scale-[1.01]"
+                  className="bg-slate-50 hover:bg-amber-50 border border-slate-200 hover:border-amber-400 text-navy text-xs font-semibold px-3 py-2 rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer shadow-2xs active:translate-y-px"
                 >
                   <Clock className="w-3.5 h-3.5 text-amber-700 shrink-0" />
                   <span>{t('copilotChip4')}</span>
@@ -101,10 +97,9 @@ const CopilotHeroCard = () => {
             </div>
           </div>
 
-          {/* Right Column: Large Typing Area for Goal Input */}
           <div className="flex-1 bg-slate-50/80 rounded-xl p-5 border border-slate-200 flex flex-col justify-between">
             <label htmlFor="copilot-hero-goal-input" className="block text-xs font-bold text-navy mb-2 flex items-center gap-1.5">
-              <Compass className="w-4 h-4 text-blue-600" />
+              <Compass className="w-4 h-4 text-navy" />
               <span>{t('copilotTitle')}</span>
             </label>
 
@@ -122,7 +117,7 @@ const CopilotHeroCard = () => {
                 <button
                   type="submit"
                   disabled={!userGoal.trim()}
-                  className="flex-1 bg-navy hover:bg-[#1a3f6e] disabled:opacity-50 text-white font-bold text-xs sm:text-sm py-3 px-4 rounded-xl shadow-sm transition-all cursor-pointer flex items-center justify-center gap-2 hover:scale-[1.01]"
+                  className="flex-1 bg-navy hover:bg-navy-hover disabled:opacity-50 text-white font-bold text-xs sm:text-sm py-3 px-4 rounded-xl shadow-sm transition-colors cursor-pointer flex items-center justify-center gap-2 active:translate-y-px"
                 >
                   <Sparkles className="w-4 h-4" />
                   <span>{t('copilotButton')}</span>
@@ -132,7 +127,7 @@ const CopilotHeroCard = () => {
                 <button
                   type="button"
                   onClick={() => handleLaunchGoal("What should I do next for my GSTR-3B filing and pending actions?")}
-                  className="bg-amber hover:bg-amber-500 text-navy font-black text-xs sm:text-sm py-3 px-4 rounded-xl shadow-sm transition-all cursor-pointer flex items-center justify-center gap-1.5 hover:scale-[1.01] shrink-0"
+                  className="bg-amber hover:bg-amber-500 text-navy font-black text-xs sm:text-sm py-3 px-4 rounded-xl shadow-sm transition-colors cursor-pointer flex items-center justify-center gap-1.5 active:translate-y-px shrink-0"
                 >
                   <Sparkles className="w-4 h-4 text-navy shrink-0 fill-navy" />
                   <span>{t('copilotWhatNext')}</span>

@@ -52,13 +52,13 @@ const CauseList = () => {
           ]}
         />
 
-        <div className="mx-auto max-w-[1400px] px-5 pb-24 pt-8 sm:px-8 lg:px-10">
-          <header className="border-b border-[#eaeaea] pb-10">
+        <div className="mx-auto max-w-[1400px] px-5 pb-16 pt-8 sm:px-8 lg:px-10">
+          <header className="border-b border-[#eaeaea] pb-7">
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#1f6c9f]">
               User service
             </p>
 
-            <h1 className="text-3xl font-semibold tracking-[-0.03em] text-[#20282d] sm:text-4xl">
+            <h1 className="text-2xl font-semibold tracking-[-0.02em] text-balance text-[#20282d] sm:text-[1.75rem]">
               Cause list
             </h1>
 
@@ -68,9 +68,9 @@ const CauseList = () => {
             </p>
           </header>
 
-          <section className="pt-10">
+          <section className="pt-8">
             <form onSubmit={handleSubmit}>
-              <div className="grid gap-x-8 gap-y-7 md:grid-cols-2">
+              <div className="grid gap-x-8 gap-y-6 md:grid-cols-2">
                 <div>
                   <label
                     htmlFor="authority"

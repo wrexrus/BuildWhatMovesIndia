@@ -55,17 +55,13 @@ const HomeStateGSK = () => {
           ]}
         />
 
-        <div className="mx-auto max-w-[1180px] px-5 pb-20 pt-8 sm:px-8">
-          {/* =====================================================
-              INTRO
-          ===================================================== */}
-
-          <header className="border-b border-[#eaeaea] pb-10">
+        <div className="mx-auto max-w-[1180px] px-5 pb-14 pt-8 sm:px-8">
+          <header className="border-b border-[#eaeaea] pb-7">
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#1f6c9f]">
               Registration service
             </p>
 
-            <h1 className="max-w-4xl text-3xl font-semibold tracking-[-0.03em] text-[#20282d] sm:text-4xl">
+            <h1 className="max-w-4xl text-2xl font-semibold tracking-[-0.02em] text-balance text-[#20282d] sm:text-[1.75rem]">
               Home State GSK selection
             </h1>
 
@@ -76,18 +72,14 @@ const HomeStateGSK = () => {
             </p>
           </header>
 
-          {/* =====================================================
-              FORM
-          ===================================================== */}
-
-          <section className="max-w-3xl pt-10">
+          <section className="max-w-3xl pt-8">
             <div className="mb-8 flex items-end justify-between border-b border-[#eaeaea] pb-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#787774]">
                   Verification
                 </p>
 
-                <h2 className="mt-1 text-xl font-semibold text-[#293238]">
+                <h2 className="mt-1 text-xl font-semibold tracking-[-0.01em] text-[#293238]">
                   Application details
                 </h2>
               </div>
@@ -99,7 +91,6 @@ const HomeStateGSK = () => {
             </div>
 
             <form onSubmit={handleSubmit} noValidate>
-              {/* TRN / GSTIN */}
               <div>
                 <label
                   htmlFor="reference"
@@ -133,6 +124,7 @@ const HomeStateGSK = () => {
                     bg-white
                     px-3
                     text-sm
+                    font-mono
                     uppercase
                     tracking-[0.03em]
                     text-[#293238]
@@ -154,7 +146,6 @@ const HomeStateGSK = () => {
                 )}
               </div>
 
-              {/* CAPTCHA */}
               <div className="mt-8 border-t border-[#eaeaea] pt-8">
                 <label
                   htmlFor="captcha"
@@ -204,7 +195,6 @@ const HomeStateGSK = () => {
                     "
                   />
 
-                  {/* Frontend placeholder for the actual CAPTCHA */}
                   <div
                     className="
                       flex
@@ -239,7 +229,6 @@ const HomeStateGSK = () => {
                 </p>
               </div>
 
-              {/* ACTION */}
               <div className="mt-8 flex items-center justify-between border-t border-[#eaeaea] pt-6">
                 <p className="max-w-md text-xs leading-5 text-[#787774]">
                   Use the TRN or GSTIN associated with the relevant

@@ -1,7 +1,5 @@
 import React from "react";
-import { ArrowUp,} from "lucide-react";
-// import { Facebook, Linkedin, Twitter, Youtube } from "lucide-react";
-
+import { ArrowUp } from "lucide-react";
 
 const columns = [
   {
@@ -66,21 +64,6 @@ const Footer = () => {
           >
             Grievance redressal portal for GST
           </a>
-
-          {/* <div className="mt-5 flex gap-4 text-white/85">
-            <a href="#" aria-label="Facebook" className="hover:text-white">
-              <Facebook size={18} />
-            </a>
-            <a href="#" aria-label="YouTube" className="hover:text-white">
-              <Youtube size={18} />
-            </a>
-            <a href="#" aria-label="LinkedIn" className="hover:text-white">
-              <Linkedin size={18} />
-            </a>
-            <a href="#" aria-label="X (Twitter)" className="hover:text-white">
-              <Twitter size={18} />
-            </a>
-          </div> */}
         </div>
       </div>
 
@@ -99,7 +82,7 @@ const Footer = () => {
         type="button"
         onClick={scrollToTop}
         aria-label="Back to top"
-        className="fixed bottom-6 right-6 grid h-11 w-11 place-items-center rounded-full bg-navy-hover text-white shadow-lg transition-colors hover:bg-navy focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2"
+        className="fixed bottom-6 left-6 z-40 grid h-11 w-11 place-items-center rounded-full bg-navy-hover text-white shadow-lg transition-colors hover:bg-navy active:translate-y-px focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2"
       >
         <ArrowUp size={18} />
       </button>
