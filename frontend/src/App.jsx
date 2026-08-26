@@ -42,6 +42,7 @@ import CreateChallan from "./pages/payments/CreateChallan";
 import TrackPaymentStatus from "./pages/payments/TrackPaymentStatus";
 import PaymentGrievance from "./pages/payments/PaymentGrievance";
 import EWayBill from "./pages/EWayBill";
+import TaxpayerProfilePage from "./pages/TaxpayerProfilePage";
 
 const MainLayout = () => {
   return (
@@ -81,6 +82,10 @@ const router = createBrowserRouter([
       {
         path: "/download/:toolId",
         element: <OfflineToolPage />,
+      },
+      {
+        path: "/profile",
+        element: <TaxpayerProfilePage />,
       },
       {
         path: "/login",

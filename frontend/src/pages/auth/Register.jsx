@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import PageContainer from '../../components/PageContainer';
 import FormField from '../../components/FormField';
 import Alert from '../../components/Alert';
-import { UserPlus, CheckCircle } from 'lucide-react';
+import { UserPlus, CheckCircle, Mail } from 'lucide-react';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -28,8 +28,24 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.name.trim() || !formData.gstin.trim()) {
-      setError("Taxpayer Name and GSTIN are required.");
+
+    if (!formData.name.trim()) {
+      setError("Taxpayer Legal Name is required.");
+      return;
+    }
+
+    if (!formData.gstin.trim() || formData.gstin.trim().length !== 15) {
+      setError("Valid 15-digit GSTIN is required.");
+      return;
+    }
+
+    if (!formData.email.trim() || !formData.email.includes('@')) {
+      setError("Valid email address is mandatory for taxpayer registration.");
+      return;
+    }
+
+    if (!formData.password || formData.password.length < 4) {
+      setError("Password must be at least 4 characters.");
       return;
     }
 
@@ -38,7 +54,7 @@ const Register = () => {
 
     try {
       await register(formData);
-      navigate('/');
+      navigate('/profile');
     } catch (err) {
       setError(err.message || "Failed to register taxpayer.");
     } finally {
@@ -90,6 +106,7 @@ const Register = () => {
           <FormField
             id="email"
             label="Email Address"
+            required
             type="email"
             value={formData.email}
             onChange={(e) => handleChange('email', e.target.value)}

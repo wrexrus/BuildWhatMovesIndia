@@ -77,10 +77,10 @@ function login(req, res) {
 function register(req, res) {
   const { name, tradeName, gstin, state, email, password } = req.body || {};
 
-  if (!name || !gstin) {
+  if (!name || !gstin || !email || !email.includes('@')) {
     return res.status(400).json({
       success: false,
-      message: "Taxpayer Name and GSTIN are required."
+      message: "Taxpayer Legal Name, 15-digit GSTIN, and a valid email address are mandatory."
     });
   }
 

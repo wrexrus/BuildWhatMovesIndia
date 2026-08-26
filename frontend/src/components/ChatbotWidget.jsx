@@ -30,11 +30,15 @@ import { speakTextInLanguage, stopSpeech } from '../utils/speechUtils';
 const ChatbotWidget = () => {
   const { user, isLoggedIn } = useAuth();
   const { showToast } = useToast() || {};
-  const { language, setLanguage } = useLanguage();
+  const { language: globalLanguage } = useLanguage();
   const location = useLocation();
 
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
+  
+  // Independent Chatbot Language State (defaults to global language, but operates independently)
+  const [chatLanguage, setChatLanguage] = useState(globalLanguage || 'HI');
+
   const [explanationMode, setExplanationMode] = useState('SHOPKEEPER'); // 'SHOPKEEPER' vs 'CA_TECHNICAL'
   const [loading, setLoading] = useState(false);
   const [showQuickActions, setShowQuickActions] = useState(true);
@@ -48,10 +52,25 @@ const ChatbotWidget = () => {
   const [dynamicChips, setDynamicChips] = useState([]);
 
   const messagesEndRef = useRef(null);
-  const labels = UI_LABELS[language] || UI_LABELS.EN;
+  const labels = UI_LABELS[chatLanguage] || UI_LABELS.EN;
 
-  // Listen for custom 'open-gst-copilot' events from Gstr3bSimplified or Hero Card
+  // Sync initial chatbot language when global language loads initially
   useEffect(() => {
+    if (globalLanguage) {
+      setChatLanguage(globalLanguage);
+    }
+  }, [globalLanguage]);
+
+  // Listen for Escape Key & custom 'open-gst-copilot' events
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && isOpen) {
+        setIsOpen(false);
+        stopSpeech();
+        setSpeakingIndex(null);
+      }
+    };
+
     const handleOpenCopilotEvent = (e) => {
       const targetQuery = e.detail?.query;
       setIsOpen(true);
@@ -60,11 +79,14 @@ const ChatbotWidget = () => {
       }
     };
 
+    window.addEventListener('keydown', handleKeyDown);
     window.addEventListener('open-gst-copilot', handleOpenCopilotEvent);
+
     return () => {
+      window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('open-gst-copilot', handleOpenCopilotEvent);
     };
-  }, [language, explanationMode, harnessContext]);
+  }, [isOpen, chatLanguage, explanationMode, harnessContext]);
 
   // Load account harness
   useEffect(() => {
@@ -72,7 +94,7 @@ const ChatbotWidget = () => {
     async function loadHarness() {
       try {
         const gstin = isLoggedIn && user ? user.gstin : '';
-        const harness = await fetchAccountHarness(gstin, language);
+        const harness = await fetchAccountHarness(gstin, chatLanguage);
         if (isMounted && harness?.success) {
           setHarnessContext(harness);
           if (harness.quickActionChips && harness.quickActionChips.length > 0) {
@@ -85,7 +107,7 @@ const ChatbotWidget = () => {
     }
     loadHarness();
     return () => { isMounted = false; };
-  }, [user, isLoggedIn, language]);
+  }, [user, isLoggedIn, chatLanguage]);
 
   const getWelcomeMessage = (lang) => {
     const defaultWelcome = WELCOME_MESSAGES[lang] || WELCOME_MESSAGES.EN;
@@ -99,7 +121,7 @@ const ChatbotWidget = () => {
     if (lang === 'HI') {
       return `नमस्ते ${name} जी${store}! मैं आपका GST साथी Copilot हूँ। GSTR-3B, बिल में अंतर, टैक्स क्रेडिट या पोर्टल फाइलिंग में मदद के लिए तैयार हूँ।`;
     } else if (lang === 'MR') {
-      return `नमस्कार ${name} जी${store}! मी तुमचा GST साथी Copilot आहे. GSTR-3B, बिल फरक, टॅक्स क्रेडिट किंवा पोर्टल रिटर्नमध्ये मदत करण्यास तयार आहे.`;
+      return `नमस्कार ${name} जी${store}! मी तुमचा GST साथी Copilot आहे. GSTR-3B, बिल फरक, टॅक्स क्रेडिट किंवा पोर्टल रिटर्नमध्ये मदत करण्यास तयार आहे।`;
     }
     return `Hello ${name} ji${store}! I am your GST Copilot. Ask me anything about GSTR-3B, supplier mismatches, tax credit rules, or portal filing.`;
   };
@@ -118,30 +140,14 @@ const ChatbotWidget = () => {
         return [
           {
             sender: 'bot',
-            text: getWelcomeMessage(language),
+            text: getWelcomeMessage(chatLanguage),
             time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
           }
         ];
       }
       return prev;
     });
-  }, [user, isLoggedIn, language]);
-
-  // Handle body overflow lock
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-      stopSpeech();
-      setSpeakingIndex(null);
-    }
-    return () => {
-      document.body.style.overflow = '';
-      stopSpeech();
-      setSpeakingIndex(null);
-    };
-  }, [isOpen]);
+  }, [user, isLoggedIn, chatLanguage]);
 
   // Audio Playback
   const handleSpeak = (text, index) => {
@@ -152,7 +158,7 @@ const ChatbotWidget = () => {
     }
 
     setSpeakingIndex(index);
-    speakTextInLanguage(text, language, () => {
+    speakTextInLanguage(text, chatLanguage, () => {
       setSpeakingIndex(null);
     }, () => {
       setSpeakingIndex(null);
@@ -171,16 +177,17 @@ const ChatbotWidget = () => {
 
   const toggleChat = () => setIsOpen(!isOpen);
 
-  const handleLanguageChange = (newLang) => {
+  // Independent chatbot language switch
+  const handleChatLanguageChange = (newLang) => {
     stopSpeech();
     setSpeakingIndex(null);
-    setLanguage(newLang);
+    setChatLanguage(newLang);
     const welcome = getWelcomeMessage(newLang);
     setMessages(prev => [
       ...prev,
       {
         sender: 'bot',
-        text: `🌐 Language set to ${newLang}.\n\n${welcome}`,
+        text: `🌐 Chatbot language set to ${newLang}.\n\n${welcome}`,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }
     ]);
@@ -193,7 +200,6 @@ const ChatbotWidget = () => {
     let currentText = '';
     const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-    // Add empty bot message entry
     setMessages(prev => [
       ...prev,
       {
@@ -223,7 +229,7 @@ const ChatbotWidget = () => {
         clearInterval(interval);
         setIsStreaming(false);
       }
-    }, 48); // Smooth, comfortable word-by-word streaming speed
+    }, 48);
   };
 
   const handleSendQuery = async (queryText) => {
@@ -242,16 +248,15 @@ const ChatbotWidget = () => {
       const activePath = location.pathname;
       const response = await sendCopilotQuery(
         textToSend.trim(),
-        language,
+        chatLanguage,
         activePath,
         user ? user.gstin : null,
         explanationMode
       );
 
-      const botText = response.data?.answer || getWelcomeMessage(language);
+      const botText = response.data?.answer || getWelcomeMessage(chatLanguage);
       setLoading(false);
       
-      // Stream text response smoothly
       streamBotResponse(botText, response.data?.status, response.data?.source);
 
     } catch (err) {
@@ -260,7 +265,7 @@ const ChatbotWidget = () => {
         ...prev,
         {
           sender: 'bot',
-          text: language === 'HI'
+          text: chatLanguage === 'HI'
             ? "क्षमा करें, GST साथी Copilot सर्वर से जुड़ने में समस्या हो रही है। कृपया पुनः प्रयास करें।"
             : "Sorry, I am having trouble reaching the GST Copilot server. Please try again.",
           time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
@@ -297,7 +302,7 @@ const ChatbotWidget = () => {
 
   const activeQuickActions = (dynamicChips && dynamicChips.length > 0)
     ? dynamicChips
-    : (QUICK_ACTIONS[language] || QUICK_ACTIONS.EN);
+    : (QUICK_ACTIONS[chatLanguage] || QUICK_ACTIONS.EN);
 
   return (
     <div className="fixed bottom-6 right-6 z-50 font-sans">
@@ -306,7 +311,7 @@ const ChatbotWidget = () => {
         <button
           onClick={toggleChat}
           className="bg-[#071b30] hover:bg-navy text-white px-4 py-3.5 rounded-full shadow-2xl flex items-center justify-center space-x-2.5 transition-all duration-300 hover:scale-105 border-2 border-white/20 cursor-pointer group"
-          title="GST Copilot - Understand. Fix. File."
+          title="GST Copilot - Understand. Fix. File. (Press Esc to close)"
           aria-label="Open GST Copilot Assistant"
         >
           <Sparkles className="w-5 h-5 text-amber group-hover:rotate-12 transition-transform" />
@@ -317,7 +322,7 @@ const ChatbotWidget = () => {
         </button>
       )}
 
-      {/* Enlarged, Sleek Copilot Popup Window (Width: 500px, Height: 670px, Zero Overflow) */}
+      {/* Popup Window with background scrolling enabled and Escape key listener */}
       {isOpen && (
         <div className="bg-white rounded-2xl shadow-2xl w-[95vw] sm:w-[500px] border border-slate-200/90 flex flex-col h-[670px] max-h-[90vh] transition-all overflow-hidden">
           
@@ -364,11 +369,12 @@ const ChatbotWidget = () => {
             </div>
 
             <div className="flex items-center space-x-2 shrink-0">
-              {/* Language Selector */}
+              {/* Independent Chatbot Language Selector */}
               <select
-                value={language}
-                onChange={(e) => handleLanguageChange(e.target.value)}
+                value={chatLanguage}
+                onChange={(e) => handleChatLanguageChange(e.target.value)}
                 className="bg-white/10 hover:bg-white/20 text-white text-xs rounded-lg px-2.5 py-1 border border-white/20 focus:outline-none cursor-pointer font-medium"
+                title="Independent Chatbot Language"
               >
                 {SUPPORTED_LANGUAGES.map(lang => (
                   <option key={lang.code} value={lang.code} className="bg-navy text-white">
@@ -379,6 +385,7 @@ const ChatbotWidget = () => {
               <button
                 onClick={toggleChat}
                 className="text-white/80 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
+                title="Close Copilot (Press Esc)"
                 aria-label="Close Copilot"
               >
                 <X className="w-5 h-5" />
@@ -469,7 +476,7 @@ const ChatbotWidget = () => {
             </div>
           )}
 
-          {/* Messages Stream Container (No Overflow) */}
+          {/* Messages Stream Container */}
           <div className="flex-1 min-h-0 p-4 overflow-y-auto space-y-4 bg-[#f8fafc] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {messages.map((msg, index) => {
               const textLower = msg.text.toLowerCase();

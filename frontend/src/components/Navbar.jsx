@@ -833,9 +833,22 @@ const Navbar = () => {
                         <p className="text-[11px] text-ink/80 font-medium">{user?.tradeName || 'Nagpur Hardware Store'}</p>
                         <p className="text-[10px] font-mono text-slate-500 mt-1">GSTIN: {user?.gstin}</p>
                       </div>
-                      <div className="text-[10px] text-slate-400 mb-3">
+                      <div className="text-[10px] text-slate-400 mb-2.5">
                         Last Logged In: {user?.lastLogin || 'Today'}
                       </div>
+                      
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setProfileDropdownOpen(false);
+                          navigate('/profile');
+                        }}
+                        className="w-full flex items-center justify-center gap-1.5 rounded bg-navy hover:bg-navy-hover text-white font-bold py-2 border border-navy mb-2 transition-colors cursor-pointer shadow-xs"
+                      >
+                        <ShieldCheck className="w-4 h-4 text-amber" />
+                        <span>My Taxpayer Dashboard</span>
+                      </button>
+
                       <button
                         type="button"
                         onClick={() => {
