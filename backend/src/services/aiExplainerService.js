@@ -125,15 +125,35 @@ const TEMPLATE_EXPLANATIONS = {
 };
 
 /**
- * Multi-Language AI Plain Language Explainer
+ * Fast Synchronous Grounded Explainer Engine (0ms, 0 Network API Calls)
+ * Used during dashboard invoice reconciliation to avoid hitting Gemini API rate limits
  */
-async function generateExplanation(mismatchItem, language = 'EN') {
+function getGroundedExplanation(mismatchItem, language = 'EN') {
   const code = mismatchItem.errorCode;
   const langUpper = (language || 'EN').toUpperCase();
 
   const fallback = TEMPLATE_EXPLANATIONS[code]
     ? TEMPLATE_EXPLANATIONS[code][langUpper] || TEMPLATE_EXPLANATIONS[code]['HI'] || TEMPLATE_EXPLANATIONS[code]['EN']
     : null;
+
+  return {
+    isAiGenerated: false,
+    source: "Rule Explainer Engine (Offline Safe)",
+    ...(fallback || {
+      problem: `Your supplier (${mismatchItem.supplierName || 'Asian Paints'}) has not uploaded invoice #${mismatchItem.invoiceNumber || 'AP/2026/045'} to the GST portal yet.`,
+      whyItHappened: "Invoice data differs from GSTR-2B portal record.",
+      impact: "May affect input tax credit eligibility.",
+      actionSteps: ["Check physical bill and contact supplier."]
+    })
+  };
+}
+
+/**
+ * Multi-Language AI Plain Language Explainer
+ */
+async function generateExplanation(mismatchItem, language = 'EN') {
+  const code = mismatchItem.errorCode;
+  const langUpper = (language || 'EN').toUpperCase();
 
   const systemInstruction = `You are a friendly, expert Indian Chartered Accountant explaining a GST return mismatch to Ramesh, a hardware shop owner in Nagpur.
 Explain the mismatch in ${getLanguageName(langUpper)} without complex jargon.
@@ -158,28 +178,21 @@ Respond ONLY in valid JSON format:
     try {
       const rawOutput = await generateGeminiContent(promptText, systemInstruction);
       const jsonMatch = rawOutput.match(/\{[\s\S]*\}/);
-      const parsed = JSON.parse(jsonMatch ? jsonMatch[0] : rawOutput);
-      return {
-        isAiGenerated: true,
-        source: "Google Gemini 2.0 / 1.5 Flash",
-        ...parsed
-      };
+      if (jsonMatch) {
+        const parsed = JSON.parse(jsonMatch[0]);
+        return {
+          isAiGenerated: true,
+          source: "Google Gemini 2.0 / 1.5 Flash",
+          ...parsed
+        };
+      }
     } catch (err) {
-      console.warn("Gemini API call failed, using deterministic rule explainer fallback:", err.message);
+      // Catch quota limit or parse errors silently and return grounded explanation
     }
   }
 
-  // Priority 2: Static Local Template Engine (Zero Cost & Offline Guarantee)
-  return {
-    isAiGenerated: false,
-    source: "Rule Explainer Engine (Offline Safe)",
-    ...(fallback || {
-      problem: `Your supplier (${mismatchItem.supplierName || 'Asian Paints'}) has not uploaded invoice #${mismatchItem.invoiceNumber || 'AP/2026/045'} to the GST portal yet.`,
-      whyItHappened: "Invoice data differs from GSTR-2B portal record.",
-      impact: "May affect input tax credit eligibility.",
-      actionSteps: ["Check physical bill and contact supplier."]
-    })
-  };
+  // Priority 2: Grounded Rule Explainer Engine (Offline Safe)
+  return getGroundedExplanation(mismatchItem, language);
 }
 
 function getLanguageName(code) {
@@ -198,6 +211,7 @@ function getLanguageName(code) {
 
 module.exports = {
   generateExplanation,
+  getGroundedExplanation,
   getLanguageName,
   TEMPLATE_EXPLANATIONS
 };

@@ -1,5 +1,5 @@
 const { reconcileInvoices } = require('../services/reconciliationService');
-const { generateExplanation } = require('../services/aiExplainerService');
+const { getGroundedExplanation } = require('../services/aiExplainerService');
 const { getCurrentInvoices } = require('./invoiceController');
 
 async function reconcile(req, res) {
@@ -11,19 +11,17 @@ async function reconcile(req, res) {
     // 1. Run Rule Engine with Persona GSTIN filtering
     const reconciliationData = reconcileInvoices(activeInvoices, gstin);
 
-    // 2. Attach Plain Language AI Explanations to all Mismatches/Deferred Items
-    const enrichedResults = await Promise.all(
-      reconciliationData.results.map(async (item) => {
-        if (item.status !== 'MATCHED') {
-          const explanation = await generateExplanation(item, language);
-          return {
-            ...item,
-            explanation
-          };
-        }
-        return item;
-      })
-    );
+    // 2. Attach Instant Grounded Plain Language Explanations (0ms Latency, 0 Network API calls)
+    const enrichedResults = reconciliationData.results.map((item) => {
+      if (item.status !== 'MATCHED') {
+        const explanation = getGroundedExplanation(item, language);
+        return {
+          ...item,
+          explanation
+        };
+      }
+      return item;
+    });
 
     reconciliationData.results = enrichedResults;
 

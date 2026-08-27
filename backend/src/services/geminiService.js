@@ -2,7 +2,7 @@ require('dotenv').config();
 
 /**
  * Google Gemini Integration (100% Free Tier API)
- * Latest Gemini Flash & Flash-Lite model fallback chain
+ * Resilient model fallback chain using official v1beta model identifiers
  */
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
@@ -16,13 +16,10 @@ async function generateGeminiContent(promptText, systemInstruction = "") {
     throw new Error("GEMINI_API_KEY is not set in environment.");
   }
 
-  // Latest Gemini Free Tier model fallback chain (Flash 2.0, Flash-Lite, Flash 1.5)
+  // Official Google Gemini v1beta model identifiers
   const models = [
     'gemini-2.0-flash',
-    'gemini-2.0-flash-lite-preview-02-05',
-    'gemini-1.5-flash',
-    'gemini-1.5-flash-8b',
-    'gemini-1.5-pro'
+    'gemini-1.5-flash'
   ];
 
   let lastError = null;
@@ -54,8 +51,8 @@ async function generateGeminiContent(promptText, systemInstruction = "") {
 
       if (!response.ok) {
         const errorText = await response.text();
-        lastError = new Error(`Gemini API Error (${response.status}): ${errorText}`);
-        continue; // Try next model in chain
+        lastError = new Error(`Gemini API (${response.status}): ${errorText.substring(0, 150)}`);
+        continue;
       }
 
       const data = await response.json();
@@ -68,7 +65,7 @@ async function generateGeminiContent(promptText, systemInstruction = "") {
     }
   }
 
-  throw lastError || new Error("All Gemini API models failed.");
+  throw lastError || new Error("Gemini API unavailable, using offline grounded rule fallback.");
 }
 
 module.exports = {
