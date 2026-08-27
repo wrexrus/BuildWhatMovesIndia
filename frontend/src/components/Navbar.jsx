@@ -230,6 +230,8 @@ function MegaPanel({ menu, onSelect }) {
       className="
         static z-50
         flex w-full
+        origin-top
+        animate-[megaPanelIn_160ms_ease-out]
         overflow-hidden
         rounded-b-lg
         border border-line
@@ -243,8 +245,6 @@ function MegaPanel({ menu, onSelect }) {
         lg:w-[min(760px,90vw)]
       "
     >
-      {
-}
 
       <div
         className="
@@ -301,8 +301,6 @@ function MegaPanel({ menu, onSelect }) {
         ))}
       </div>
 
-      {
-}
 
       <div className="hidden max-h-[55vh] flex-1 overflow-y-auto p-4 lg:block">
         {previewTab ? (
@@ -366,8 +364,6 @@ function MegaPanel({ menu, onSelect }) {
         )}
       </div>
 
-      {
-}
 
       {previewTab && (
         <div
@@ -550,13 +546,19 @@ const Navbar = () => {
 
   return (
     <header className="w-full text-white">
-      {
-}
+      <style>{`
+        @keyframes megaPanelIn {
+          from { opacity: 0; transform: translateY(-4px) scaleY(0.98); }
+          to { opacity: 1; transform: translateY(0) scaleY(1); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .animate-\\[megaPanelIn_160ms_ease-out\\] { animation: none; }
+        }
+      `}</style>
+
 
       <div className="bg-navy">
         <div className="mx-auto max-w-360 px-6">
-          {
-}
 
           <div className="flex h-9 items-center justify-between border-b border-white/10 text-[0.8rem]">
             <a
@@ -576,8 +578,6 @@ const Navbar = () => {
             </a>
 
             <div className="flex items-center gap-3">
-              {
-}
               <div className="flex items-center gap-1.5 bg-white/10 hover:bg-white/20 border border-white/25 rounded px-2 py-0.5 text-xs text-white transition-colors">
                 <Globe className="w-3.5 h-3.5 text-amber shrink-0" />
                 <select
@@ -594,8 +594,6 @@ const Navbar = () => {
                 </select>
               </div>
 
-              {
-}
               <button
                 type="button"
                 aria-pressed={highContrast}
@@ -624,8 +622,6 @@ const Navbar = () => {
                 <Contrast size={13} strokeWidth={2.25} />
               </button>
 
-              {
-}
               <div
                 className="flex items-center gap-1"
                 role="group"
@@ -698,12 +694,8 @@ const Navbar = () => {
             </div>
           </div>
 
-          {
-}
 
           <div className="flex min-h-19.5 items-center justify-between gap-6">
-            {
-}
             <div className="flex items-center gap-4">
               <img
                 src={logo}
@@ -717,18 +709,16 @@ const Navbar = () => {
               />
 
               <div>
-                <h1 className="text-[1.55rem] font-bold leading-tight tracking-tight">
+                <h1 className="font-serif text-[1.65rem] leading-[1.1] tracking-[-0.02em] text-white">
                   Goods and Services Tax
                 </h1>
 
-                <p className="mt-0.5 text-[0.85rem] text-white/60">
+                <p className="mt-1 text-[0.78rem] font-medium uppercase tracking-[0.08em] text-white/55">
                   Government of India, States and Union Territories
                 </p>
               </div>
             </div>
 
-            {
-}
             <div className="flex items-center gap-2.5">
               {!isLoggedIn ? (
                 <>
@@ -806,8 +796,6 @@ const Navbar = () => {
                 </div>
               )}
 
-              {
-}
               <button
                 type="button"
                 aria-label={
@@ -840,8 +828,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {
-}
 
       <nav
         ref={navRef}
@@ -919,13 +905,13 @@ const Navbar = () => {
                       />
                     </button>
 
-                    {
-}
                     {isOpen && (
                       <div
                         className="
                           static z-50
                           min-w-full
+                          origin-top
+                          animate-[megaPanelIn_160ms_ease-out]
                           overflow-hidden
                           rounded-b-lg
                           border border-line

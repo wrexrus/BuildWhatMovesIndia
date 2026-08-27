@@ -59,14 +59,25 @@ const TrackApplicationStatus = () => {
         />
 
         <div className="mx-auto max-w-[1180px] px-5 pb-14 pt-8 sm:px-8">
-          <header className="border-b border-[#eaeaea] pb-7">
+          <style>{`
+            @keyframes pageRise {
+              from { opacity: 0; transform: translateY(10px); }
+              to { opacity: 1; transform: translateY(0); }
+            }
+            .page-rise { animation: pageRise 500ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+            @media (prefers-reduced-motion: reduce) {
+              .page-rise { animation: none; }
+            }
+          `}</style>
+
+          <header className="page-rise border-b border-[#eaeaea] pb-7">
             <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <p className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#1f6c9f]">
+                <p className="mb-3 text-xs font-semibold uppercase tracking-[0.1em] text-[#1f6c9f]">
                   Registration
                 </p>
 
-                <h1 className="text-2xl font-semibold tracking-[-0.02em] text-balance text-[#20282d] sm:text-[1.75rem]">
+                <h1 className="font-serif text-[2.1rem] leading-[1.1] tracking-[-0.02em] text-balance text-[#161b1e] sm:text-[2.4rem]">
                   Track application status
                 </h1>
 
@@ -126,12 +137,12 @@ const TrackApplicationStatus = () => {
                     className={`
                       flex cursor-pointer items-start gap-3
                       border p-4
-                      transition-colors
+                      transition-all duration-150
 
                       ${
                         isARN
-                          ? "border-[#1f6c9f] bg-[#f4f9fc]"
-                          : "border-[#eaeaea] bg-white hover:bg-[#fbfbfa]"
+                          ? "border-[#1f6c9f] bg-[#f4f9fc] shadow-sm"
+                          : "border-[#eaeaea] bg-white hover:border-[#c7d8e3] hover:bg-[#fbfbfa]"
                       }
                     `}
                   >
@@ -160,12 +171,12 @@ const TrackApplicationStatus = () => {
                     className={`
                       flex cursor-pointer items-start gap-3
                       border p-4
-                      transition-colors
+                      transition-all duration-150
 
                       ${
                         !isARN
-                          ? "border-[#1f6c9f] bg-[#f4f9fc]"
-                          : "border-[#eaeaea] bg-white hover:bg-[#fbfbfa]"
+                          ? "border-[#1f6c9f] bg-[#f4f9fc] shadow-sm"
+                          : "border-[#eaeaea] bg-white hover:border-[#c7d8e3] hover:bg-[#fbfbfa]"
                       }
                     `}
                   >

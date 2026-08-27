@@ -73,14 +73,25 @@ const GSTLaw = () => {
       <main className="min-h-[calc(100vh-150px)] bg-[#f7f6f3] text-[#2f3437]">
         <Breadcrumbs items={[{ label: "GST Law" }]} />
 
-        <div className="mx-auto max-w-[1400px] px-5 pb-24 pt-8 sm:px-8 lg:px-10">
+        <div className="mx-auto max-w-[1400px] px-5 pb-16 pt-8 sm:px-8 lg:px-10">
+          <style>{`
+            @keyframes pageRise {
+              from { opacity: 0; transform: translateY(10px); }
+              to { opacity: 1; transform: translateY(0); }
+            }
+            .page-rise { animation: pageRise 500ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+            @media (prefers-reduced-motion: reduce) {
+              .page-rise { animation: none; }
+            }
+          `}</style>
+
           {/* Page introduction */}
-          <header className="max-w-4xl border-b border-[#eaeaea] pb-12">
-            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.08em] text-[#1f6c9f]">
+          <header className="page-rise max-w-4xl border-b border-[#eaeaea] pb-10">
+            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.1em] text-[#1f6c9f]">
               Legal resources
             </p>
 
-            <h1 className="text-4xl font-semibold tracking-[-0.035em] text-[#20282d] sm:text-[3rem]">
+            <h1 className="font-serif text-[2.6rem] leading-[1.05] tracking-[-0.03em] text-[#161b1e] sm:text-[3.2rem]">
               GST Law
             </h1>
 
@@ -91,7 +102,7 @@ const GSTLaw = () => {
           </header>
 
           {/* Central */}
-          <section className="border-b border-[#eaeaea] py-12">
+          <section className="border-b border-[#eaeaea] py-10">
             <div className="grid gap-8 lg:grid-cols-[220px_1fr]">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#787774]">
@@ -108,7 +119,7 @@ const GSTLaw = () => {
                   <a
                     key={resource.title}
                     href="#"
-                    className="group flex items-start justify-between gap-8 border-t border-[#eaeaea] py-5 transition-colors hover:bg-[#fbfbfa]"
+                    className="group flex items-start justify-between gap-8 border-t border-[#eaeaea] py-5 px-3 -mx-3 rounded-md transition-all duration-200 hover:bg-[#fbfbfa] hover:px-4"
                   >
                     <div>
                       <h3 className="text-base font-semibold text-[#1f6c9f]">
@@ -133,7 +144,7 @@ const GSTLaw = () => {
           </section>
 
           {/* States */}
-          <section className="border-b border-[#eaeaea] py-12">
+          <section className="border-b border-[#eaeaea] py-10">
             <div className="grid gap-8 lg:grid-cols-[220px_1fr]">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#787774]">
