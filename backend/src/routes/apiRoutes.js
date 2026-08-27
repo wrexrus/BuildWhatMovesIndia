@@ -7,7 +7,7 @@ const reconciliationRoutes = require('./reconciliationRoutes');
 const chatRoutes = require('./chatRoutes');
 const portalServiceRoutes = require('./portalServiceRoutes');
 const filingRoutes = require('./filingRoutes');
-const { getVoiceExplanation } = require('../controllers/voiceController');
+const { getVoiceExplanation, streamVoiceAudio } = require('../controllers/voiceController');
 
 // Compose domain-specific sub-routers
 router.use('/auth', authRoutes);
@@ -17,8 +17,9 @@ router.use('/chat', chatRoutes);
 router.use('/services', portalServiceRoutes);
 router.use('/gstr3b', filingRoutes);
 
-// Direct alias compatibility for /api/explain-voice
+// Direct alias compatibility for /api/explain-voice & audio stream
 router.post('/explain-voice', getVoiceExplanation);
+router.get('/explain-voice/audio', streamVoiceAudio);
 
 // Health check endpoint
 router.get('/health', (req, res) => {

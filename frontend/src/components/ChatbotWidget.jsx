@@ -179,7 +179,7 @@ const ChatbotWidget = () => {
       ...prev,
       {
         sender: 'bot',
-        text: `Chatbot language set to ${newLang}.\n\n${welcome}`,
+        text: welcome,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }
     ]);
