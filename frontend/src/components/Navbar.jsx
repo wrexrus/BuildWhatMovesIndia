@@ -205,11 +205,11 @@ const navLinks = [
   },
   {
     label: "e-Invoice",
-    href: "#",
+    href: "/e-invoice",
   },
   {
     label: "News and Updates",
-    href: "#",
+    href: "/news-and-updates",
   },
 ];
 

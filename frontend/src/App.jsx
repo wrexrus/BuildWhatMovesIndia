@@ -13,9 +13,7 @@ import { AuthProvider } from "./context/AuthContext";
 import Navbar from "./components/Navbar";
 import PageTransition from "./components/PageTransition";
 import ChatbotWidget from "./components/ChatbotWidget";
-
 import Home from "./pages/Home";
-
 import Gstr3bSimplified from "./pages/Gstr3bSimplified";
 import GstStatisticsPage from "./pages/GstStatisticsPage";
 import Downloads from "./pages/Downloads";
@@ -24,7 +22,7 @@ import SearchGSTIN from "./pages/searchTaxpayer/SearchGSTIN";
 import SearchPAN from "./pages/searchTaxpayer/SearchPAN";
 import SearchTemporaryID from "./pages/searchTaxpayer/SearchTemporaryID";
 import SearchComposition from "./pages/searchTaxpayer/SearchComposition";
-import GstLaw from "./pages/GSTLaw";
+import GstLaw from "./pages/GstLaw";
 import HelpTaxpayerFacilities from "./pages/HelpTaxPayerFacilities";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
@@ -43,6 +41,8 @@ import TrackPaymentStatus from "./pages/payments/TrackPaymentStatus";
 import PaymentGrievance from "./pages/payments/PaymentGrievance";
 import EWayBill from "./pages/EWayBill";
 import TaxpayerProfilePage from "./pages/TaxpayerProfilePage";
+import EInvoice from "./pages/EInvoice";
+import NewsAndUpdates from "./pages/NewsAndUpdates";
 
 const MainLayout = () => {
   return (
@@ -179,6 +179,14 @@ const router = createBrowserRouter([
       {
         path: "/services/eway-bill",
         element: <EWayBill />,
+      },
+      {
+        path: "/e-invoice",
+        element: <EInvoice />,
+      },
+      {
+        path: "/news-and-updates",
+        element: <NewsAndUpdates />
       },
       {
         path: "*",
