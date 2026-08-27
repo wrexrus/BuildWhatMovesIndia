@@ -10,7 +10,6 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const { showToast } = useToast() || {};
 
-  // Restore session from localStorage on mount
   useEffect(() => {
     const savedToken = localStorage.getItem('gst_auth_token');
     const savedUser = localStorage.getItem('gst_user_data');
@@ -24,14 +23,12 @@ export const AuthProvider = ({ children }) => {
         setToken(savedToken);
         setUser(JSON.parse(savedUser));
       } else {
-        // Session expired (10-minute timeout)
         logout();
       }
     }
     setLoading(false);
   }, []);
 
-  // Set automatic 10-minute session timeout timer
   useEffect(() => {
     if (!token) return;
 

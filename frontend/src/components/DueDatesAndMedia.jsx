@@ -77,30 +77,30 @@ const DueDatesAndMedia = () => {
   };
 
   return (
-    <section className="bg-paper pb-14 font-sans">
-      <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-8 px-6 lg:grid-cols-[1.3fr_1fr]">
+    <section className="w-full overflow-x-hidden bg-paper pb-10 font-sans sm:pb-14">
+      <div className="mx-auto grid w-full max-w-[1440px] grid-cols-1 gap-7 px-4 py-1 sm:gap-8 sm:px-6 lg:grid-cols-[1.3fr_1fr]">
         <div>
-          <div className="mb-5 flex items-end justify-between">
-            <h2 className="text-2xl font-bold tracking-tight text-ink sm:text-[1.65rem]">Upcoming due dates</h2>
+          <div className="mb-4 flex flex-wrap items-end justify-between gap-3 sm:mb-5">
+            <h2 className="text-xl font-bold tracking-tight text-ink sm:text-[1.65rem]">Upcoming due dates</h2>
             <button
               type="button"
               onClick={handleDownloadPdf}
-              className="inline-flex items-center gap-1.5 text-[0.87rem] font-bold text-navy hover:text-navy transition-colors cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2"
+              className="inline-flex min-h-10 items-center gap-1.5 rounded-md px-1 text-[0.82rem] font-bold text-navy transition-colors hover:text-navy cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2 sm:min-h-0 sm:text-[0.87rem]"
               title="Download PDF filing schedule"
             >
               <Download size={14} className="text-navy" /> PDF
             </button>
           </div>
 
-          <div className="rounded-xl border border-line bg-white shadow-xs overflow-hidden">
-            <div role="tablist" aria-label="Filing cadence" className="flex gap-1 border-b border-line p-2 bg-slate-50">
+          <div className="overflow-hidden rounded-xl border border-line bg-white shadow-xs">
+            <div role="tablist" aria-label="Filing cadence" className="flex gap-1 overflow-x-auto border-b border-line bg-slate-50 p-2">
               {["Monthly", "Quarterly", "Other"].map((tab) => (
                 <button
                   key={tab}
                   role="tab"
                   aria-selected={activeTab === tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`flex-1 rounded-lg px-4 py-2.5 text-xs font-bold transition-all cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2 ${
+                  className={`min-w-[92px] flex-1 rounded-lg px-3 py-2.5 text-xs font-bold transition-all cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2 ${
                     activeTab === tab ? "bg-navy text-white shadow-xs" : "text-slate-600 hover:bg-slate-200/60 hover:text-navy"
                   }`}
                 >
@@ -109,7 +109,8 @@ const DueDatesAndMedia = () => {
               ))}
             </div>
 
-            <table className="w-full border-collapse">
+            <div className="w-full overflow-x-auto overscroll-x-contain">
+              <table className="w-full min-w-[590px] border-collapse">
               <caption className="sr-only">
                 GST filing due dates for the {activeTab.toLowerCase()} cadence
               </caption>
@@ -149,16 +150,17 @@ const DueDatesAndMedia = () => {
                   </tr>
                 ))}
               </tbody>
-            </table>
+              </table>
+            </div>
           </div>
         </div>
 
         <div>
-          <div className="mb-5 flex items-end justify-between">
-            <h2 className="text-2xl font-bold tracking-tight text-ink sm:text-[1.65rem]">GST media</h2>
+          <div className="mb-4 flex flex-wrap items-end justify-between gap-3 sm:mb-5">
+            <h2 className="text-xl font-bold tracking-tight text-ink sm:text-[1.65rem]">GST media</h2>
             <a
               href="#"
-              className="text-[0.87rem] font-medium text-navy focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2"
+              className="inline-flex min-h-10 items-center text-[0.82rem] font-medium text-navy focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2"
             >
               View all
             </a>
@@ -169,13 +171,13 @@ const DueDatesAndMedia = () => {
               <a
                 key={item.title}
                 href="#"
-                className="group flex items-center gap-3 rounded-lg border border-line bg-white p-3 transition-colors hover:border-navy/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2"
+                className="group flex min-w-0 items-center gap-3 rounded-lg border border-line bg-white p-3 transition-colors hover:border-navy/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2"
               >
                 <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-navy text-white transition-colors group-hover:bg-navy-hover">
                   <Play size={14} className="fill-white" />
                 </span>
                 <div className="min-w-0">
-                  <p className="truncate text-[0.87rem] font-medium text-ink">{item.title}</p>
+                  <p className="break-words text-[0.84rem] font-medium leading-snug text-ink sm:text-[0.87rem]">{item.title}</p>
                   <p className="mt-0.5 font-mono text-[0.75rem] text-muted">{item.date}</p>
                 </div>
               </a>

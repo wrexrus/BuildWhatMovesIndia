@@ -13,14 +13,7 @@ const WarningModal = ({
   return (
     <div
       className="
-        fixed
-        inset-0
-        z-[1000]
-        flex
-        items-center
-        justify-center
-        bg-[#111111]/45
-        px-5
+        fixed inset-0 z-[1000] flex items-start justify-center overflow-y-auto bg-[#111111]/45 px-3 py-4 sm:items-center sm:px-5 sm:py-6
       "
       role="dialog"
       aria-modal="true"
@@ -28,12 +21,10 @@ const WarningModal = ({
     >
       <div
         className="
-          w-full
-          max-w-[620px]
+          my-auto w-full max-w-[620px]
           border
           border-[#dededc]
-          bg-white
-          p-7
+          bg-white p-5 sm:p-7
           shadow-[0_8px_30px_rgba(0,0,0,0.08)]
           sm:p-9
         "
@@ -45,7 +36,7 @@ const WarningModal = ({
 
           <h2
             id="warning-title"
-            className="text-2xl font-semibold tracking-[-0.02em] text-[#20282d]"
+            className="break-words text-xl font-semibold tracking-[-0.02em] text-[#20282d] sm:text-2xl"
           >
             Before you continue
           </h2>
@@ -70,7 +61,7 @@ const WarningModal = ({
           </p>
         </div>
 
-        <div className="flex justify-end gap-3 border-t border-[#eaeaea] pt-5">
+        <div className="flex flex-col-reverse gap-2 border-t border-[#eaeaea] pt-5 sm:flex-row sm:justify-end sm:gap-3">
           <button
             type="button"
             onClick={onCancel}
@@ -127,7 +118,7 @@ const GenerateUserID = () => {
 
   return (
     <PageContainer>
-      <main className="min-h-[calc(100vh-150px)] bg-[#f7f6f3] text-[#2f3437]">
+      <main className="min-h-[calc(100vh-150px)] min-w-0 overflow-x-hidden bg-[#f7f6f3] text-[#2f3437]">
         <Breadcrumbs
           items={[
             { label: "Services" },
@@ -139,24 +130,24 @@ const GenerateUserID = () => {
           ]}
         />
 
-        <div className="mx-auto max-w-[1400px] px-5 pb-16 pt-8 sm:px-8 lg:px-10">
-          <header className="border-b border-[#eaeaea] pb-7">
+        <div className="mx-auto w-full max-w-[1400px] min-w-0 px-4 pb-12 pt-5 sm:px-6 sm:pb-16 sm:pt-7 lg:px-8 lg:pt-8">
+          <header className="min-w-0 border-b border-[#eaeaea] pb-6 sm:pb-7">
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#1f6c9f]">
               User service
             </p>
 
-            <h1 className="max-w-4xl text-2xl font-semibold tracking-[-0.02em] text-balance text-[#20282d] sm:text-[1.75rem]">
+            <h1 className="max-w-4xl break-words text-xl font-semibold tracking-[-0.02em] text-[#20282d] sm:text-2xl md:text-[1.75rem]">
               Generate User ID for unregistered applicant
             </h1>
 
-            <p className="mt-4 max-w-[70ch] text-sm leading-6 text-[#6f7375]">
+            <p className="mt-3 max-w-[70ch] break-words text-sm leading-6 text-[#6f7375] sm:mt-4">
               Select the purpose for which you need a temporary
               User ID or enrolment facility.
             </p>
           </header>
 
-          <section className="max-w-4xl pt-8">
-            <div className="border-b border-[#eaeaea] pb-7">
+          <section className="w-full max-w-4xl min-w-0 pt-6 sm:pt-8">
+            <div className="min-w-0 border-b border-[#eaeaea] pb-6 sm:pb-7">
               <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#787774]">
                 Application details
               </p>
@@ -169,7 +160,7 @@ const GenerateUserID = () => {
                 Select one of the available purposes.
               </p>
 
-              <div className="mt-6 grid gap-3 md:grid-cols-2">
+              <div className="mt-5 grid gap-3 sm:grid-cols-2">
                 <label
                   className={`
                     flex cursor-pointer items-start gap-3
@@ -286,7 +277,7 @@ const GenerateUserID = () => {
               </label>
             </div>
 
-            <div className="flex justify-end pt-7">
+            <div className="flex justify-stretch pt-6 sm:justify-end sm:pt-7">
               <button
                 type="button"
                 disabled={!canProceed}

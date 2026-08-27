@@ -14,10 +14,10 @@ const FormField = ({
   className = "",
 }) => {
   return (
-    <div className={className}>
+    <div className={`min-w-0 ${className}`}>
       <label
         htmlFor={id}
-        className="mb-2 block text-[0.95rem] font-semibold text-navy"
+        className="mb-2 block break-words text-[0.9rem] font-semibold text-navy sm:text-[0.95rem]"
       >
         {label}
         {required && (
@@ -39,13 +39,12 @@ const FormField = ({
         maxLength={maxLength}
         disabled={disabled}
         className={`
-          h-12 w-full rounded-md border bg-white px-4
-          text-[0.95rem] text-slate-800
+          h-12 w-full min-w-0 rounded-md border bg-white px-3
+          text-[0.9rem] text-slate-800 sm:px-4 sm:text-[0.95rem]
           outline-none transition-all
           placeholder:text-slate-400
           disabled:cursor-not-allowed
           disabled:bg-slate-100
-
           ${
             error
               ? "border-red-400 ring-2 ring-red-100"
@@ -55,7 +54,7 @@ const FormField = ({
       />
 
       {error && (
-        <p className="mt-1.5 text-sm font-medium text-red-600">
+        <p className="mt-1.5 break-words text-xs font-medium leading-5 text-red-600 sm:text-sm">
           {error}
         </p>
       )}

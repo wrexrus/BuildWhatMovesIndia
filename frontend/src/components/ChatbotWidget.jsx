@@ -49,9 +49,7 @@ const ChatbotWidget = () => {
 
   const location = useLocation();
 
-  /* ------------------------------------------------------------------
-   * Core widget state
-   * ---------------------------------------------------------------- */
+
 
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -77,9 +75,7 @@ const ChatbotWidget = () => {
   const [dynamicChips, setDynamicChips] =
     useState([]);
 
-  /* ------------------------------------------------------------------
-   * Conversation
-   * ---------------------------------------------------------------- */
+
 
   const messagesEndRef = useRef(null);
 
@@ -156,9 +152,7 @@ const ChatbotWidget = () => {
     }
   }, [globalLanguage]);
 
-  /* ------------------------------------------------------------------
-   * Sync harness context when open
-   * ---------------------------------------------------------------- */
+
 
   useEffect(() => {
     let isMounted = true;
@@ -187,7 +181,7 @@ const ChatbotWidget = () => {
             }
           }
         })
-        .catch(() => {});
+        .catch(() => { });
     }
 
     return () => {
@@ -195,9 +189,7 @@ const ChatbotWidget = () => {
     };
   }, [isOpen, isLoggedIn]);
 
-  /* ------------------------------------------------------------------
-   * Listeners
-   * ---------------------------------------------------------------- */
+
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -252,9 +244,7 @@ const ChatbotWidget = () => {
     });
   }, [messages, loading, isStreaming, isOpen]);
 
-  /* ------------------------------------------------------------------
-   * Stream response
-   * ---------------------------------------------------------------- */
+
 
   const streamBotResponse = (
     fullText,
@@ -302,7 +292,7 @@ const ChatbotWidget = () => {
             if (
               lastIndex >= 0 &&
               updated[lastIndex].sender ===
-                "bot"
+              "bot"
             ) {
               updated[lastIndex] = {
                 ...updated[lastIndex],
@@ -324,9 +314,7 @@ const ChatbotWidget = () => {
     );
   };
 
-  /* ------------------------------------------------------------------
-   * Send query
-   * ---------------------------------------------------------------- */
+
 
   const handleSendQuery = async (
     queryText
@@ -406,9 +394,7 @@ const ChatbotWidget = () => {
     }
   };
 
-  /* ------------------------------------------------------------------
-   * Contextual actions
-   * ---------------------------------------------------------------- */
+
 
   const handleActionCardClick = async (
     actionType,
@@ -417,8 +403,7 @@ const ChatbotWidget = () => {
     if (actionType === "CALL_SUPPLIER") {
       if (showToast) {
         showToast(
-          `Reminder sent to ${
-            payload.supplier || "supplier"
+          `Reminder sent to ${payload.supplier || "supplier"
           }'s GSTR-1 accounts desk.`,
           "info",
           "Supplier reminder"
@@ -483,15 +468,13 @@ const ChatbotWidget = () => {
     dynamicChips?.length
       ? dynamicChips
       : QUICK_ACTIONS[chatLanguage] ||
-        QUICK_ACTIONS.EN;
+      QUICK_ACTIONS.EN;
 
   const hasPendingActions = Boolean(
     harnessContext?.pendingToDos?.length
   );
 
-  /* ------------------------------------------------------------------
-   * Enhanced Formatted Message Renderer (Improves Readability)
-   * ---------------------------------------------------------------- */
+
   const renderFormattedMessage = (content) => {
     if (!content) return null;
 
@@ -593,9 +576,7 @@ const ChatbotWidget = () => {
         font-sans
       "
     >
-      {/* ============================================================
-          FLOATING LAUNCHER
-      ============================================================= */}
+      { }
       {!isOpen && (
         <button
           type="button"
@@ -603,14 +584,15 @@ const ChatbotWidget = () => {
           aria-label="Open GST Copilot"
           title="Open GST Copilot"
           className="
+          cursor-pointer
             group
             relative
             flex
             items-center
             gap-2.5
             rounded-[15px]
-            border
-            border-navy
+            border-[0.25px]
+            border-gray-50
             bg-navy
             px-3.5
             py-2.5
@@ -663,103 +645,101 @@ const ChatbotWidget = () => {
         </button>
       )}
 
-      {/* ============================================================
-          ASSISTANT WINDOW
-      ============================================================= */}
+      { }
       {isOpen && (
         <section
           aria-label="GST Copilot"
           className="
             flex
-            w-[min(420px,calc(100vw-24px))]
+            w-[calc(100vw-24px)] max-w-[420px]
+            max-h-[calc(100dvh-24px)]
             flex-col
             overflow-hidden
-            rounded-[16px]
+            rounded-[16px] sm:w-[min(420px,calc(100vw-32px))] sm:max-h-[calc(100dvh-30px)]
             border
             border-line/80
             bg-white
             shadow-[0_22px_60px_rgba(16,35,58,0.15)]
           "
           style={{
-            height: "min(610px, calc(100dvh - 30px))",
+            height: "min(610px, calc(100dvh - 24px))",
           }}
         >
-          {/* ========================================================
-              HEADER
-          ========================================================= */}
+          { }
           <header className="shrink-0 bg-white">
-            <div className="flex items-center justify-between px-4 py-3.5">
+            <div className="flex items-start justify-between gap-2 bg-navy px-3 py-3 text-white sm:px-4 sm:py-3.5">
               <div className="flex min-w-0 items-center gap-2.5">
                 <div
                   className="
-                    flex
-                    h-8
-                    w-8
-                    shrink-0
-                    items-center
-                    justify-center
-                    rounded-[10px]
-                    bg-shell
-                  "
+        flex
+        h-8
+        w-8
+        shrink-0
+        items-center
+        justify-center
+        rounded-[8px]
+        bg-white/12
+      "
                 >
                   <MessageSquare
-                    className="h-4 w-4 text-navy"
+                    className="h-4 w-4 text-white"
                     strokeWidth={1.7}
                   />
                 </div>
 
                 <div className="min-w-0">
                   <div className="flex items-center gap-2">
-                    <h2 className="text-[13px] font-semibold tracking-[-0.01em] text-ink">
+                    <h2 className="text-[13px] font-semibold tracking-[-0.01em] text-white">
                       GST Copilot
                     </h2>
 
                     <span
                       className="
-                        flex
-                        items-center
-                        gap-1.5
-                        text-[9px]
-                        font-medium
-                        text-green
-                      "
+            flex
+            items-center
+            gap-1.5
+            text-[9px]
+            font-medium
+            text-emerald-200
+          "
                     >
-                      <span className="h-1.5 w-1.5 rounded-full bg-green" />
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" />
                       Available
                     </span>
                   </div>
 
-                  <p className="mt-0.5 truncate text-[9px] text-muted">
+                  <p className="mt-0.5 truncate text-[9px] text-white/70">
                     GST assistance for this page
                   </p>
                 </div>
               </div>
 
-              <div className="flex items-center gap-1.5">
+              <div className="flex min-w-0 items-center gap-1.5">
                 <select
                   value={chatLanguage}
                   onChange={(event) =>
-                    handleChatLanguageChange(
-                      event.target.value
-                    )
+                    handleChatLanguageChange(event.target.value)
                   }
                   className="
-                    h-7
-                    rounded-[8px]
-                    border-0
-                    bg-shell
-                    px-2
-                    text-[10px]
-                    font-medium
-                    text-ink
-                    focus:outline-none
-                  "
+        h-7
+        rounded-[7px]
+        border
+        border-white/15
+        bg-white/10
+        px-2
+        text-[10px]
+        font-medium
+        text-white
+        focus:border-white/30
+        focus:outline-none
+      "
                   aria-label="Assistant language"
                 >
                   {SUPPORTED_LANGUAGES.map((lang) => (
                     <option
                       key={lang.code}
                       value={lang.code}
+                      className="text-ink"
                     >
                       {lang.name}
                     </option>
@@ -774,17 +754,18 @@ const ChatbotWidget = () => {
                     setSpeakingIndex(null);
                   }}
                   className="
-                    flex
-                    h-7
-                    w-7
-                    items-center
-                    justify-center
-                    rounded-[8px]
-                    text-muted
-                    transition-colors
-                    hover:bg-shell
-                    hover:text-ink
-                  "
+        flex
+        h-7
+        w-7
+        cursor-pointer
+        items-center
+        justify-center
+        rounded-[7px]
+        text-white/70
+        transition-colors
+        hover:bg-white/10
+        hover:text-white
+      "
                   aria-label="Close GST Copilot"
                 >
                   <X className="h-4 w-4" />
@@ -817,52 +798,13 @@ const ChatbotWidget = () => {
             </div>
           </header>
 
-          {/* ========================================================
-              OPTIONAL ACCOUNT NOTICE
-          ========================================================= */}
-          {hasPendingActions && (
-            <button
-              type="button"
-              onClick={() =>
-                handleSendQuery(
-                  "What are my pending action items and how do I solve them step-by-step?"
-                )
-              }
-              className="
-                flex
-                shrink-0
-                items-center
-                justify-between
-                border-t
-                border-b
-                border-[#e8c980]
-                bg-[#fffaf0]
-                px-4
-                py-2
-                text-left
-                transition-colors
-                hover:bg-[#fff7e2]
-              "
-            >
-              <span className="flex items-center gap-2 text-[10px] font-medium text-[#6d5200]">
-                <AlertCircle className="h-3.5 w-3.5" />
-                {harnessContext.pendingToDos.length} pending action
-                {harnessContext.pendingToDos.length === 1 ? "" : "s"}
-              </span>
-
-              <ArrowRight className="h-3.5 w-3.5 text-[#8d5d00]" />
-            </button>
-          )}
-
-          {/* ========================================================
-              SUGGESTED ACTIONS
-          ========================================================= */}
-          {showQuickActions && (
-            <div className="shrink-0 border-b border-line/70 bg-shell/30 px-4 py-2.5">
+          {showQuickActions ? (
+            <div className="shrink-0 border-b border-line bg-shell/65 px-4 py-2.5">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
-                  <HelpCircle className="h-3 w-3 text-navy" />
-                  <span className="text-[9px] font-semibold uppercase tracking-[0.08em] text-muted">
+                  <HelpCircle className="h-3.5 w-3.5 text-navy/80" />
+
+                  <span className="text-[9px] font-semibold uppercase tracking-[0.07em] text-ink/65">
                     {isLoggedIn
                       ? labels.harnessTitle
                       : labels.quickTitle}
@@ -872,13 +814,24 @@ const ChatbotWidget = () => {
                 <button
                   type="button"
                   onClick={() => setShowQuickActions(false)}
-                  className="text-[9px] font-medium text-muted hover:text-navy"
+                  className="
+          cursor-pointer
+          rounded-[4px]
+          px-1.5
+          py-0.5
+          text-[9px]
+          font-medium
+          text-muted
+          transition-colors
+          hover:bg-white/70
+          hover:text-ink
+        "
                 >
                   Hide
                 </button>
               </div>
 
-              <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5">
+              <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1">
                 {activeQuickActions
                   .slice(0, 3)
                   .map((action, index) => (
@@ -888,40 +841,77 @@ const ChatbotWidget = () => {
                       onClick={() => handleSendQuery(action.query)}
                       disabled={loading || isStreaming}
                       className="
-                        group
-                        inline-flex
-                        items-center
-                        gap-1
-                        py-1
-                        text-left
-                        text-[10px]
-                        font-medium
-                        text-navy
-                        transition-colors
-                        hover:text-navy-hover
-                        disabled:opacity-50
-                      "
+              group
+              inline-flex
+              min-w-0
+              items-center
+              gap-1
+              rounded-[4px]
+              border-b
+              border-transparent
+              py-0.5
+              text-left
+              text-[10px]
+              font-medium
+              leading-5
+              text-navy
+              transition-all
+              duration-150
+              hover:border-navy/25
+              hover:text-navy-hover
+              disabled:cursor-not-allowed
+              disabled:opacity-50
+            "
                     >
-                      <span>{action.label}</span>
-                      <ChevronRight className="h-3 w-3 text-muted transition-transform group-hover:translate-x-0.5" />
+                      <span className="truncate">
+                        {action.label}
+                      </span>
+
+                      <ChevronRight
+                        className="
+                h-3 w-3
+                shrink-0
+                text-muted/70
+                transition-transform
+                duration-150
+                group-hover:translate-x-0.5
+              "
+                      />
                     </button>
                   ))}
               </div>
             </div>
+          ) : (
+            <div className="shrink-0 border-b border-line bg-shell/45 px-4 py-1.5">
+              <button
+                type="button"
+                onClick={() => setShowQuickActions(true)}
+                className="
+        inline-flex
+        cursor-pointer
+        items-center
+        gap-1.5
+        rounded-[5px]
+        px-1.5
+        py-1
+        text-[9px]
+        font-semibold
+        text-navy
+        transition-colors
+        hover:bg-white/70
+        hover:text-navy-hover
+      "
+              >
+                <HelpCircle className="h-3.5 w-3.5" />
+                <span>Show quick actions</span>
+                <ChevronRight className="h-3 w-3" />
+              </button>
+            </div>
           )}
 
-          {/* ========================================================
-              CONVERSATION
-          ========================================================= */}
+          { }
           <div
-            className="
-              min-h-0
-              flex-1
-              overflow-y-auto
-              bg-[#fbfcfd]
-              px-4
-              py-5
-            "
+            className="min-h-0 flex-1 overflow-y-auto bg-[#fbfcfd] px-3 py-4 sm:px-4 sm:py-5 overscroll-contain"
           >
             <div className="mx-auto max-w-[65ch]">
               <div className="space-y-6">
@@ -939,7 +929,7 @@ const ChatbotWidget = () => {
                       key={index}
                       className={
                         isUser
-                          ? "ml-8 border-l-2 border-navy/15 pl-3"
+                          ? "ml-3 border-l-2 border-navy/15 pl-2 sm:ml-8 sm:pl-3"
                           : ""
                       }
                     >
@@ -950,10 +940,9 @@ const ChatbotWidget = () => {
                             font-semibold
                             uppercase
                             tracking-[0.09em]
-                            ${
-                              isUser
-                                ? "text-navy"
-                                : "text-muted"
+                            ${isUser
+                              ? "text-navy"
+                              : "text-muted"
                             }
                           `}
                         >
@@ -970,10 +959,9 @@ const ChatbotWidget = () => {
                           p-3
                           rounded-xl
                           border
-                          ${
-                            isUser
-                              ? "bg-navy/5 border-navy/10"
-                              : message.isError
+                          ${isUser
+                            ? "bg-navy/5 border-navy/10"
+                            : message.isError
                               ? "bg-red-50/70 border-red-200"
                               : "bg-white border-line/80 shadow-2xs"
                           }
@@ -982,9 +970,7 @@ const ChatbotWidget = () => {
                         {renderFormattedMessage(message.text)}
                       </div>
 
-                      {/* ------------------------------------------
-                          CLEARLY SEPARATED ACTION AREA
-                      ------------------------------------------- */}
+                      { }
                       {message.sender === "bot" &&
                         !message.isError &&
                         isAsianPaints && (
@@ -1019,7 +1005,7 @@ const ChatbotWidget = () => {
                                   w-full
                                   items-center
                                   justify-between
-                                  rounded-[9px]
+                                  min-h-10 rounded-[9px]
                                   bg-navy
                                   px-3
                                   py-2.5
@@ -1069,9 +1055,7 @@ const ChatbotWidget = () => {
                           </div>
                         )}
 
-                      {/* ------------------------------------------
-                          SPEAK AUDIO ACTION
-                      ------------------------------------------- */}
+                      { }
                       {message.sender === "bot" &&
                         !message.isError &&
                         message.text.length > 0 && (
@@ -1117,9 +1101,7 @@ const ChatbotWidget = () => {
                   );
                 })}
 
-                {/* ------------------------------------------
-                    LOADING
-                ------------------------------------------- */}
+                { }
                 {loading && (
                   <div className="border-l-2 border-navy/15 pl-3">
                     <div className="flex items-center gap-2">
@@ -1141,12 +1123,10 @@ const ChatbotWidget = () => {
             </div>
           </div>
 
-          {/* ========================================================
-              COMPOSER (Context & Voice buttons cleanly removed)
-          ========================================================= */}
+          { }
           <form
             onSubmit={handleFormSubmit}
-            className="shrink-0 bg-white px-3.5 pb-3.5 pt-2.5"
+            className="shrink-0 bg-white px-2.5 pb-3 pt-2.5 sm:px-3.5 sm:pb-3.5"
           >
             <div
               className="
@@ -1175,15 +1155,16 @@ const ChatbotWidget = () => {
                 placeholder={labels.placeholder || "Ask your GST query (e.g. Why is Asian Paints bill unfiled?)"}
                 className="
                   block
-                  min-h-[58px]
-                  max-h-28
+                  min-h-[54px]
+                  max-h-28 sm:min-h-[58px]
                   w-full
                   resize-none
                   border-0
                   bg-transparent
-                  px-3.5
+                  px-3
                   py-3
-                  text-[12px]
+                  text-[12px] sm:px-3.5
+                  sm:py-3
                   leading-5
                   text-ink
                   placeholder:text-muted/55
@@ -1192,7 +1173,7 @@ const ChatbotWidget = () => {
                 aria-label="Ask GST Copilot"
               />
 
-              <div className="flex items-center justify-between border-t border-line/70 px-3 py-2 bg-slate-50/50">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line/70 px-2.5 py-2 bg-slate-50/50 sm:px-3">
                 <span className="text-[10px] text-muted/70 font-medium">
                   Press Enter to send
                 </span>
@@ -1228,7 +1209,7 @@ const ChatbotWidget = () => {
               </div>
             </div>
 
-            <p className="mt-1.5 text-center text-[8px] text-muted/50">
+            <p className="mt-1.5 px-1 text-center text-[8px] leading-3 text-muted/50">
               GST Copilot uses the current page and active taxpayer account context.
             </p>
           </form>

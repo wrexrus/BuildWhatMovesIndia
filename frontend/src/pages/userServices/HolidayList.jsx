@@ -83,7 +83,7 @@ const HolidayList = () => {
 
   return (
     <PageContainer>
-      <main className="min-h-[calc(100vh-150px)] bg-[#f7f6f3] text-[#2f3437]">
+      <main className="min-h-[calc(100vh-150px)] min-w-0 overflow-x-hidden bg-[#f7f6f3] text-[#2f3437]">
         <Breadcrumbs
           items={[
             { label: "Services" },
@@ -92,24 +92,24 @@ const HolidayList = () => {
           ]}
         />
 
-        <div className="mx-auto max-w-[1400px] px-5 pb-16 pt-8 sm:px-8 lg:px-10">
-          <header className="border-b border-[#eaeaea] pb-7">
+        <div className="mx-auto w-full max-w-[1400px] min-w-0 px-4 pb-12 pt-5 sm:px-6 sm:pb-16 sm:pt-7 lg:px-8 lg:pt-8">
+          <header className="min-w-0 border-b border-[#eaeaea] pb-6 sm:pb-7">
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#1f6c9f]">
               User service
             </p>
 
-            <h1 className="text-2xl font-semibold tracking-[-0.02em] text-balance text-[#20282d] sm:text-[1.75rem]">
+            <h1 className="break-words text-xl font-semibold tracking-[-0.02em] text-[#20282d] sm:text-2xl md:text-[1.75rem]">
               Holiday list
             </h1>
 
-            <p className="mt-4 max-w-[65ch] text-sm leading-6 text-[#6f7375]">
+            <p className="mt-3 max-w-[65ch] break-words text-sm leading-6 text-[#6f7375] sm:mt-4">
               View GST-related holidays by year and State or Union
               Territory.
             </p>
           </header>
 
           <section className="border-b border-[#eaeaea] py-6">
-            <div className="grid gap-5 sm:grid-cols-[180px_260px_auto] sm:items-end">
+            <div className="grid gap-4 sm:grid-cols-[minmax(0,180px)_minmax(0,260px)_auto] sm:items-end">
               <div>
                 <label
                   htmlFor="holiday-year"
@@ -179,8 +179,7 @@ const HolidayList = () => {
               <button
                 type="button"
                 className="
-                  h-11
-                  rounded-[5px]
+                  h-11 w-full rounded-[5px] sm:w-auto
                   bg-[#22282d]
                   px-7
                   text-sm
@@ -195,14 +194,14 @@ const HolidayList = () => {
             </div>
           </section>
 
-          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#eaeaea] py-5">
+          <div className="flex flex-col items-stretch gap-4 border-b py-5 sm:flex-row sm:items-center sm:justify-between border-[#eaeaea] py-5">
             <p className="text-sm text-[#6f7375]">
               {holidays.length} holiday
               {holidays.length !== 1 ? "s" : ""} available
               {state ? ` for ${state}` : ""}.
             </p>
 
-            <div className="flex border border-[#d9d9d7]">
+            <div className="flex self-start border border-[#d9d9d7] sm:self-auto">
               <button
                 type="button"
                 onClick={() => setView("list")}
@@ -242,7 +241,7 @@ const HolidayList = () => {
 
           {view === "list" && (
             <section className="pt-6">
-              <div className="grid grid-cols-[150px_1fr_180px] border-y border-[#dcdcdc] bg-[#f1f0ed] px-4 py-3 text-xs font-semibold uppercase tracking-[0.05em] text-[#616567] sm:grid-cols-[180px_1fr_200px]">
+              <div className="grid grid-cols-[minmax(105px,120px)_minmax(160px,1fr)_minmax(110px,140px)] overflow-x-auto border-y border-[#dcdcdc] bg-[#f1f0ed] px-4 py-3 text-xs font-semibold uppercase tracking-[0.05em] text-[#616567] sm:grid-cols-[180px_1fr_200px]">
                 <span>Date</span>
                 <span>Description</span>
                 <span>State / Centre</span>
@@ -261,9 +260,7 @@ const HolidayList = () => {
                         )
                       }
                       className="
-                        grid
-                        w-full
-                        grid-cols-[150px_1fr]
+                        grid w-full min-w-[340px] grid-cols-[minmax(120px,150px)_minmax(180px,1fr)]
                         items-center
                         px-4
                         py-4
@@ -295,9 +292,7 @@ const HolidayList = () => {
                         <div
                           key={holiday.date}
                           className="
-                            grid
-                            grid-cols-[150px_1fr]
-                            gap-4
+                            grid min-w-[340px] grid-cols-[minmax(120px,150px)_minmax(180px,1fr)] gap-4
                             border-t
                             border-[#eaeaea]
                             bg-white
@@ -334,7 +329,7 @@ const HolidayList = () => {
                 {holidays.map((holiday) => (
                   <article
                     key={holiday.date}
-                    className="bg-white p-5"
+                    className="min-w-0 bg-white p-4 sm:p-5"
                   >
                     <p className="font-mono text-xs text-[#8a8d8f]">
                       {holiday.date}

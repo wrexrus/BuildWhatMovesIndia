@@ -7,8 +7,8 @@ const Breadcrumbs = ({ items = [] }) => {
       aria-label="Breadcrumb"
       className="border-b border-slate-200 bg-shell"
     >
-      <div className="mx-auto flex max-w-[1440px] items-center px-5 py-3 sm:px-6 lg:px-8">
-        <ol className="flex flex-wrap items-center gap-1.5 text-sm">
+      <div className="mx-auto flex min-w-0 max-w-[1440px] items-center px-4 py-2.5 sm:px-6 sm:py-3 lg:px-8">
+        <ol className="flex min-w-0 flex-wrap items-center gap-x-1.5 gap-y-1 text-xs sm:text-sm">
           <li>
             <a
               href="/"
@@ -28,15 +28,15 @@ const Breadcrumbs = ({ items = [] }) => {
                   <ChevronRight size={15} />
                 </li>
 
-                <li>
+                <li className="min-w-0 max-w-full">
                   {isLast ? (
-                    <span className="font-medium text-slate-700">
+                    <span className="block break-words font-medium text-slate-700">
                       {item.label}
                     </span>
                   ) : (
                     <a
                       href={item.href || "#"}
-                      className="font-medium text-navy transition-colors hover:text-navy-hover"
+                      className="block break-words font-medium text-navy transition-colors hover:text-navy-hover"
                     >
                       {item.label}
                     </a>

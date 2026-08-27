@@ -23,10 +23,10 @@ const OfflineToolPage = () => {
         }
       `}</style>
 
-      <div className="max-w-5xl mx-auto py-8 px-4 sm:px-6 lg:px-8 font-sans">
+      <div className="mx-auto w-full max-w-5xl min-w-0 px-4 py-5 font-sans sm:px-6 sm:py-8 lg:px-8">
         <nav
           aria-label="Breadcrumb"
-          className="flex items-center gap-2 text-xs text-slate-500 mb-8"
+          className="mb-6 flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500 sm:mb-8"
         >
           <Link to="/" className="font-medium text-navy transition-colors hover:text-navy-hover">
             Home
@@ -34,14 +34,14 @@ const OfflineToolPage = () => {
           <ChevronRight className="w-3.5 h-3.5 text-slate-300" />
           <span className="text-slate-500">Downloads</span>
           <ChevronRight className="w-3.5 h-3.5 text-slate-300" />
-          <span className="font-semibold text-ink">{tool.title}</span>
+          <span className="min-w-0 break-words font-semibold text-ink">{tool.title}</span>
         </nav>
 
-        <header className="page-rise border-b border-line pb-6 mb-8">
+        <header className="page-rise mb-6 min-w-0 border-b border-line pb-5 sm:mb-8 sm:pb-6">
           <p className="mb-2 text-xs font-semibold uppercase tracking-[0.1em] text-navy/70">
             Offline utility
           </p>
-          <h1 className="font-serif text-[2rem] leading-[1.1] tracking-[-0.02em] text-ink sm:text-[2.3rem]">
+          <h1 className="break-words font-serif text-[1.75rem] leading-[1.1] tracking-[-0.02em] text-ink sm:text-[2.3rem]">
             {tool.title}
           </h1>
           <p className="mt-2 text-sm font-medium text-slate-500">
@@ -50,7 +50,7 @@ const OfflineToolPage = () => {
         </header>
 
         <section className="page-rise mb-8" style={{ animationDelay: '80ms' }}>
-          <p className="text-[15px] leading-7 text-ink/85">
+          <p className="break-words text-sm leading-6 text-ink/85 sm:text-[15px] sm:leading-7">
             {tool.description}
           </p>
 
@@ -58,7 +58,7 @@ const OfflineToolPage = () => {
             href={tool.downloadUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="group mt-5 inline-flex items-center gap-2.5 rounded-[6px] bg-navy px-5 py-3 text-sm font-semibold text-white transition-all duration-150 hover:-translate-y-0.5 hover:bg-navy-hover hover:shadow-md active:translate-y-0"
+            className="group mt-5 inline-flex min-h-11 w-full items-center justify-center gap-2.5 rounded-[6px] bg-navy px-4 py-3 text-sm font-semibold text-white transition-all duration-150 hover:-translate-y-0.5 hover:bg-navy-hover hover:shadow-md active:translate-y-0 sm:w-auto sm:px-5"
           >
             <Download className="w-4 h-4 transition-transform duration-150 group-hover:translate-y-0.5" />
             Download {tool.title}
@@ -66,7 +66,7 @@ const OfflineToolPage = () => {
         </section>
 
         <section
-          className="page-rise mt-8 border border-line bg-shell/60 p-6 rounded-[6px]"
+          className="page-rise mt-6 min-w-0 rounded-[6px] border border-line bg-shell/60 p-4 sm:mt-8 sm:p-6"
           style={{ animationDelay: '140ms' }}
         >
           <h3 className="flex items-center gap-2 text-sm font-semibold text-ink">
@@ -84,7 +84,7 @@ const OfflineToolPage = () => {
         </section>
 
         <section
-          className="page-rise mt-6 border border-amber/40 bg-amber/[0.06] p-6 rounded-[6px]"
+          className="page-rise mt-5 min-w-0 rounded-[6px] border border-amber/40 bg-amber/[0.06] p-4 sm:mt-6 sm:p-6"
           style={{ animationDelay: '200ms' }}
         >
           <h3 className="flex items-center gap-2 text-sm font-semibold text-[#7a5200]">
@@ -137,7 +137,7 @@ const OfflineToolPage = () => {
           </div>
         </section>
 
-        <section className="page-rise mt-10 border-t border-line pt-8" style={{ animationDelay: '260ms' }}>
+        <section className="page-rise mt-8 min-w-0 border-t border-line pt-6 sm:mt-10 sm:pt-8" style={{ animationDelay: '260ms' }}>
           <h2 className="font-serif text-xl tracking-[-0.01em] text-ink">
             System requirements
           </h2>
@@ -145,16 +145,16 @@ const OfflineToolPage = () => {
             Confirm the following before using the tool.
           </p>
 
-          <div className="mt-6 grid gap-4 sm:grid-cols-3">
-            <div className="rounded-[6px] border border-line bg-white p-5 transition-shadow hover:shadow-sm">
+          <div className="mt-5 grid gap-3 sm:mt-6 sm:grid-cols-3 sm:gap-4">
+            <div className="min-w-0 rounded-[6px] border border-line bg-white p-4 transition-shadow hover:shadow-sm sm:p-5">
               <Monitor className="w-4 h-4 text-navy" />
               <h3 className="mt-3 text-xs font-semibold uppercase tracking-[0.06em] text-ink/50">
                 Operating system
               </h3>
-              <p className="mt-2 text-sm leading-6 text-ink/80">{tool.sysReq.os}</p>
+              <p className="mt-2 break-words text-sm leading-6 text-ink/80">{tool.sysReq.os}</p>
             </div>
 
-            <div className="rounded-[6px] border border-line bg-white p-5 transition-shadow hover:shadow-sm">
+            <div className="min-w-0 rounded-[6px] border border-line bg-white p-4 transition-shadow hover:shadow-sm sm:p-5">
               <Globe className="w-4 h-4 text-navy" />
               <h3 className="mt-3 text-xs font-semibold uppercase tracking-[0.06em] text-ink/50">
                 Supported browsers
@@ -166,16 +166,16 @@ const OfflineToolPage = () => {
               </ul>
             </div>
 
-            <div className="rounded-[6px] border border-line bg-white p-5 transition-shadow hover:shadow-sm">
+            <div className="min-w-0 rounded-[6px] border border-line bg-white p-4 transition-shadow hover:shadow-sm sm:p-5">
               <Table className="w-4 h-4 text-navy" />
               <h3 className="mt-3 text-xs font-semibold uppercase tracking-[0.06em] text-ink/50">
                 Microsoft Excel
               </h3>
-              <p className="mt-2 text-sm leading-6 text-ink/80">{tool.sysReq.excel}</p>
+              <p className="mt-2 break-words text-sm leading-6 text-ink/80">{tool.sysReq.excel}</p>
             </div>
           </div>
 
-          <p className="mt-4 flex items-start gap-2 text-xs leading-5 text-ink/50">
+          <p className="mt-4 flex min-w-0 items-start gap-2 break-words text-xs leading-5 text-ink/50">
             <Info className="mt-0.5 w-3.5 h-3.5 shrink-0" />
             For any lower Excel version, the tool will open in your default browser instead.
           </p>

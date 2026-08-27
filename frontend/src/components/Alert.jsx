@@ -31,13 +31,13 @@ const Alert = ({ type = 'info', title, message, children, onClose, className = '
   return (
     <div
       role="alert"
-      className={`p-4 rounded-r-xl border border-r-slate-200/80 border-y-slate-200/80 transition-all duration-200 flex items-start justify-between gap-3 ${variant.container} ${className}`}
+      className={`flex min-w-0 items-start justify-between gap-2 rounded-r-xl border border-r-slate-200/80 border-y-slate-200/80 p-3 text-sm transition-all duration-200 sm:gap-3 sm:p-4 ${variant.container} ${className}`}
     >
-      <div className="flex items-start gap-3">
+      <div className="flex min-w-0 items-start gap-2 sm:gap-3">
         {variant.icon}
-        <div className="text-xs sm:text-sm font-sans leading-relaxed">
-          {title && <h4 className="font-bold mb-0.5 leading-tight">{title}</h4>}
-          <div className="font-medium text-slate-800/90">{content}</div>
+        <div className="min-w-0 font-sans text-xs leading-relaxed sm:text-sm">
+          {title && <h4 className="mb-0.5 break-words font-bold leading-tight">{title}</h4>}
+          <div className="break-words font-medium text-slate-800/90">{content}</div>
         </div>
       </div>
 
@@ -45,7 +45,7 @@ const Alert = ({ type = 'info', title, message, children, onClose, className = '
         <button
           onClick={onClose}
           type="button"
-          className="text-slate-400 hover:text-slate-700 p-1 rounded-lg hover:bg-slate-200/50 transition-colors cursor-pointer shrink-0"
+          className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-slate-400 transition-colors hover:bg-slate-200/50 hover:text-slate-700 cursor-pointer sm:h-auto sm:w-auto sm:p-1"
           aria-label="Dismiss alert"
         >
           <X className="w-4 h-4" />

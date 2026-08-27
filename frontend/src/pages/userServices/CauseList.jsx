@@ -43,7 +43,7 @@ const CauseList = () => {
 
   return (
     <PageContainer>
-      <main className="min-h-[calc(100vh-150px)] bg-[#f7f6f3] text-[#2f3437]">
+      <main className="min-h-[calc(100vh-150px)] min-w-0 overflow-x-hidden bg-[#f7f6f3] text-[#2f3437]">
         <Breadcrumbs
           items={[
             { label: "Services" },
@@ -52,25 +52,25 @@ const CauseList = () => {
           ]}
         />
 
-        <div className="mx-auto max-w-[1400px] px-5 pb-16 pt-8 sm:px-8 lg:px-10">
-          <header className="border-b border-[#eaeaea] pb-7">
+        <div className="mx-auto w-full max-w-[1400px] min-w-0 px-4 pb-12 pt-5 sm:px-6 sm:pb-16 sm:pt-7 lg:px-8 lg:pt-8">
+          <header className="min-w-0 border-b border-[#eaeaea] pb-6 sm:pb-7">
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#1f6c9f]">
               User service
             </p>
 
-            <h1 className="text-2xl font-semibold tracking-[-0.02em] text-balance text-[#20282d] sm:text-[1.75rem]">
+            <h1 className="break-words text-xl font-semibold tracking-[-0.02em] text-[#20282d] sm:text-2xl md:text-[1.75rem]">
               Cause list
             </h1>
 
-            <p className="mt-4 max-w-[65ch] text-sm leading-6 text-[#6f7375]">
+            <p className="mt-3 max-w-[65ch] break-words text-sm leading-6 text-[#6f7375] sm:mt-4">
               Find scheduled hearings and matters using authority,
               State, jurisdiction and date.
             </p>
           </header>
 
-          <section className="pt-8">
+          <section className="min-w-0 pt-6 sm:pt-8">
             <form onSubmit={handleSubmit}>
-              <div className="grid gap-x-8 gap-y-6 md:grid-cols-2">
+              <div className="grid min-w-0 gap-x-6 gap-y-5 sm:gap-x-8 sm:gap-y-6 md:grid-cols-2">
                 <div>
                   <label
                     htmlFor="authority"
@@ -185,7 +185,7 @@ const CauseList = () => {
                 </div>
               </div>
 
-              <div className="mt-8 flex justify-end border-t border-[#eaeaea] pt-6">
+              <div className="mt-6 flex flex-col border-t border-[#eaeaea] pt-5 sm:mt-8 sm:flex-row sm:justify-end sm:pt-6">
                 <button
                   type="submit"
                   className="

@@ -1,8 +1,3 @@
-/**
- * Comprehensive Website-Wide Multilingual Translation Dictionary
- * Supported: EN (English), HI (हिंदी), MR (मराठी), TA (தமிழ்), PA (ਪੰਜਾਬੀ)
- */
-
 export const SITE_TRANSLATIONS = {
   EN: {
     // Navbar
@@ -16,6 +11,16 @@ export const SITE_TRANSLATIONS = {
     navRegister: "Register",
     navLogout: "Logout",
     navProfile: "My Profile",
+    navGstLaw: "GST Law",
+    navDownloads: "Downloads",
+    navHelpFacilities: "Help and Taxpayer Facilities",
+    navEinvoice: "e-Invoice",
+    navNews: "News and Updates",
+    heroGovBadge: "Government of India",
+    heroMainTitle: "Goods and Services Tax, simplified for every taxpayer.",
+    heroMainSubtitle: "Register, file returns, track applications and manage payments through a single, secure GST Portal built for businesses across India.",
+    heroCtaStart: "Start new registration",
+    heroCtaTrack: "Track application status",
 
     // Hero Section
     heroBadge: "Simpler GST Filing for Small Taxpayers",
@@ -78,6 +83,16 @@ export const SITE_TRANSLATIONS = {
     navRegister: "पंजीकरण",
     navLogout: "लॉगआउट",
     navProfile: "मेरी प्रोफाइल",
+    navGstLaw: "जीएसटी कानून",
+    navDownloads: "डाउनलोड",
+    navHelpFacilities: "सहायता और करदाता सुविधाएं",
+    navEinvoice: "ई-इनवॉइस",
+    navNews: "समाचार और अपडेट",
+    heroGovBadge: "भारत सरकार",
+    heroMainTitle: "वस्तु एवं सेवा कर, हर करदाता के लिए सरल।",
+    heroMainSubtitle: "पंजीकरण करें, रिटर्न फाइल करें, आवेदनों को ट्रैक करें और भारत भर के व्यवसायों के लिए बने एक सुरक्षित GST पोर्टल के माध्यम से भुगतान प्रबंधित करें।",
+    heroCtaStart: "नया पंजीकरण शुरू करें",
+    heroCtaTrack: "आवेदन की स्थिति ट्रैक करें",
 
     // Hero Section
     heroBadge: "छोटे व्यापारियों के लिए आसान GST फाइलिंग",
@@ -140,6 +155,16 @@ export const SITE_TRANSLATIONS = {
     navRegister: "नोंदणी",
     navLogout: "लॉगआउट",
     navProfile: "माझी प्रोफाईल",
+    navGstLaw: "जीएसटी कायदा",
+    navDownloads: "डाउनलोड",
+    navHelpFacilities: "मदत आणि करदाता सुविधा",
+    navEinvoice: "ई-इनव्हॉइस",
+    navNews: "बातम्या आणि अपडेट्स",
+    heroGovBadge: "भारत सरकार",
+    heroMainTitle: "वस्तू आणि सेवा कर, प्रत्येक करदात्यासाठी सोपे.",
+    heroMainSubtitle: "नोंदणी करा, रिटर्न भरा, अर्जांचा मागोवा घ्या आणि भारतभरातील व्यवसायांसाठी तयार केलेल्या सुरक्षित GST पोर्टलद्वारे पेमेंट व्यवस्थापित करा.",
+    heroCtaStart: "नवीन नोंदणी सुरू करा",
+    heroCtaTrack: "अर्जाची स्थिती तपासा",
 
     // Hero Section
     heroBadge: "लहान व्यापाऱ्यांसाठी सोपी GST फाइलिंग",
@@ -201,6 +226,16 @@ export const SITE_TRANSLATIONS = {
     navRegister: "பதிவு",
     navLogout: "வெளியேறு",
     navProfile: "என் சுயவிவரம்",
+    navGstLaw: "ஜிஎஸ்டி சட்டம்",
+    navDownloads: "பதிவிறக்கங்கள்",
+    navHelpFacilities: "உதவி மற்றும் வரி செலுத்துவோர் வசதிகள்",
+    navEinvoice: "மின்-விலைப்பட்டியல்",
+    navNews: "செய்திகள் மற்றும் புதுப்பிப்புகள்",
+    heroGovBadge: "இந்திய அரசு",
+    heroMainTitle: "ஒவ்வொரு வரி செலுத்துவோருக்கும் எளிமையாக்கப்பட்ட சரக்கு மற்றும் சேவை வரி.",
+    heroMainSubtitle: "இந்தியா முழுவதும் உள்ள வணிகங்களுக்காக உருவாக்கப்பட்ட ஒரே பாதுகாப்பான ஜிஎஸ்டி போர்டல் மூலம் பதிவு செய்யவும், ரிட்டர்ன்களை தாக்கல் செய்யவும், விண்ணப்பங்களை கண்காணிக்கவும், கட்டணங்களை நிர்வகிக்கவும்.",
+    heroCtaStart: "புதிய பதிவைத் தொடங்கவும்",
+    heroCtaTrack: "விண்ணப்ப நிலையைக் கண்காணிக்கவும்",
 
     // Hero Section
     heroBadge: "சிறு வணிகர்களுக்கான எளிய ஜிஎஸ்டி தாக்கல்",
@@ -262,6 +297,16 @@ export const SITE_TRANSLATIONS = {
     navRegister: "ਰਜਿਸਟਰ",
     navLogout: "ਲੌਗਆਊਟ",
     navProfile: "ਮੇਰੀ ਪ੍ਰੋਫਾਈਲ",
+    navGstLaw: "ਜੀਐਸਟੀ ਕਾਨੂੰਨ",
+    navDownloads: "ਡਾਊਨਲੋਡ",
+    navHelpFacilities: "ਮਦਦ ਅਤੇ ਟੈਕਸਦਾਤਾ ਸਹੂਲਤਾਂ",
+    navEinvoice: "ਈ-ਇਨਵਾਇਸ",
+    navNews: "ਖ਼ਬਰਾਂ ਅਤੇ ਅੱਪਡੇਟ",
+    heroGovBadge: "ਭਾਰਤ ਸਰਕਾਰ",
+    heroMainTitle: "ਵਸਤੂ ਅਤੇ ਸੇਵਾ ਟੈਕਸ, ਹਰ ਟੈਕਸਦਾਤਾ ਲਈ ਸੌਖਾ।",
+    heroMainSubtitle: "ਭਾਰਤ ਭਰ ਦੇ ਵਪਾਰਾਂ ਲਈ ਬਣਾਏ ਗਏ ਇੱਕ ਸੁਰੱਖਿਅਤ GST ਪੋਰਟਲ ਰਾਹੀਂ ਰਜਿਸਟਰ ਕਰੋ, ਰਿਟਰਨ ਭਰੋ, ਅਰਜ਼ੀਆਂ ਟਰੈਕ ਕਰੋ ਅਤੇ ਭੁਗਤਾਨ ਪ੍ਰਬੰਧਿਤ ਕਰੋ।",
+    heroCtaStart: "ਨਵੀਂ ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਸ਼ੁਰੂ ਕਰੋ",
+    heroCtaTrack: "ਅਰਜ਼ੀ ਦੀ ਸਥਿਤੀ ਟਰੈਕ ਕਰੋ",
 
     // Hero Section
     heroBadge: "ਛੋਟੇ ਵਪਾਰੀਆਂ ਲਈ ਆਸਾਨ GST ਫਾਈਲਿੰਗ",

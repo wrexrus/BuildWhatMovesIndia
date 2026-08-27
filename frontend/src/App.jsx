@@ -47,12 +47,22 @@ import NewsAndUpdates from "./pages/NewsAndUpdates";
 
 const MainLayout = () => {
   return (
-    <div className="min-h-dvh bg-shell">
+    <div className="min-h-dvh overflow-x-hidden bg-shell">
       <PageTransition />
+      <div
+        role="status"
+        className="prototype-notice border-b border-amber/30 bg-amber/10 px-4 py-2 text-center text-[0.72rem] font-medium leading-5 text-navy sm:px-6 sm:text-[0.78rem]"
+      >
+        <span className="font-bold">Hackathon Prototype:</span>{" "}
+        This is a demo/prototype and is not an official GST government website.
+      </div>
+
       <Navbar />
+
       <main id="main">
         <Outlet />
       </main>
+
       <ChatbotWidget />
       <Footer />
     </div>
@@ -163,12 +173,10 @@ const router = createBrowserRouter([
         path: "/services/payments/create-challan",
         element: <CreateChallan />,
       },
-
       {
         path: "/services/payments/track-status",
         element: <TrackPaymentStatus />,
       },
-
       {
         path: "/services/payments/grievance",
         element: <PaymentGrievance />,
@@ -191,7 +199,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/news-and-updates",
-        element: <NewsAndUpdates />
+        element: <NewsAndUpdates />,
       },
       {
         path: "*",

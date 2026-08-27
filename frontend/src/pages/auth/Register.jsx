@@ -64,86 +64,92 @@ const Register = () => {
 
   return (
     <PageContainer>
-      <div className="max-w-xl mx-auto my-8 bg-white p-8 rounded-xl shadow-md border border-slate-200 font-sans">
-        <div className="text-center mb-6">
-          <div className="inline-flex p-3 bg-navy text-amber rounded-full mb-3 shadow-xs">
-            <UserPlus className="w-6 h-6" />
+      <div className="mx-auto my-4 w-full max-w-xl min-w-0 px-3 sm:my-8 sm:px-6">
+        <div className="min-w-0 overflow-hidden rounded-xl border border-slate-200 bg-white p-4 font-sans shadow-md sm:p-6 md:p-8">
+          <div className="mb-5 text-center sm:mb-6">
+            <div className="mb-3 inline-flex rounded-full bg-navy p-3 text-amber shadow-xs">
+              <UserPlus className="h-6 w-6" />
+            </div>
+            <h2 className="break-words text-xl font-bold text-navy sm:text-2xl">New Taxpayer Registration</h2>
+            <p className="mx-auto mt-1 max-w-md break-words text-xs leading-5 text-slate-500 sm:text-sm">
+              Create your GST citizen profile to manage GSTR-3B filings seamlessly.
+            </p>
           </div>
-          <h2 className="text-2xl font-bold text-navy">New Taxpayer Registration</h2>
-          <p className="text-sm text-slate-500 mt-1">
-            Create your GST citizen profile to manage GSTR-3B filings seamlessly.
-          </p>
-        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-          <FormField
-            id="name"
-            label="Taxpayer Legal Name"
-            required
-            value={formData.name}
-            onChange={(e) => handleChange('name', e.target.value)}
-            placeholder="e.g. Ramesh Kumar"
-          />
+          <div className="mb-5 rounded-lg border border-blue-100 bg-blue-50/60 px-3 py-2.5 text-xs leading-5 text-slate-600 sm:mb-6 sm:px-4">
+            <span className="font-semibold text-navy">Hackathon Prototype:</span> This is a demo registration flow and is not an official GST government website.
+          </div>
 
-          <FormField
-            id="tradeName"
-            label="Trade / Business Name"
-            value={formData.tradeName}
-            onChange={(e) => handleChange('tradeName', e.target.value)}
-            placeholder="e.g. Nagpur Hardware & Sanitary Store"
-          />
+          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+            <FormField
+              id="name"
+              label="Taxpayer Legal Name"
+              required
+              value={formData.name}
+              onChange={(e) => handleChange('name', e.target.value)}
+              placeholder="e.g. Ramesh Kumar"
+            />
 
-          <FormField
-            id="gstin"
-            label="GSTIN (15-digit)"
-            required
-            value={formData.gstin}
-            onChange={(e) => handleChange('gstin', e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ''))}
-            placeholder="e.g. 27AAAAA1234A1Z5"
-            maxLength={15}
-          />
+            <FormField
+              id="tradeName"
+              label="Trade / Business Name"
+              value={formData.tradeName}
+              onChange={(e) => handleChange('tradeName', e.target.value)}
+              placeholder="e.g. Nagpur Hardware & Sanitary Store"
+            />
 
-          <FormField
-            id="email"
-            label="Email Address"
-            required
-            type="email"
-            value={formData.email}
-            onChange={(e) => handleChange('email', e.target.value)}
-            placeholder="e.g. ramesh.nagpur@gst.gov.in"
-          />
+            <FormField
+              id="gstin"
+              label="GSTIN (15-digit)"
+              required
+              value={formData.gstin}
+              onChange={(e) => handleChange('gstin', e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, ''))}
+              placeholder="e.g. 27AAAAA1234A1Z5"
+              maxLength={15}
+            />
 
-          <FormField
-            id="password"
-            label="Password"
-            required
-            type="password"
-            value={formData.password}
-            onChange={(e) => handleChange('password', e.target.value)}
-            placeholder="Choose a password"
-          />
+            <FormField
+              id="email"
+              label="Email Address"
+              required
+              type="email"
+              value={formData.email}
+              onChange={(e) => handleChange('email', e.target.value)}
+              placeholder="e.g. ramesh.nagpur@gst.gov.in"
+            />
 
-          {error && (
-            <Alert type="error" title="Registration Error" onClose={() => setError("")}>
-              {error}
-            </Alert>
-          )}
+            <FormField
+              id="password"
+              label="Password"
+              required
+              type="password"
+              value={formData.password}
+              onChange={(e) => handleChange('password', e.target.value)}
+              placeholder="Choose a password"
+            />
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-navy hover:bg-[#1a3f6e] disabled:opacity-50 text-white font-semibold py-3 rounded-lg shadow-sm transition-all cursor-pointer flex items-center justify-center space-x-2 mt-4"
-          >
-            <CheckCircle className="w-4 h-4" />
-            <span>{loading ? 'Creating Account...' : 'Complete Registration'}</span>
-          </button>
-        </form>
+            {error && (
+              <Alert type="error" title="Registration Error" onClose={() => setError("")}>
+                {error}
+              </Alert>
+            )}
 
-        <div className="mt-6 border-t border-slate-100 pt-4 text-center text-xs text-slate-500">
-          Already registered?{' '}
-          <Link to="/login" className="text-blue-700 font-bold hover:underline">
-            Login Here
-          </Link>
+            <button
+              type="submit"
+              disabled={loading}
+              className="mt-4 flex min-h-12 w-full items-center justify-center gap-2 rounded-lg bg-navy px-4 py-3 font-semibold text-white shadow-sm transition-all hover:bg-[#1a3f6e] disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+            >
+              <CheckCircle className="h-4 w-4 shrink-0" />
+              <span className="truncate">{loading ? 'Creating Account...' : 'Complete Registration'}</span>
+            </button>
+          </form>
+
+          <div className="mt-5 border-t border-slate-100 pt-4 text-center text-xs leading-5 text-slate-500 sm:mt-6">
+            Already registered?{' '}
+            <Link to="/login" className="font-bold text-blue-700 hover:underline">
+              Login Here
+            </Link>
+          </div>
         </div>
       </div>
     </PageContainer>

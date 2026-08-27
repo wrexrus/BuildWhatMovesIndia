@@ -129,307 +129,465 @@ const GstStatisticsPage = () => {
 
   return (
     <PageContainer>
-      <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 font-sans">
-        
-        {/* Header Hero Section */}
-        <div className="bg-gradient-to-r from-navy via-navy-2 to-blue-900 text-white p-6 sm:p-8 rounded-2xl shadow-lg border border-white/10 mb-8 relative overflow-hidden">
-          <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-            <BarChart3 className="w-56 h-56 text-white" />
-          </div>
-
-          <div className="relative z-10 max-w-3xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber/20 border border-amber/40 text-amber text-xs font-bold mb-3">
-              <BarChart3 className="w-3.5 h-3.5" />
-              <span>OFFICIAL GST PORTAL NATIONAL DATASET</span>
+      <div className="mx-auto w-full max-w-7xl px-3 py-5 font-sans sm:px-5 sm:py-7 lg:px-8 lg:py-8">
+        <header className="border-b border-line pb-6 sm:pb-8">
+          <div className="max-w-4xl">
+            <div className="mb-3 flex flex-wrap items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-full border border-navy/15 bg-navy/[0.04] px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.08em] text-navy sm:text-[11px]">
+                <BarChart3 className="h-3.5 w-3.5" />
+                GST statistics
+              </span>
+              <span className="text-[10px] text-muted sm:text-[11px]">
+                FY 2017-18 to FY 2026-27
+              </span>
             </div>
-            <h1 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight">
+
+            <h1 className="text-[1.8rem] font-semibold leading-[1.12] tracking-[-0.025em] text-ink sm:text-[2.25rem] lg:text-[2.55rem]">
               GST Statistics & Compliance Reports
             </h1>
-            <p className="text-xs sm:text-sm text-white/80 mt-2 leading-relaxed">
+
+            <p className="mt-3 max-w-4xl text-sm leading-6 text-muted sm:text-[15px] sm:leading-7">
               Official government datasets covering taxpayer registrations, GSTR-3B & GSTR-1 return filings, gross & net tax collections, state-wise revenue settlements, and E-Way Bill trends from FY 2017-18 to FY 2026-27.
             </p>
           </div>
-        </div>
+        </header>
 
-        {/* Quick Highlights Summary Row */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
-            <div>
-              <p className="text-xs font-bold text-slate-500 uppercase">Registration Data</p>
-              <p className="text-xl font-black text-navy mt-1">Active Taxpayers</p>
-              <p className="text-[11px] text-emerald-600 font-semibold mt-1">All India State-Wise Data</p>
-            </div>
-            <div className="p-3 bg-blue-50 text-blue-700 rounded-xl">
-              <Users className="w-6 h-6" />
+        <section className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="border border-line bg-white p-4 sm:p-5">
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted">
+                  Registration Data
+                </p>
+                <p className="mt-1 text-base font-semibold text-ink sm:text-lg">
+                  Active Taxpayers
+                </p>
+                <p className="mt-1 text-xs leading-5 text-muted">
+                  All India State-Wise Data
+                </p>
+              </div>
+              <Users className="h-5 w-5 shrink-0 text-navy" />
             </div>
           </div>
 
-          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
-            <div>
-              <p className="text-xs font-bold text-slate-500 uppercase">Return Filings</p>
-              <p className="text-xl font-black text-emerald-600 mt-1">GSTR-3B & GSTR-1</p>
-              <p className="text-[11px] text-slate-500 mt-1">Annual Filings Summary</p>
-            </div>
-            <div className="p-3 bg-emerald-50 text-emerald-700 rounded-xl">
-              <FileSpreadsheet className="w-6 h-6" />
-            </div>
-          </div>
-
-          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
-            <div>
-              <p className="text-xs font-bold text-slate-500 uppercase">Tax Collections</p>
-              <p className="text-xl font-black text-amber-600 mt-1">Gross & IGST</p>
-              <p className="text-[11px] text-amber-700 font-semibold mt-1">State & UT Settlements</p>
-            </div>
-            <div className="p-3 bg-amber-50 text-amber-700 rounded-xl">
-              <Landmark className="w-6 h-6" />
+          <div className="border border-line bg-white p-4 sm:p-5">
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted">
+                  Return Filings
+                </p>
+                <p className="mt-1 text-base font-semibold text-ink sm:text-lg">
+                  GSTR-3B & GSTR-1
+                </p>
+                <p className="mt-1 text-xs leading-5 text-muted">
+                  Annual Filings Summary
+                </p>
+              </div>
+              <FileSpreadsheet className="h-5 w-5 shrink-0 text-navy" />
             </div>
           </div>
 
-          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs flex items-center justify-between">
-            <div>
-              <p className="text-xs font-bold text-slate-500 uppercase">Logistics & Trade</p>
-              <p className="text-xl font-black text-navy mt-1">E-Way Bills</p>
-              <p className="text-[11px] text-slate-500 mt-1">Started 01/04/2018</p>
-            </div>
-            <div className="p-3 bg-slate-100 text-navy rounded-xl">
-              <Truck className="w-6 h-6" />
+          <div className="border border-line bg-white p-4 sm:p-5">
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted">
+                  Tax Collections
+                </p>
+                <p className="mt-1 text-base font-semibold text-ink sm:text-lg">
+                  Gross & IGST
+                </p>
+                <p className="mt-1 text-xs leading-5 text-muted">
+                  State & UT Settlements
+                </p>
+              </div>
+              <Landmark className="h-5 w-5 shrink-0 text-navy" />
             </div>
           </div>
-        </div>
 
-        {/* Main Clean & Readable GST Statistics Table */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-10">
-          <div className="p-5 border-b border-slate-200 bg-slate-50 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div>
-              <h3 className="text-base font-bold text-navy flex items-center gap-2">
-                <FileSpreadsheet className="w-5 h-5 text-blue-600" />
-                <span>GST Statistics Annual Excel Datasets (2017-18 to 2026-27)</span>
-              </h3>
-              <p className="text-xs text-slate-500 mt-0.5">Click any download icon to fetch the official Excel spreadsheet from gst.gov.in.</p>
+          <div className="border border-line bg-white p-4 sm:p-5">
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.08em] text-muted">
+                  Logistics & Trade
+                </p>
+                <p className="mt-1 text-base font-semibold text-ink sm:text-lg">
+                  E-Way Bills
+                </p>
+                <p className="mt-1 text-xs leading-5 text-muted">
+                  Started 01/04/2018
+                </p>
+              </div>
+              <Truck className="h-5 w-5 shrink-0 text-navy" />
             </div>
+          </div>
+        </section>
 
-            <div className="relative w-full sm:w-64">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-2.5" />
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Filter Financial Year..."
-                className="w-full text-xs pl-9 pr-3 py-2 rounded-xl border border-slate-300 focus:outline-none"
-              />
+        <section className="mt-8 overflow-hidden border border-line bg-white">
+          <div className="border-b border-line bg-[#f8fafc] px-4 py-4 sm:px-5">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <FileSpreadsheet className="h-4 w-4 shrink-0 text-navy" />
+                  <h2 className="text-sm font-semibold text-ink sm:text-base">
+                    GST Statistics Annual Excel Datasets
+                  </h2>
+                </div>
+                <p className="mt-1 max-w-2xl text-xs leading-5 text-muted sm:text-sm">
+                  Download the available Excel dataset for each financial year.
+                </p>
+              </div>
+
+              <div className="w-full lg:w-72">
+                <label className="mb-1.5 block text-[10px] font-semibold uppercase tracking-[0.08em] text-muted">
+                  Filter Financial Year
+                </label>
+                <div className="relative">
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted/60" />
+                  <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    placeholder="e.g. 2025-2026"
+                    className="
+                      h-10
+                      w-full
+                      rounded-[7px]
+                      border
+                      border-line
+                      bg-white
+                      pl-9
+                      pr-3
+                      text-sm
+                      text-ink
+                      placeholder:text-muted/50
+                      focus:border-navy/35
+                      focus:outline-none
+                      focus:ring-2
+                      focus:ring-amber/25
+                    "
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="border-b border-line bg-white px-4 py-2.5 sm:px-5">
+            <div className="flex items-start gap-2 text-[11px] leading-5 text-muted">
+              <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-navy" />
+              <span>
+                On smaller screens, swipe horizontally to view all dataset columns.
+              </span>
             </div>
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse text-xs sm:text-sm">
-              <thead className="bg-[#3F6F9F] text-white font-bold uppercase text-[11px] border-b border-blue-900">
-                <tr>
-                  <th className="p-3.5 border-r border-white/20" rowSpan={2}>Financial Year</th>
-                  <th className="p-3.5 text-center border-r border-white/20" rowSpan={2}>Registration</th>
-                  <th className="p-3.5 text-center border-r border-white/20" colSpan={2}>Return</th>
-                  <th className="p-3.5 text-center border-r border-white/20" colSpan={3}>Tax Collection</th>
-                  <th className="p-3.5 text-center" rowSpan={2}>E-Way Bill</th>
+            <table className="min-w-[1180px] w-full border-collapse text-xs">
+              <thead>
+                <tr className="border-b border-white/15 bg-navy text-white">
+                  <th
+                    className="sticky left-0 z-20 whitespace-nowrap border-r border-white/15 bg-navy px-3 py-3 text-left text-[10px] font-semibold uppercase tracking-[0.07em] sm:px-4"
+                    rowSpan={2}
+                  >
+                    Financial Year
+                  </th>
+                  <th
+                    className="border-r border-white/15 px-3 py-3 text-center text-[10px] font-semibold uppercase tracking-[0.07em] sm:px-4"
+                    rowSpan={2}
+                  >
+                    Registration
+                  </th>
+                  <th
+                    className="border-r border-white/15 px-3 py-3 text-center text-[10px] font-semibold uppercase tracking-[0.07em] sm:px-4"
+                    colSpan={2}
+                  >
+                    Return
+                  </th>
+                  <th
+                    className="border-r border-white/15 px-3 py-3 text-center text-[10px] font-semibold uppercase tracking-[0.07em] sm:px-4"
+                    colSpan={3}
+                  >
+                    Tax Collection
+                  </th>
+                  <th
+                    className="px-3 py-3 text-center text-[10px] font-semibold uppercase tracking-[0.07em] sm:px-4"
+                    rowSpan={2}
+                  >
+                    E-Way Bill
+                  </th>
                 </tr>
-                <tr className="bg-[#2D537B] text-white">
-                  <th className="p-2.5 text-center border-r border-white/20">GSTR-3B</th>
-                  <th className="p-2.5 text-center border-r border-white/20">GSTR-1</th>
-                  <th className="p-2.5 text-center border-r border-white/20">Gross & Net Tax Collection</th>
-                  <th className="p-2.5 text-center border-r border-white/20">State wise Tax Collection</th>
-                  <th className="p-2.5 text-center border-r border-white/20">Settlement of IGST to State/UTs</th>
+
+                <tr className="border-b border-white/15 bg-navy-2 text-white">
+                  <th className="border-r border-white/15 px-3 py-2.5 text-center text-[10px] font-semibold uppercase tracking-[0.05em] sm:px-4">
+                    GSTR-3B
+                  </th>
+                  <th className="border-r border-white/15 px-3 py-2.5 text-center text-[10px] font-semibold uppercase tracking-[0.05em] sm:px-4">
+                    GSTR-1
+                  </th>
+                  <th className="border-r border-white/15 px-3 py-2.5 text-center text-[10px] font-semibold uppercase tracking-[0.05em] sm:px-4">
+                    Gross & Net Tax Collection
+                  </th>
+                  <th className="border-r border-white/15 px-3 py-2.5 text-center text-[10px] font-semibold uppercase tracking-[0.05em] sm:px-4">
+                    State wise Tax Collection
+                  </th>
+                  <th className="border-r border-white/15 px-3 py-2.5 text-center text-[10px] font-semibold uppercase tracking-[0.05em] sm:px-4">
+                    Settlement of IGST to State/UTs
+                  </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200 font-sans">
-                {filteredData.map((row, idx) => (
-                  <tr key={idx} className={`hover:bg-slate-50 transition-colors ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}`}>
-                    <td className="p-3.5 font-bold font-mono text-navy border-r border-slate-200">{row.fy}</td>
 
-                    {/* Registration (Merged single download for all years) */}
+              <tbody className="divide-y divide-line font-sans">
+                {filteredData.map((row, idx) => (
+                  <tr
+                    key={idx}
+                    className="group bg-white transition-colors hover:bg-[#f7f9fb]"
+                  >
+                    <td className="sticky left-0 z-10 whitespace-nowrap border-r border-line bg-white px-3 py-3.5 font-mono text-[11px] font-semibold text-navy group-hover:bg-[#f7f9fb] sm:px-4">
+                      {row.fy}
+                    </td>
+
                     {idx === 0 ? (
-                      <td className="p-3.5 text-center border-r border-slate-200 bg-slate-100/30" rowSpan={10}>
+                      <td
+                        className="border-r border-line bg-[#fafbfd] px-3 py-3.5 text-center sm:px-4"
+                        rowSpan={10}
+                      >
                         <a
                           href={row.regUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex flex-col items-center justify-center p-2 rounded-xl text-blue-700 hover:text-blue-900 hover:bg-blue-50 transition-all group cursor-pointer"
+                          className="
+                            inline-flex
+                            min-w-[122px]
+                            flex-col
+                            items-center
+                            justify-center
+                            gap-1
+                            rounded-[7px]
+                            border
+                            border-line
+                            bg-white
+                            px-3
+                            py-2.5
+                            text-navy
+                            transition-colors
+                            hover:border-navy/25
+                            hover:bg-shell
+                            focus-visible:outline-none
+                          "
                           title="Download All-India Registration Excel Data"
                         >
-                          <Download className="w-6 h-6 text-blue-600 group-hover:scale-110 transition-transform" />
-                          <span className="text-[10px] font-bold mt-1 text-slate-600">REGISTRATION.xlsx</span>
+                          <Download className="h-4 w-4" />
+                          <span className="text-[10px] font-semibold leading-4 text-muted">
+                            REGISTRATION.xlsx
+                          </span>
                         </a>
                       </td>
                     ) : null}
 
-                    {/* GSTR-3B */}
-                    <td className="p-3.5 text-center border-r border-slate-200">
+                    <td className="border-r border-line px-3 py-3.5 text-center sm:px-4">
                       {row.gstr3bUrl ? (
                         <a
                           href={row.gstr3bUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center justify-center p-2 rounded-lg text-emerald-700 hover:bg-emerald-50 transition-all cursor-pointer"
+                          className="inline-flex h-8 min-w-8 items-center justify-center rounded-[7px] text-navy transition-colors hover:bg-shell focus-visible:outline-none"
                           title={`Download GSTR-3B Data (${row.fy})`}
                         >
-                          <Download className="w-5 h-5 text-emerald-600" />
+                          <Download className="h-4 w-4" />
                         </a>
                       ) : (
-                        <span className="text-slate-300">-</span>
+                        <span className="text-muted/35">—</span>
                       )}
                     </td>
 
-                    {/* GSTR-1 */}
-                    <td className="p-3.5 text-center border-r border-slate-200">
+                    <td className="border-r border-line px-3 py-3.5 text-center sm:px-4">
                       {row.gstr1Url ? (
                         <a
                           href={row.gstr1Url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center justify-center p-2 rounded-lg text-blue-700 hover:bg-blue-50 transition-all cursor-pointer"
+                          className="inline-flex h-8 min-w-8 items-center justify-center rounded-[7px] text-navy transition-colors hover:bg-shell focus-visible:outline-none"
                           title={`Download GSTR-1 Data (${row.fy})`}
                         >
-                          <Download className="w-5 h-5 text-blue-600" />
+                          <Download className="h-4 w-4" />
                         </a>
                       ) : (
-                        <span className="text-slate-300">-</span>
+                        <span className="text-muted/35">—</span>
                       )}
                     </td>
 
-                    {/* Gross and Net Tax Collection */}
-                    <td className="p-3.5 text-center border-r border-slate-200">
+                    <td className="border-r border-line px-3 py-3.5 text-center sm:px-4">
                       {row.grossTaxUrl ? (
                         <a
                           href={row.grossTaxUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center justify-center p-2 rounded-lg text-amber-700 hover:bg-amber-50 transition-all cursor-pointer"
+                          className="inline-flex h-8 min-w-8 items-center justify-center rounded-[7px] text-navy transition-colors hover:bg-shell focus-visible:outline-none"
                           title={`Download Gross & Net Tax Collection Data (${row.fy})`}
                         >
-                          <Download className="w-5 h-5 text-amber-600" />
+                          <Download className="h-4 w-4" />
                         </a>
                       ) : (
-                        <span className="text-slate-300 font-mono text-[11px]">-</span>
+                        <span className="text-muted/35">—</span>
                       )}
                     </td>
 
-                    {/* State wise Tax Collection */}
-                    <td className="p-3.5 text-center border-r border-slate-200">
+                    <td className="border-r border-line px-3 py-3.5 text-center sm:px-4">
                       {row.stateTaxUrl ? (
                         <a
                           href={row.stateTaxUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center justify-center p-2 rounded-lg text-indigo-700 hover:bg-indigo-50 transition-all cursor-pointer"
+                          className="inline-flex h-8 min-w-8 items-center justify-center rounded-[7px] text-navy transition-colors hover:bg-shell focus-visible:outline-none"
                           title={`Download State-wise Tax Collection Data (${row.fy})`}
                         >
-                          <Download className="w-5 h-5 text-indigo-600" />
+                          <Download className="h-4 w-4" />
                         </a>
                       ) : (
-                        <span className="text-slate-300">-</span>
+                        <span className="text-muted/35">—</span>
                       )}
                     </td>
 
-                    {/* Settlement of IGST to State/UTs */}
-                    <td className="p-3.5 text-center border-r border-slate-200">
+                    <td className="border-r border-line px-3 py-3.5 text-center sm:px-4">
                       {row.igstSettlementUrl ? (
                         <a
                           href={row.igstSettlementUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center justify-center p-2 rounded-lg text-purple-700 hover:bg-purple-50 transition-all cursor-pointer"
+                          className="inline-flex h-8 min-w-8 items-center justify-center rounded-[7px] text-navy transition-colors hover:bg-shell focus-visible:outline-none"
                           title={`Download IGST Settlement Data (${row.fy})`}
                         >
-                          <Download className="w-5 h-5 text-purple-600" />
+                          <Download className="h-4 w-4" />
                         </a>
                       ) : (
-                        <span className="text-slate-300">-</span>
+                        <span className="text-muted/35">—</span>
                       )}
                     </td>
 
-                    {/* E-Way Bill */}
-                    <td className="p-3.5 text-center">
+                    <td className="px-3 py-3.5 text-center sm:px-4">
                       {row.ewayUrl ? (
                         <a
                           href={row.ewayUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center justify-center p-2 rounded-lg text-slate-700 hover:bg-slate-100 transition-all cursor-pointer"
+                          className="inline-flex h-8 min-w-8 items-center justify-center rounded-[7px] text-navy transition-colors hover:bg-shell focus-visible:outline-none"
                           title={`Download E-Way Bill Data (${row.fy})`}
                         >
-                          <Download className="w-5 h-5 text-slate-700" />
+                          <Download className="h-4 w-4" />
                         </a>
                       ) : (
-                        <span className="text-slate-400 text-[11px] font-semibold">N/A</span>
+                        <span className="text-[11px] font-medium text-muted/55">
+                          N/A
+                        </span>
                       )}
                     </td>
                   </tr>
                 ))}
 
-                {/* Special Summary Footer Rows */}
-                <tr className="bg-slate-100 font-bold border-t-2 border-slate-300">
-                  <td colSpan={7} className="p-4 text-right text-navy font-sans">
+                <tr className="border-t-2 border-line bg-[#f7f9fb]">
+                  <td
+                    colSpan={7}
+                    className="px-3 py-3.5 text-left text-[11px] font-semibold leading-5 text-navy sm:px-4 sm:text-xs"
+                  >
                     Yearwise Pre-GST regime revenue from taxes subsumed in GST
                   </td>
-                  <td className="p-4 text-center">
+                  <td className="px-3 py-3.5 text-center sm:px-4">
                     <a
                       href="https://tutorial.gst.gov.in/offlineutilities/gst_statistics/Yearwise_Pre-GST_regime_revenue.xlsx"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center p-2 rounded-lg text-blue-700 hover:bg-blue-100 transition-all cursor-pointer"
+                      className="inline-flex h-8 min-w-8 items-center justify-center rounded-[7px] text-navy transition-colors hover:bg-white focus-visible:outline-none"
                       title="Download Pre-GST Revenue Report"
                     >
-                      <Download className="w-5 h-5 text-navy" />
+                      <Download className="h-4 w-4" />
                     </a>
                   </td>
                 </tr>
 
-                <tr className="bg-slate-200/80 font-extrabold border-t border-slate-300">
-                  <td colSpan={7} className="p-4 text-right text-navy font-sans text-sm">
+                <tr className="border-t border-line bg-[#eef2f6]">
+                  <td
+                    colSpan={7}
+                    className="px-3 py-3.5 text-left text-[11px] font-semibold leading-5 text-navy sm:px-4 sm:text-sm"
+                  >
                     Statistical Report on 9 Years of GST
                   </td>
-                  <td className="p-4 text-center">
+                  <td className="px-3 py-3.5 text-center sm:px-4">
                     <a
                       href="https://tutorial.gst.gov.in/offlineutilities/gst_statistics/Statistical_Report_on_9_Years_of_GST.pdf"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center justify-center p-2 rounded-lg text-emerald-800 hover:bg-emerald-100 transition-all cursor-pointer"
+                      className="inline-flex h-8 min-w-8 items-center justify-center rounded-[7px] text-navy transition-colors hover:bg-white focus-visible:outline-none"
                       title="Download Statistical Report on 9 Years of GST"
                     >
-                      <Download className="w-5 h-5 text-emerald-700" />
+                      <Download className="h-4 w-4" />
                     </a>
                   </td>
                 </tr>
               </tbody>
             </table>
           </div>
-        </div>
 
-        {/* Official Notes Section */}
-        <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm mb-10">
-          <h3 className="text-base font-bold text-navy mb-3 flex items-center gap-2">
-            <Info className="w-5 h-5 text-blue-600" />
-            <span>Important Official Notes:</span>
-          </h3>
+          {filteredData.length === 0 && (
+            <div className="border-t border-line px-4 py-10 text-center sm:px-6">
+              <p className="text-sm font-medium text-ink">
+                No financial year found
+              </p>
+              <p className="mt-1 text-xs text-muted">
+                Try searching for another year.
+              </p>
+            </div>
+          )}
+        </section>
 
-          <ul className="space-y-2.5 text-xs text-slate-700 font-sans list-disc list-inside">
-            <li>
-              <strong className="text-navy">E-way Bill:</strong> System started from <span className="font-semibold text-slate-900">01/04/2018</span>. Data prior to FY 2018-19 is not applicable.
-            </li>
-            <li>
-              <strong className="text-navy">Registration Data:</strong> The State-wise data contains details of active taxpayers at the close of last month. This excludes taxpayers whose registration has been cancelled, but includes taxpayers whose registration was restored on application/appeal.
-            </li>
-            <li>
-              <strong className="text-navy">Tax Collection Breakdown:</strong>
-              <ol className="list-decimal list-inside ml-5 mt-1 space-y-1 text-slate-600">
-                <li>Tax data is divided into three parts viz. Tax Paid on GST Portal, IGST paid on Customs Portal, and IGST settled to States/UTs.</li>
-                <li>July 2017 being the first month of GST implementation, there was no settlement data for that specific period.</li>
-              </ol>
-            </li>
-          </ul>
-        </div>
+        <section className="mt-8 border border-line bg-white">
+          <div className="border-b border-line bg-[#f8fafc] px-4 py-4 sm:px-5">
+            <div className="flex items-center gap-2">
+              <Info className="h-4 w-4 shrink-0 text-navy" />
+              <h2 className="text-sm font-semibold text-ink sm:text-base">
+                Important Official Notes
+              </h2>
+            </div>
+          </div>
 
+          <div className="px-4 py-4 sm:px-5 sm:py-5">
+            <ul className="space-y-4 text-xs leading-6 text-muted sm:text-sm">
+              <li>
+                <strong className="font-semibold text-ink">
+                  E-way Bill:
+                </strong>{" "}
+                System started from{" "}
+                <span className="font-semibold text-ink">
+                  01/04/2018
+                </span>
+                . Data prior to FY 2018-19 is not applicable.
+              </li>
+
+              <li>
+                <strong className="font-semibold text-ink">
+                  Registration Data:
+                </strong>{" "}
+                The State-wise data contains details of active taxpayers at the close of last month. This excludes taxpayers whose registration has been cancelled, but includes taxpayers whose registration was restored on application/appeal.
+              </li>
+
+              <li>
+                <strong className="font-semibold text-ink">
+                  Tax Collection Breakdown:
+                </strong>
+
+                <ol className="mt-2 list-decimal space-y-1.5 pl-5 text-muted">
+                  <li>
+                    Tax data is divided into three parts viz. Tax Paid on GST Portal, IGST paid on Customs Portal, and IGST settled to States/UTs.
+                  </li>
+                  <li>
+                    July 2017 being the first month of GST implementation, there was no settlement data for that specific period.
+                  </li>
+                </ol>
+              </li>
+            </ul>
+          </div>
+        </section>
       </div>
     </PageContainer>
-  );
+  )
 };
 
 export default GstStatisticsPage;

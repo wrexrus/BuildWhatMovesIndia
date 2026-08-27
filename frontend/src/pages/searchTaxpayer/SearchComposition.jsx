@@ -99,7 +99,7 @@ const SearchComposition = () => {
                 ]}
             >
                 <form onSubmit={handleSubmit} noValidate>
-                    <div className="max-w-2xl">
+                    <div className="w-full max-w-2xl min-w-0">
                         <label
                             htmlFor="composition-option"
                             className="mb-2 block text-[0.95rem] font-semibold text-[#112f58]"
@@ -247,19 +247,19 @@ const SearchComposition = () => {
                         </div>
                     )}
 
-                    <div className="mt-8 flex justify-start">
+                    <div className="mt-6 flex w-full justify-stretch sm:mt-8 sm:justify-start">
                         <SearchButton loading={loading} />
                     </div>
                 </form>
 
                 {result && (
-                    <div className="mt-8 max-w-2xl bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                        <div className="flex justify-between items-start mb-4 border-b border-slate-100 pb-3">
+                    <div className="mt-6 w-full max-w-2xl min-w-0 overflow-hidden rounded-xl bg-white p-4 sm:mt-8 sm:rounded-2xl sm:p-6 shadow-sm border border-slate-200">
+                        <div className="flex min-w-0 flex-col gap-3 border-b border-slate-100 pb-3">
                             <div>
-                                <h3 className="text-lg font-bold text-[#071b30]">{result.tradeName}</h3>
-                                <p className="text-xs text-slate-500 font-mono">GSTIN: {result.gstin}</p>
+                                <h3 className="break-words text-lg font-bold text-[#071b30]">{result.tradeName}</h3>
+                                <p className="break-words text-xs text-slate-500 font-mono">GSTIN: {result.gstin}</p>
                             </div>
-                            <span className="px-3 py-1 text-xs font-bold rounded-full bg-blue-100 text-blue-800 border border-blue-200 flex items-center gap-1">
+                            <span className="inline-flex max-w-full w-fit items-center px-3 py-1 text-xs font-bold rounded-full bg-blue-100 text-blue-800 border border-blue-200 flex items-center gap-1">
                                 <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
                                 <span>{result.status}</span>
                             </span>
