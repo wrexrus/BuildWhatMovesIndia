@@ -256,6 +256,17 @@ const Registration = () => {
             </div>
           </header>
 
+          {/* Synthetic Environment Banner */}
+          <div className="mt-6 bg-amber-500/10 border border-amber-500/30 text-amber-900 px-4 py-2 rounded-xl text-xs font-bold flex items-center justify-between shadow-2xs">
+            <div className="flex items-center gap-2">
+              <span className="bg-amber-500 text-slate-900 font-extrabold px-2 py-0.5 rounded text-[10px] uppercase tracking-wider">
+                SYNTHETIC REGISTRATION
+              </span>
+              <span>Registration applicant verification and OTP generation operate in a simulated mock environment.</span>
+            </div>
+            <span className="font-mono text-[11px] font-extrabold text-amber-800 hidden sm:inline">[MOCK DATA ACTIVE]</span>
+          </div>
+
           <section className="border-b border-[#eaeaea] py-6">
             <div className="flex max-w-xl items-start">
               {steps.map((step, index) => {

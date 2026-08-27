@@ -100,7 +100,18 @@ const CreateChallan = () => {
             </p>
           </header>
 
-          <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-8">
+          {/* Synthetic Environment Banner */}
+          <div className="mt-6 bg-amber-500/10 border border-amber-500/30 text-amber-900 px-4 py-2 rounded-xl text-xs font-bold flex items-center justify-between shadow-2xs">
+            <div className="flex items-center gap-2">
+              <span className="bg-amber-500 text-slate-900 font-extrabold px-2 py-0.5 rounded text-[10px] uppercase tracking-wider">
+                SYNTHETIC DEMO PAYMENT
+              </span>
+              <span>All payment processing and CPIN challan numbers operate on simulated mock GSTN records.</span>
+            </div>
+            <span className="font-mono text-[11px] font-extrabold text-amber-800 hidden sm:inline">[MOCK DATA ACTIVE]</span>
+          </div>
+
+          <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-6">
             <div className="lg:col-span-7 bg-white p-6 rounded-2xl shadow-sm border border-[#eaeaea]">
               <div className="border-b border-[#eaeaea] pb-4 mb-6">
                 <span className="text-xs font-bold text-[#787774] uppercase tracking-wider">Challan Setup</span>

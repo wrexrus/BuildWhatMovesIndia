@@ -208,6 +208,17 @@ const TaxpayerProfilePage = () => {
     <PageContainer>
       <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 font-sans">
         
+        {/* Top Synthetic Environment Indicator Badge */}
+        <div className="mb-4 bg-amber-500/10 border border-amber-500/30 text-amber-900 px-4 py-2 rounded-xl text-xs font-bold flex items-center justify-between shadow-2xs">
+          <div className="flex items-center gap-2">
+            <span className="bg-amber-500 text-slate-900 font-extrabold px-2 py-0.5 rounded text-[10px] uppercase tracking-wider">
+              SYNTHETIC DEMO PROFILE
+            </span>
+            <span>Taxpayer profile credentials and compliance scores operate in a synthetic test sandbox.</span>
+          </div>
+          <span className="font-mono text-[11px] font-extrabold text-amber-800 hidden sm:inline">[MOCK DATA ACTIVE]</span>
+        </div>
+
         {/* Top Header Card */}
         <div className="bg-gradient-to-r from-[#071b30] via-navy to-[#0a2f58] text-white p-6 sm:p-8 rounded-2xl shadow-xl border border-white/10 relative overflow-hidden mb-8">
           <div className="absolute -right-10 -bottom-10 opacity-10 pointer-events-none">

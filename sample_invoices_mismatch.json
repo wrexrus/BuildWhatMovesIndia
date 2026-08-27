@@ -1,0 +1,49 @@
+[
+  {
+    "invoiceNumber": "AP/2026/045",
+    "supplierName": "Asian Paints Limited",
+    "supplierGstin": "27AAACA1234A1Z1",
+    "invoiceDate": "2026-07-08",
+    "claimedTotalTax": 4500,
+    "gstr2bData": null,
+    "errorCode": "ERR_SUPPLIER_UNFILED",
+    "status": "UNFILED_BY_SUPPLIER"
+  },
+  {
+    "invoiceNumber": "JQ/2026/089",
+    "supplierName": "Jaquar & Company Private Limited",
+    "supplierGstin": "27AAACJ5678B1Z2",
+    "invoiceDate": "2026-07-10",
+    "claimedTotalTax": 18000,
+    "gstr2bData": {
+      "totalTax": 12000
+    },
+    "taxDifference": 6000,
+    "errorCode": "ERR_TAX_AMOUNT_MISMATCH",
+    "status": "TAX_MISMATCH"
+  },
+  {
+    "invoiceNumber": "POLY/2026/178",
+    "supplierName": "Polycab India Limited",
+    "supplierGstin": "27AAACP9988C1Z5",
+    "invoiceDate": "2026-07-12",
+    "claimedTotalTax": 3600,
+    "gstr2bData": {
+      "totalTax": 3600
+    },
+    "errorCode": "ERR_DUPLICATE_CLAIM",
+    "status": "DUPLICATE_ENTRY"
+  },
+  {
+    "invoiceNumber": "UT/2026/112",
+    "supplierName": "UltraTech Cement Limited",
+    "supplierGstin": "27AAACU9012C1Z3",
+    "invoiceDate": "2026-07-18",
+    "claimedTotalTax": 9800,
+    "gstr2bData": {
+      "totalTax": 9800
+    },
+    "errorCode": "ERR_DEFERRED_ITC_LATE_UPLOAD",
+    "status": "LATE_SUPPLIER_FILING"
+  }
+]
