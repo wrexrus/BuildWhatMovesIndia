@@ -121,14 +121,25 @@ const HelpTaxPayerFacilities = () => {
           ]}
         />
 
-        <div className="mx-auto max-w-[1400px] px-5 pb-24 pt-8 sm:px-8 lg:px-10">
+        <div className="mx-auto max-w-[1400px] px-5 pb-16 pt-8 sm:px-8 lg:px-10">
+          <style>{`
+            @keyframes pageRise {
+              from { opacity: 0; transform: translateY(10px); }
+              to { opacity: 1; transform: translateY(0); }
+            }
+            .page-rise { animation: pageRise 500ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+            @media (prefers-reduced-motion: reduce) {
+              .page-rise { animation: none; }
+            }
+          `}</style>
+
           {/* Intro */}
-          <header className="max-w-4xl border-b border-[#eaeaea] pb-12">
-            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.08em] text-[#1f6c9f]">
+          <header className="page-rise max-w-4xl border-b border-[#eaeaea] pb-10">
+            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.1em] text-[#1f6c9f]">
               Support & facilities
             </p>
 
-            <h1 className="text-4xl font-semibold tracking-[-0.035em] text-[#20282d] sm:text-[3rem]">
+            <h1 className="font-serif text-[2.6rem] leading-[1.05] tracking-[-0.03em] text-[#161b1e] sm:text-[3.2rem]">
               Help and taxpayer facilities
             </h1>
 
@@ -139,11 +150,11 @@ const HelpTaxPayerFacilities = () => {
           </header>
 
           {/* Taxpayer services */}
-          <section className="border-b border-[#eaeaea] py-12">
+          <section className="border-b border-[#eaeaea] py-10">
             <div className="grid gap-8 lg:grid-cols-[220px_1fr]">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#787774]">
-                  01
+                <p className="text-xs font-semibold uppercase tracking-[0.1em] text-[#787774]">
+                  Facilities
                 </p>
 
                 <h2 className="mt-2 text-lg font-semibold text-[#293238]">
@@ -159,8 +170,10 @@ const HelpTaxPayerFacilities = () => {
                     className={`
                       group
                       py-6
-                      transition-colors
+                      transition-all
+                      duration-200
                       hover:bg-[#fbfbfa]
+                      hover:-translate-y-0.5
                       md:px-6
                       ${
                         index === 0
@@ -205,11 +218,11 @@ const HelpTaxPayerFacilities = () => {
           </section>
 
           {/* Help */}
-          <section className="py-12">
+          <section className="py-10">
             <div className="grid gap-8 lg:grid-cols-[220px_1fr]">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#787774]">
-                  02
+                <p className="text-xs font-semibold uppercase tracking-[0.1em] text-[#787774]">
+                  Support
                 </p>
 
                 <h2 className="mt-2 text-lg font-semibold text-[#293238]">

@@ -56,12 +56,23 @@ const HomeStateGSK = () => {
         />
 
         <div className="mx-auto max-w-[1180px] px-5 pb-14 pt-8 sm:px-8">
-          <header className="border-b border-[#eaeaea] pb-7">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#1f6c9f]">
+          <style>{`
+            @keyframes pageRise {
+              from { opacity: 0; transform: translateY(10px); }
+              to { opacity: 1; transform: translateY(0); }
+            }
+            .page-rise { animation: pageRise 500ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+            @media (prefers-reduced-motion: reduce) {
+              .page-rise { animation: none; }
+            }
+          `}</style>
+
+          <header className="page-rise border-b border-[#eaeaea] pb-7">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.1em] text-[#1f6c9f]">
               Registration service
             </p>
 
-            <h1 className="max-w-4xl text-2xl font-semibold tracking-[-0.02em] text-balance text-[#20282d] sm:text-[1.75rem]">
+            <h1 className="max-w-4xl font-serif text-[2.1rem] leading-[1.1] tracking-[-0.02em] text-balance text-[#161b1e] sm:text-[2.4rem]">
               Home State GSK selection
             </h1>
 

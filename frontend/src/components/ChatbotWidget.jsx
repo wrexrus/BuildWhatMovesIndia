@@ -297,10 +297,27 @@ const ChatbotWidget = () => {
 
   return (
     <div className="fixed bottom-6 right-6 z-50 font-sans">
+      <style>{`
+        @keyframes copilotPanelIn {
+          from { opacity: 0; transform: translateY(12px) scale(0.97); }
+          to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes copilotFloat {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-3px); }
+        }
+        .copilot-panel-in { animation: copilotPanelIn 220ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+        .copilot-launcher { animation: copilotFloat 3.2s ease-in-out infinite; }
+        .copilot-launcher:hover { animation-play-state: paused; }
+        @media (prefers-reduced-motion: reduce) {
+          .copilot-panel-in, .copilot-launcher { animation: none; }
+        }
+      `}</style>
+
       {!isOpen && (
         <button
           onClick={toggleChat}
-          className="bg-navy-2 hover:bg-navy text-white px-4 py-3.5 rounded-full shadow-lg flex items-center justify-center space-x-2.5 transition-colors duration-200 border border-white/15 cursor-pointer group active:translate-y-px"
+          className="copilot-launcher bg-navy-2 hover:bg-navy text-white px-4 py-3.5 rounded-full shadow-lg hover:shadow-xl flex items-center justify-center space-x-2.5 transition-all duration-200 border border-white/15 cursor-pointer group active:translate-y-px hover:scale-[1.03]"
           title="GST Copilot - Understand. Fix. File. (Press Esc to close)"
           aria-label="Open GST Copilot Assistant"
         >
@@ -313,7 +330,7 @@ const ChatbotWidget = () => {
       )}
 
       {isOpen && (
-        <div className="bg-white rounded-2xl shadow-2xl w-[95vw] sm:w-[500px] border border-slate-200/90 flex flex-col h-[670px] max-h-[90vh] transition-all overflow-hidden">
+        <div className="copilot-panel-in origin-bottom-right bg-white rounded-2xl shadow-2xl w-[95vw] sm:w-[500px] border border-slate-200/90 flex flex-col h-[670px] max-h-[90vh] overflow-hidden">
           
           <div className="bg-gradient-to-r from-navy-2 via-navy to-navy-2 text-white px-5 py-3.5 flex items-center justify-between shadow-md shrink-0">
             <div className="flex items-center space-x-3 min-w-0">
