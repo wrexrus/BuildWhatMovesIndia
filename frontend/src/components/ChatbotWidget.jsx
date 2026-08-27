@@ -1,24 +1,23 @@
 import React, {
+  useState,
   useEffect,
   useRef,
-  useState,
 } from "react";
+
 import { useLocation } from "react-router-dom";
+
 import {
-  AlertCircle,
-  ArrowRight,
-  ChevronRight,
-  FileText,
-  HelpCircle,
   MessageSquare,
-  Mic,
-  PhoneCall,
+  X,
   Send,
-  Square,
+  ChevronRight,
+  HelpCircle,
   UserCheck,
+  AlertCircle,
   Volume2,
   VolumeX,
-  X,
+  PhoneCall,
+  ArrowRight,
 } from "lucide-react";
 
 import {
@@ -37,7 +36,6 @@ import {
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
 import { useLanguage } from "../context/LanguageContext";
-
 import {
   speakTextInLanguage,
   stopSpeech,
@@ -80,16 +78,6 @@ const ChatbotWidget = () => {
     useState([]);
 
   /* ------------------------------------------------------------------
-   * Voice
-   * ---------------------------------------------------------------- */
-
-  const [isListening, setIsListening] =
-    useState(false);
-
-  const isListeningRef = useRef(false);
-  const recognitionRef = useRef(null);
-
-  /* ------------------------------------------------------------------
    * Conversation
    * ---------------------------------------------------------------- */
 
@@ -99,230 +87,20 @@ const ChatbotWidget = () => {
     UI_LABELS[chatLanguage] ||
     UI_LABELS.EN;
 
-  /* ------------------------------------------------------------------
-   * Voice recognition
-   * ---------------------------------------------------------------- */
-
-  const cleanupRecognition = () => {
-    if (!recognitionRef.current) {
-      return;
-    }
-
-    try {
-      recognitionRef.current.onresult = null;
-      recognitionRef.current.onerror = null;
-      recognitionRef.current.onend = null;
-      recognitionRef.current.stop();
-    } catch (error) {
-      // Recognition may already have ended.
-    }
-
-    recognitionRef.current = null;
-  };
-
-  const startListeningLoop = () => {
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    const SpeechRecognition =
-      window.SpeechRecognition ||
-      window.webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-      return;
-    }
-
-    cleanupRecognition();
-
-    try {
-      const recognition =
-        new SpeechRecognition();
-
-      recognitionRef.current =
-        recognition;
-
-      recognition.continuous = false;
-      recognition.interimResults = true;
-
-      const localeMap = {
-        HI: "hi-IN",
-        HINGLISH: "hi-IN",
-        MR: "mr-IN",
-        TA: "ta-IN",
-        PA: "pa-IN",
-        GU: "gu-IN",
-        EN: "en-IN",
-      };
-
-      recognition.lang =
-        localeMap[chatLanguage] ||
-        "hi-IN";
-
-      recognition.onresult = (event) => {
-        let transcript = "";
-
-        for (
-          let i = event.resultIndex;
-          i < event.results.length;
-          i += 1
-        ) {
-          transcript +=
-            event.results[i][0].transcript;
-        }
-
-        if (transcript.trim()) {
-          setQuery(transcript.trim());
-        }
-      };
-
-      recognition.onerror = (event) => {
-        if (event.error === "aborted") {
-          return;
-        }
-
-        if (event.error === "network") {
-          isListeningRef.current = false;
-          setIsListening(false);
-          cleanupRecognition();
-
-          const fallbackQuery =
-            chatLanguage === "MR"
-              ? "GSTR-3B kiti bharaicha aahe?"
-              : chatLanguage === "HI"
-              ? "Asian Paints ka bill kyon unfiled hai?"
-              : "What is my net GST tax payable?";
-
-          setQuery(fallbackQuery);
-
-          if (showToast) {
-            showToast(
-              "Voice input captured.",
-              "info",
-              "Voice input"
-            );
-          }
-
-          return;
-        }
-
-        if (
-          isListeningRef.current &&
-          event.error === "no-speech"
-        ) {
-          window.setTimeout(() => {
-            if (isListeningRef.current) {
-              startListeningLoop();
-            }
-          }, 300);
-        }
-      };
-
-      recognition.onend = () => {
-        if (isListeningRef.current) {
-          window.setTimeout(() => {
-            if (isListeningRef.current) {
-              startListeningLoop();
-            }
-          }, 200);
-        }
-      };
-
-      recognition.start();
-    } catch (error) {
-      isListeningRef.current = false;
-      setIsListening(false);
-    }
-  };
-
-  const handleMicToggle = () => {
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    const SpeechRecognition =
-      window.SpeechRecognition ||
-      window.webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-      if (showToast) {
-        showToast(
-          "Voice recognition is not supported on this browser.",
-          "warning"
-        );
-      }
-
-      return;
-    }
-
-    if (isListening) {
-      isListeningRef.current = false;
-      setIsListening(false);
-      cleanupRecognition();
-
-      window.setTimeout(() => {
-        setQuery((currentQuery) => {
-          if (currentQuery?.trim()) {
-            handleSendQuery(
-              currentQuery.trim()
-            );
-          }
-
-          return currentQuery;
-        });
-      }, 300);
-
-      return;
-    }
-
-    isListeningRef.current = true;
-    setIsListening(true);
-
-    if (showToast) {
-      showToast(
-        "Voice input is active.",
-        "info",
-        "Voice input"
-      );
-    }
-
-    startListeningLoop();
-  };
-
-  /* ------------------------------------------------------------------
-   * Welcome message
-   * ---------------------------------------------------------------- */
-
-  const getWelcomeMessage = (lang) => {
-    const defaultWelcome =
-      WELCOME_MESSAGES[lang] ||
-      WELCOME_MESSAGES.EN;
-
-    if (!isLoggedIn || !user) {
-      return defaultWelcome;
-    }
-
-    const name = user.name || "Taxpayer";
-
-    const store = user.tradeName
-      ? ` (${user.tradeName})`
-      : "";
-
-    if (lang === "HI") {
-      return `नमस्ते ${name} जी${store}! मैं आपका GST साथी Copilot हूँ। GSTR-3B, बिल में अंतर, टैक्स क्रेडिट या पोर्टल फाइलिंग में मदद के लिए तैयार हूँ।`;
-    }
-
-    if (lang === "MR") {
-      return `नमस्कार ${name} जी${store}! मी तुमचा GST साथी Copilot आहे. GSTR-3B, बिल फरक, टॅक्स क्रेडिट किंवा पोर्टल रिटर्नमध्ये मदत करण्यास तयार आहे।`;
-    }
-
-    return `Hello ${name} ji${store}! I am your GST Copilot. Ask me anything about GSTR-3B, supplier mismatches, tax credit rules, or portal filing.`;
+  const getWelcomeMessage = (langCode) => {
+    return (
+      WELCOME_MESSAGES[langCode] ||
+      WELCOME_MESSAGES.HI ||
+      "नमस्ते! मैं आपका GST साथी Copilot हूँ।"
+    );
   };
 
   const [messages, setMessages] = useState([
     {
       sender: "bot",
-      text: WELCOME_MESSAGES.HI,
+      text: getWelcomeMessage(
+        globalLanguage || "HI"
+      ),
       time: new Date().toLocaleTimeString(
         [],
         {
@@ -333,27 +111,18 @@ const ChatbotWidget = () => {
     },
   ]);
 
-  /* ------------------------------------------------------------------
-   * Language
-   * ---------------------------------------------------------------- */
+  const handleChatLanguageChange = (
+    nextLanguage
+  ) => {
+    setChatLanguage(nextLanguage);
 
-  useEffect(() => {
-    if (globalLanguage) {
-      setChatLanguage(globalLanguage);
-    }
-  }, [globalLanguage]);
-
-  useEffect(() => {
     setMessages((previous) => {
-      if (
-        previous.length === 1 &&
-        previous[0].sender === "bot"
-      ) {
+      if (!previous.length) {
         return [
           {
             sender: "bot",
             text: getWelcomeMessage(
-              chatLanguage
+              nextLanguage
             ),
             time: new Date().toLocaleTimeString(
               [],
@@ -366,50 +135,73 @@ const ChatbotWidget = () => {
         ];
       }
 
-      return previous;
-    });
-  }, [
-    user,
-    isLoggedIn,
-    chatLanguage,
-  ]);
+      const updated = [...previous];
 
-  const handleChatLanguageChange = (
-    newLang
-  ) => {
-    stopSpeech();
-    setSpeakingIndex(null);
-    setChatLanguage(newLang);
-
-    setMessages((previous) => [
-      ...previous,
-      {
-        sender: "bot",
-        text: getWelcomeMessage(
-          newLang
-        ),
-        time:
-          new Date().toLocaleTimeString(
-            [],
-            {
-              hour: "2-digit",
-              minute: "2-digit",
-            }
+      if (updated[0].sender === "bot") {
+        updated[0] = {
+          ...updated[0],
+          text: getWelcomeMessage(
+            nextLanguage
           ),
-      },
-    ]);
+        };
+      }
+
+      return updated;
+    });
   };
 
+  useEffect(() => {
+    if (globalLanguage) {
+      handleChatLanguageChange(globalLanguage);
+    }
+  }, [globalLanguage]);
+
   /* ------------------------------------------------------------------
-   * Global events
+   * Sync harness context when open
+   * ---------------------------------------------------------------- */
+
+  useEffect(() => {
+    let isMounted = true;
+
+    if (isOpen && isLoggedIn) {
+      fetchAccountHarness()
+        .then((response) => {
+          if (!isMounted || !response) return;
+
+          const data =
+            response.data || response;
+
+          if (data.harness) {
+            setHarnessContext(
+              data.harness
+            );
+
+            if (
+              data.harness
+                .dynamicActionChips
+            ) {
+              setDynamicChips(
+                data.harness
+                  .dynamicActionChips
+              );
+            }
+          }
+        })
+        .catch(() => {});
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, [isOpen, isLoggedIn]);
+
+  /* ------------------------------------------------------------------
+   * Listeners
    * ---------------------------------------------------------------- */
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (
-        event.key === "Escape" &&
-        isOpen
-      ) {
+      if (event.key === "Escape" && isOpen) {
         setIsOpen(false);
         stopSpeech();
         setSpeakingIndex(null);
@@ -425,9 +217,7 @@ const ChatbotWidget = () => {
       setIsOpen(true);
 
       if (targetQuery) {
-        handleSendQuery(
-          targetQuery
-        );
+        handleSendQuery(targetQuery);
       }
     };
 
@@ -451,114 +241,16 @@ const ChatbotWidget = () => {
         "open-gst-copilot",
         handleOpenCopilotEvent
       );
-
-      cleanupRecognition();
     };
-  }, [
-    isOpen,
-    chatLanguage,
-    explanationMode,
-    harnessContext,
-  ]);
-
-  /* ------------------------------------------------------------------
-   * Account harness
-   * ---------------------------------------------------------------- */
+  }, [isOpen]);
 
   useEffect(() => {
-    let isMounted = true;
+    if (!isOpen) return;
 
-    const loadHarness = async () => {
-      try {
-        const gstin =
-          isLoggedIn && user
-            ? user.gstin
-            : "";
-
-        const harness =
-          await fetchAccountHarness(
-            gstin,
-            chatLanguage
-          );
-
-        if (
-          isMounted &&
-          harness?.success
-        ) {
-          setHarnessContext(harness);
-
-          if (
-            harness.quickActionChips &&
-            harness.quickActionChips.length
-          ) {
-            setDynamicChips(
-              harness.quickActionChips
-            );
-          }
-        }
-      } catch (error) {
-        console.warn(
-          "Account harness fetch fallback:",
-          error.message
-        );
-      }
-    };
-
-    loadHarness();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [
-    user,
-    isLoggedIn,
-    chatLanguage,
-  ]);
-
-  /* ------------------------------------------------------------------
-   * Speech
-   * ---------------------------------------------------------------- */
-
-  const handleSpeak = (
-    text,
-    index
-  ) => {
-    if (speakingIndex === index) {
-      stopSpeech();
-      setSpeakingIndex(null);
-      return;
-    }
-
-    setSpeakingIndex(index);
-
-    speakTextInLanguage(
-      text,
-      chatLanguage,
-      () => setSpeakingIndex(null),
-      () => setSpeakingIndex(null)
-    );
-  };
-
-  /* ------------------------------------------------------------------
-   * Auto-scroll
-   * ---------------------------------------------------------------- */
-
-  useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
-
-    messagesEndRef.current?.scrollIntoView(
-      {
-        behavior: "smooth",
-      }
-    );
-  }, [
-    messages,
-    loading,
-    isStreaming,
-    isOpen,
-  ]);
+    messagesEndRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }, [messages, loading, isStreaming, isOpen]);
 
   /* ------------------------------------------------------------------
    * Stream response
@@ -575,13 +267,10 @@ const ChatbotWidget = () => {
     let currentText = "";
 
     const time =
-      new Date().toLocaleTimeString(
-        [],
-        {
-          hour: "2-digit",
-          minute: "2-digit",
-        }
-      );
+      new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
 
     setMessages((previous) => [
       ...previous,
@@ -596,52 +285,43 @@ const ChatbotWidget = () => {
 
     let index = 0;
 
-    const interval =
-      window.setInterval(() => {
+    const interval = window.setInterval(
+      () => {
         if (index < words.length) {
           currentText +=
-            (index === 0
-              ? ""
-              : " ") +
+            (index === 0 ? "" : " ") +
             words[index];
 
-          const nextText =
-            currentText;
+          const nextText = currentText;
 
-          setMessages(
-            (previous) => {
-              const updated = [
-                ...previous,
-              ];
+          setMessages((previous) => {
+            const updated = [...previous];
+            const lastIndex =
+              updated.length - 1;
 
-              const lastIndex =
-                updated.length - 1;
-
-              if (
-                lastIndex >= 0 &&
-                updated[lastIndex]
-                  .sender === "bot"
-              ) {
-                updated[lastIndex] = {
-                  ...updated[lastIndex],
-                  text: nextText,
-                };
-              }
-
-              return updated;
+            if (
+              lastIndex >= 0 &&
+              updated[lastIndex].sender ===
+                "bot"
+            ) {
+              updated[lastIndex] = {
+                ...updated[lastIndex],
+                text: nextText,
+              };
             }
-          );
+
+            return updated;
+          });
 
           index += 1;
           return;
         }
 
-        window.clearInterval(
-          interval
-        );
-
+        window.clearInterval(interval);
         setIsStreaming(false);
-      }, 48);
+      },
+      30
+    );
   };
 
   /* ------------------------------------------------------------------
@@ -651,8 +331,7 @@ const ChatbotWidget = () => {
   const handleSendQuery = async (
     queryText
   ) => {
-    const textToSend =
-      queryText || query;
+    const textToSend = queryText || query;
 
     if (
       !textToSend.trim() ||
@@ -671,36 +350,30 @@ const ChatbotWidget = () => {
       {
         sender: "user",
         text: textToSend.trim(),
-        time:
-          new Date().toLocaleTimeString(
-            [],
-            {
-              hour: "2-digit",
-              minute: "2-digit",
-            }
-          ),
+        time: new Date().toLocaleTimeString(
+          [],
+          {
+            hour: "2-digit",
+            minute: "2-digit",
+          }
+        ),
       },
     ]);
 
     setLoading(true);
 
     try {
-      const response =
-        await sendCopilotQuery(
-          textToSend.trim(),
-          chatLanguage,
-          location.pathname,
-          user
-            ? user.gstin
-            : null,
-          explanationMode
-        );
+      const response = await sendCopilotQuery(
+        textToSend.trim(),
+        chatLanguage,
+        location.pathname,
+        user ? user.gstin : null,
+        explanationMode
+      );
 
       const botText =
         response.data?.answer ||
-        getWelcomeMessage(
-          chatLanguage
-        );
+        getWelcomeMessage(chatLanguage);
 
       setLoading(false);
 
@@ -720,14 +393,13 @@ const ChatbotWidget = () => {
             chatLanguage === "HI"
               ? "क्षमा करें, GST साथी Copilot सर्वर से जुड़ने में समस्या हो रही है। कृपया पुनः प्रयास करें।"
               : "Sorry, I am having trouble reaching the GST Copilot server. Please try again.",
-          time:
-            new Date().toLocaleTimeString(
-              [],
-              {
-                hour: "2-digit",
-                minute: "2-digit",
-              }
-            ),
+          time: new Date().toLocaleTimeString(
+            [],
+            {
+              hour: "2-digit",
+              minute: "2-digit",
+            }
+          ),
           isError: true,
         },
       ]);
@@ -742,21 +414,16 @@ const ChatbotWidget = () => {
     actionType,
     payload
   ) => {
-    if (
-      actionType ===
-      "CALL_SUPPLIER"
-    ) {
+    if (actionType === "CALL_SUPPLIER") {
       if (showToast) {
         showToast(
           `Reminder sent to ${
-            payload.supplier ||
-            "supplier"
+            payload.supplier || "supplier"
           }'s GSTR-1 accounts desk.`,
           "info",
           "Supplier reminder"
         );
       }
-
       return;
     }
 
@@ -790,9 +457,24 @@ const ChatbotWidget = () => {
     }
   };
 
-  const handleFormSubmit = (
-    event
-  ) => {
+  const handleSpeak = (text, index) => {
+    if (speakingIndex === index) {
+      stopSpeech();
+      setSpeakingIndex(null);
+    } else {
+      stopSpeech();
+      setSpeakingIndex(index);
+      const cleanText = text.replace(/<[^>]*>/g, '').trim();
+      speakTextInLanguage(
+        cleanText,
+        chatLanguage,
+        () => setSpeakingIndex(null),
+        () => setSpeakingIndex(null)
+      );
+    }
+  };
+
+  const handleFormSubmit = (event) => {
     event.preventDefault();
     handleSendQuery(query);
   };
@@ -800,15 +482,106 @@ const ChatbotWidget = () => {
   const activeQuickActions =
     dynamicChips?.length
       ? dynamicChips
-      : QUICK_ACTIONS[
-          chatLanguage
-        ] || QUICK_ACTIONS.EN;
+      : QUICK_ACTIONS[chatLanguage] ||
+        QUICK_ACTIONS.EN;
 
-  const hasPendingActions =
-    Boolean(
-      harnessContext?.pendingToDos
-        ?.length
+  const hasPendingActions = Boolean(
+    harnessContext?.pendingToDos?.length
+  );
+
+  /* ------------------------------------------------------------------
+   * Enhanced Formatted Message Renderer (Improves Readability)
+   * ---------------------------------------------------------------- */
+  const renderFormattedMessage = (content) => {
+    if (!content) return null;
+
+    const lines = content.split("\n");
+
+    const formatInline = (str) => {
+      const parts = str.split(/(\*\*.*?\*\*)/g);
+      return parts.map((part, pIdx) => {
+        if (part.startsWith("**") && part.endsWith("**")) {
+          return (
+            <strong
+              key={pIdx}
+              className="font-bold text-navy"
+            >
+              {part.slice(2, -2)}
+            </strong>
+          );
+        }
+        return part;
+      });
+    };
+
+    return (
+      <div className="space-y-2 text-[12.5px] leading-relaxed text-slate-800 font-sans">
+        {lines.map((line, idx) => {
+          const trimmed = line.trim();
+          if (!trimmed) return <div key={idx} className="h-1.5" />;
+
+          const isHeader =
+            (trimmed.endsWith(":") && trimmed.length < 65) ||
+            trimmed.startsWith("##") ||
+            trimmed.startsWith("###");
+
+          const isBullet =
+            trimmed.startsWith("•") ||
+            trimmed.startsWith("* ") ||
+            trimmed.startsWith("- ");
+
+          const isNumbered = /^\d+\.\s/.test(trimmed);
+
+          if (isHeader) {
+            return (
+              <div
+                key={idx}
+                className="font-extrabold text-navy text-[13px] mt-2 mb-1 border-b border-slate-100 pb-1"
+              >
+                {formatInline(trimmed.replace(/^#+\s*/, ""))}
+              </div>
+            );
+          }
+
+          if (isBullet) {
+            const bulletText = trimmed.replace(/^[•*\-]\s*/, "");
+            return (
+              <div
+                key={idx}
+                className="flex items-start gap-2 pl-1.5 my-1"
+              >
+                <span className="h-1.5 w-1.5 rounded-full bg-navy/70 mt-2 shrink-0" />
+                <span className="flex-1">{formatInline(bulletText)}</span>
+              </div>
+            );
+          }
+
+          if (isNumbered) {
+            const match = trimmed.match(/^(\d+\.)\s*(.*)/);
+            return (
+              <div
+                key={idx}
+                className="flex items-start gap-2 pl-1 my-1"
+              >
+                <span className="font-bold text-navy text-xs shrink-0">
+                  {match ? match[1] : "•"}
+                </span>
+                <span className="flex-1">
+                  {formatInline(match ? match[2] : trimmed)}
+                </span>
+              </div>
+            );
+          }
+
+          return (
+            <p key={idx} className="my-1">
+              {formatInline(trimmed)}
+            </p>
+          );
+        })}
+      </div>
     );
+  };
 
   return (
     <div
@@ -826,9 +599,7 @@ const ChatbotWidget = () => {
       {!isOpen && (
         <button
           type="button"
-          onClick={() =>
-            setIsOpen(true)
-          }
+          onClick={() => setIsOpen(true)}
           aria-label="Open GST Copilot"
           title="Open GST Copilot"
           className="
@@ -875,7 +646,6 @@ const ChatbotWidget = () => {
 
           <span>GST Copilot</span>
 
-          {/* meaningful activity / availability indicator */}
           <span
             className="
               absolute
@@ -911,8 +681,7 @@ const ChatbotWidget = () => {
             shadow-[0_22px_60px_rgba(16,35,58,0.15)]
           "
           style={{
-            height:
-              "min(610px, calc(100dvh - 30px))",
+            height: "min(610px, calc(100dvh - 30px))",
           }}
         >
           {/* ========================================================
@@ -987,16 +756,14 @@ const ChatbotWidget = () => {
                   "
                   aria-label="Assistant language"
                 >
-                  {SUPPORTED_LANGUAGES.map(
-                    (lang) => (
-                      <option
-                        key={lang.code}
-                        value={lang.code}
-                      >
-                        {lang.name}
-                      </option>
-                    )
-                  )}
+                  {SUPPORTED_LANGUAGES.map((lang) => (
+                    <option
+                      key={lang.code}
+                      value={lang.code}
+                    >
+                      {lang.name}
+                    </option>
+                  ))}
                 </select>
 
                 <button
@@ -1031,21 +798,11 @@ const ChatbotWidget = () => {
                   <span className="font-medium text-ink">
                     Context
                   </span>
-
-                  <span className="text-line">
-                    /
-                  </span>
-
+                  <span className="text-line">/</span>
                   <span className="truncate">
                     {location.pathname
-                      .replace(
-                        /^\//,
-                        ""
-                      )
-                      .replace(
-                        /\//g,
-                        " / "
-                      ) ||
+                      .replace(/^\//, "")
+                      .replace(/\//g, " / ") ||
                       "Current page"}
                   </span>
                 </div>
@@ -1089,16 +846,8 @@ const ChatbotWidget = () => {
             >
               <span className="flex items-center gap-2 text-[10px] font-medium text-[#6d5200]">
                 <AlertCircle className="h-3.5 w-3.5" />
-
-                {
-                  harnessContext.pendingToDos
-                    .length
-                }{" "}
-                pending action
-                {harnessContext.pendingToDos
-                  .length === 1
-                  ? ""
-                  : "s"}
+                {harnessContext.pendingToDos.length} pending action
+                {harnessContext.pendingToDos.length === 1 ? "" : "s"}
               </span>
 
               <ArrowRight className="h-3.5 w-3.5 text-[#8d5d00]" />
@@ -1113,7 +862,6 @@ const ChatbotWidget = () => {
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
                   <HelpCircle className="h-3 w-3 text-navy" />
-
                   <span className="text-[9px] font-semibold uppercase tracking-[0.08em] text-muted">
                     {isLoggedIn
                       ? labels.harnessTitle
@@ -1123,11 +871,7 @@ const ChatbotWidget = () => {
 
                 <button
                   type="button"
-                  onClick={() =>
-                    setShowQuickActions(
-                      false
-                    )
-                  }
+                  onClick={() => setShowQuickActions(false)}
                   className="text-[9px] font-medium text-muted hover:text-navy"
                 >
                   Hide
@@ -1137,46 +881,31 @@ const ChatbotWidget = () => {
               <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5">
                 {activeQuickActions
                   .slice(0, 3)
-                  .map(
-                    (
-                      action,
-                      index
-                    ) => (
-                      <button
-                        key={index}
-                        type="button"
-                        onClick={() =>
-                          handleSendQuery(
-                            action.query
-                          )
-                        }
-                        disabled={
-                          loading ||
-                          isStreaming
-                        }
-                        className="
-                          group
-                          inline-flex
-                          items-center
-                          gap-1
-                          py-1
-                          text-left
-                          text-[10px]
-                          font-medium
-                          text-navy
-                          transition-colors
-                          hover:text-navy-hover
-                          disabled:opacity-50
-                        "
-                      >
-                        <span>
-                          {action.label}
-                        </span>
-
-                        <ChevronRight className="h-3 w-3 text-muted transition-transform group-hover:translate-x-0.5" />
-                      </button>
-                    )
-                  )}
+                  .map((action, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      onClick={() => handleSendQuery(action.query)}
+                      disabled={loading || isStreaming}
+                      className="
+                        group
+                        inline-flex
+                        items-center
+                        gap-1
+                        py-1
+                        text-left
+                        text-[10px]
+                        font-medium
+                        text-navy
+                        transition-colors
+                        hover:text-navy-hover
+                        disabled:opacity-50
+                      "
+                    >
+                      <span>{action.label}</span>
+                      <ChevronRight className="h-3 w-3 text-muted transition-transform group-hover:translate-x-0.5" />
+                    </button>
+                  ))}
               </div>
             </div>
           )}
@@ -1196,229 +925,197 @@ const ChatbotWidget = () => {
           >
             <div className="mx-auto max-w-[65ch]">
               <div className="space-y-6">
-                {messages.map(
-                  (
-                    message,
-                    index
-                  ) => {
-                    const textLower =
-                      message.text.toLowerCase();
+                {messages.map((message, index) => {
+                  const textLower = message.text.toLowerCase();
 
-                    const isAsianPaints =
-                      textLower.includes(
-                        "asian paints"
-                      ) ||
-                      textLower.includes(
-                        "unfiled"
-                      );
+                  const isAsianPaints =
+                    textLower.includes("asian paints") ||
+                    textLower.includes("unfiled");
 
-                    const isUser =
-                      message.sender ===
-                      "user";
+                  const isUser = message.sender === "user";
 
-                    return (
-                      <article
-                        key={index}
-                        className={
-                          isUser
-                            ? "ml-8 border-l-2 border-navy/15 pl-3"
-                            : ""
-                        }
-                      >
-                        <div className="mb-1.5 flex items-center gap-2">
-                          <span
-                            className={`
-                              text-[9px]
-                              font-semibold
-                              uppercase
-                              tracking-[0.09em]
-                              ${
-                                isUser
-                                  ? "text-navy"
-                                  : "text-muted"
-                              }
-                            `}
-                          >
-                            {isUser
-                              ? "You"
-                              : "GST Copilot"}
-                          </span>
-
-                          <span className="text-[9px] text-muted/60">
-                            {message.time}
-                          </span>
-                        </div>
-
-                        <div
+                  return (
+                    <article
+                      key={index}
+                      className={
+                        isUser
+                          ? "ml-8 border-l-2 border-navy/15 pl-3"
+                          : ""
+                      }
+                    >
+                      <div className="mb-1.5 flex items-center justify-between gap-2">
+                        <span
                           className={`
-                            text-[12px]
-                            leading-[1.75]
+                            text-[9px]
+                            font-semibold
+                            uppercase
+                            tracking-[0.09em]
                             ${
-                              message.isError
-                                ? "text-red-800"
-                                : "text-ink"
+                              isUser
+                                ? "text-navy"
+                                : "text-muted"
                             }
                           `}
                         >
-                          {message.text}
-                        </div>
+                          {isUser ? "You" : "GST Copilot"}
+                        </span>
 
-                        {/* ------------------------------------------
-                            CLEARLY SEPARATED ACTION AREA
-                        ------------------------------------------- */}
-                        {message.sender ===
-                          "bot" &&
-                          !message.isError &&
-                          isAsianPaints && (
-                            <div
-                              className="
-                                mt-4
-                                overflow-hidden
-                                rounded-[12px]
-                                border
-                                border-navy/10
-                                bg-white
-                                shadow-[0_2px_8px_rgba(16,35,58,0.035)]
-                              "
-                            >
-                              <div className="flex items-center justify-between border-b border-line bg-shell/45 px-3.5 py-2">
-                                <span className="text-[9px] font-semibold uppercase tracking-[0.08em] text-muted">
-                                  Available actions
-                                </span>
+                        <span className="text-[9px] text-muted/60 font-mono">
+                          {message.time}
+                        </span>
+                      </div>
 
-                                <span className="text-[9px] text-muted/65">
-                                  Review before applying
-                                </span>
-                              </div>
+                      <div
+                        className={`
+                          p-3
+                          rounded-xl
+                          border
+                          ${
+                            isUser
+                              ? "bg-navy/5 border-navy/10"
+                              : message.isError
+                              ? "bg-red-50/70 border-red-200"
+                              : "bg-white border-line/80 shadow-2xs"
+                          }
+                        `}
+                      >
+                        {renderFormattedMessage(message.text)}
+                      </div>
 
-                              <div className="p-2">
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    handleActionCardClick(
-                                      "DEFER_ITC"
-                                    )
-                                  }
-                                  className="
-                                    flex
-                                    w-full
-                                    items-center
-                                    justify-between
-                                    rounded-[9px]
-                                    bg-navy
-                                    px-3
-                                    py-2.5
-                                    text-left
-                                    text-[11px]
-                                    font-semibold
-                                    text-white
-                                    transition-colors
-                                    hover:bg-navy-hover
-                                  "
-                                >
-                                  <span>
-                                    Defer ₹4,500 ITC
-                                  </span>
-
-                                  <ArrowRight className="h-3.5 w-3.5" />
-                                </button>
-
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    handleActionCardClick(
-                                      "CALL_SUPPLIER",
-                                      {
-                                        supplier:
-                                          "Asian Paints",
-                                      }
-                                    )
-                                  }
-                                  className="
-                                    mt-1
-                                    flex
-                                    w-full
-                                    items-center
-                                    justify-between
-                                    rounded-[9px]
-                                    px-3
-                                    py-2
-                                    text-left
-                                    text-[10px]
-                                    font-medium
-                                    text-ink
-                                    transition-colors
-                                    hover:bg-shell
-                                  "
-                                >
-                                  <span className="flex items-center gap-2">
-                                    <PhoneCall className="h-3.5 w-3.5 text-navy" />
-                                    {
-                                      labels.remindSupplier
-                                    }
-                                  </span>
-
-                                  <ChevronRight className="h-3.5 w-3.5 text-muted" />
-                                </button>
-                              </div>
+                      {/* ------------------------------------------
+                          CLEARLY SEPARATED ACTION AREA
+                      ------------------------------------------- */}
+                      {message.sender === "bot" &&
+                        !message.isError &&
+                        isAsianPaints && (
+                          <div
+                            className="
+                              mt-3
+                              overflow-hidden
+                              rounded-[12px]
+                              border
+                              border-navy/10
+                              bg-white
+                              shadow-[0_2px_8px_rgba(16,35,58,0.035)]
+                            "
+                          >
+                            <div className="flex items-center justify-between border-b border-line bg-shell/45 px-3.5 py-2">
+                              <span className="text-[9px] font-semibold uppercase tracking-[0.08em] text-muted">
+                                Available actions
+                              </span>
+                              <span className="text-[9px] text-muted/65">
+                                Review before applying
+                              </span>
                             </div>
-                          )}
 
-                        {/* ------------------------------------------
-                            SPEAK ACTION
-                        ------------------------------------------- */}
-                        {message.sender ===
-                          "bot" &&
-                          !message.isError &&
-                          message.text.length >
-                            0 && (
-                            <div className="mt-2.5">
+                            <div className="p-2">
                               <button
                                 type="button"
                                 onClick={() =>
-                                  handleSpeak(
-                                    message.text,
-                                    index
-                                  )
+                                  handleActionCardClick("DEFER_ITC")
                                 }
                                 className="
-                                  inline-flex
+                                  flex
+                                  w-full
                                   items-center
-                                  gap-1.5
-                                  rounded-[7px]
-                                  px-2
-                                  py-1
-                                  text-[9px]
-                                  font-medium
-                                  text-muted
+                                  justify-between
+                                  rounded-[9px]
+                                  bg-navy
+                                  px-3
+                                  py-2.5
+                                  text-left
+                                  text-[11px]
+                                  font-semibold
+                                  text-white
                                   transition-colors
-                                  hover:bg-shell
-                                  hover:text-navy
+                                  hover:bg-navy-hover
                                 "
                               >
-                                {speakingIndex ===
-                                index ? (
-                                  <>
-                                    <VolumeX className="h-3 w-3" />
-                                    {
-                                      labels.stopAudio
-                                    }
-                                  </>
-                                ) : (
-                                  <>
-                                    <Volume2 className="h-3 w-3" />
-                                    {
-                                      labels.listen
-                                    }
-                                  </>
-                                )}
+                                <span>Defer ₹4,500 ITC</span>
+                                <ArrowRight className="h-3.5 w-3.5" />
+                              </button>
+
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleActionCardClick("CALL_SUPPLIER", {
+                                    supplier: "Asian Paints",
+                                  })
+                                }
+                                className="
+                                  mt-1
+                                  flex
+                                  w-full
+                                  items-center
+                                  justify-between
+                                  rounded-[9px]
+                                  px-3
+                                  py-2
+                                  text-left
+                                  text-[10px]
+                                  font-medium
+                                  text-ink
+                                  transition-colors
+                                  hover:bg-shell
+                                "
+                              >
+                                <span className="flex items-center gap-2">
+                                  <PhoneCall className="h-3.5 w-3.5 text-navy" />
+                                  {labels.remindSupplier}
+                                </span>
+                                <ChevronRight className="h-3.5 w-3.5 text-muted" />
                               </button>
                             </div>
-                          )}
-                      </article>
-                    );
-                  }
-                )}
+                          </div>
+                        )}
+
+                      {/* ------------------------------------------
+                          SPEAK AUDIO ACTION
+                      ------------------------------------------- */}
+                      {message.sender === "bot" &&
+                        !message.isError &&
+                        message.text.length > 0 && (
+                          <div className="mt-2 flex justify-end">
+                            <button
+                              type="button"
+                              onClick={() =>
+                                handleSpeak(message.text, index)
+                              }
+                              className="
+                                inline-flex
+                                items-center
+                                gap-1.5
+                                rounded-[7px]
+                                border
+                                border-slate-200/80
+                                bg-slate-50
+                                px-2.5
+                                py-1
+                                text-[10px]
+                                font-semibold
+                                text-slate-700
+                                transition-colors
+                                hover:bg-slate-100
+                                hover:text-navy
+                              "
+                            >
+                              {speakingIndex === index ? (
+                                <>
+                                  <VolumeX className="h-3 w-3 text-amber-700" />
+                                  <span>{labels.stopAudio}</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Volume2 className="h-3 w-3 text-navy" />
+                                  <span>Listen Explanation</span>
+                                </>
+                              )}
+                            </button>
+                          </div>
+                        )}
+                    </article>
+                  );
+                })}
 
                 {/* ------------------------------------------
                     LOADING
@@ -1426,17 +1123,15 @@ const ChatbotWidget = () => {
                 {loading && (
                   <div className="border-l-2 border-navy/15 pl-3">
                     <div className="flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-navy" />
-
-                      <span className="text-[10px] text-muted">
-                        {labels.analyzing ||
-                          "Preparing your response"}
+                      <span className="h-1.5 w-1.5 rounded-full bg-navy animate-ping" />
+                      <span className="text-[10px] font-semibold text-muted">
+                        {labels.analyzing || "Preparing response..."}
                       </span>
                     </div>
 
                     <div className="mt-2 space-y-1.5">
-                      <div className="h-1.5 w-36 rounded-full bg-shell" />
-                      <div className="h-1.5 w-24 rounded-full bg-shell" />
+                      <div className="h-2 w-44 rounded-full bg-slate-200 animate-pulse" />
+                      <div className="h-2 w-28 rounded-full bg-slate-200 animate-pulse" />
                     </div>
                   </div>
                 )}
@@ -1447,41 +1142,37 @@ const ChatbotWidget = () => {
           </div>
 
           {/* ========================================================
-              COMPOSER
+              COMPOSER (Context & Voice buttons cleanly removed)
           ========================================================= */}
           <form
             onSubmit={handleFormSubmit}
             className="shrink-0 bg-white px-3.5 pb-3.5 pt-2.5"
           >
             <div
-              className={`
+              className="
                 overflow-hidden
                 rounded-[13px]
                 border
+                border-line
                 bg-white
                 shadow-[0_4px_16px_rgba(16,35,58,0.045)]
                 transition-all
                 duration-200
-                ${
-                  isListening
-                    ? "border-[#c09535] shadow-[0_0_0_3px_rgba(232,161,27,0.08)]"
-                    : "border-line focus-within:border-navy/30 focus-within:shadow-[0_7px_22px_rgba(16,35,58,0.07)]"
-                }
-              `}
+                focus-within:border-navy/30
+                focus-within:shadow-[0_7px_22px_rgba(16,35,58,0.07)]
+              "
             >
               <textarea
                 value={query}
-                onChange={(event) =>
-                  setQuery(
-                    event.target.value
-                  )
-                }
+                onChange={(event) => setQuery(event.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleFormSubmit(e);
+                  }
+                }}
                 rows={2}
-                placeholder={
-                  isListening
-                    ? "Listening..."
-                    : labels.placeholder
-                }
+                placeholder={labels.placeholder || "Ask your GST query (e.g. Why is Asian Paints bill unfiled?)"}
                 className="
                   block
                   min-h-[58px]
@@ -1501,97 +1192,44 @@ const ChatbotWidget = () => {
                 aria-label="Ask GST Copilot"
               />
 
-              <div className="flex items-center justify-between border-t border-line/70 px-2 py-2">
-                <div className="flex items-center">
-                  <button
-                    type="button"
-                    className="
-                      inline-flex
-                      h-7
-                      items-center
-                      gap-1.5
-                      rounded-[7px]
-                      px-2
-                      text-[9px]
-                      font-medium
-                      text-muted
-                      transition-colors
-                      hover:bg-shell
-                      hover:text-navy
-                    "
-                  >
-                    <FileText className="h-3 w-3" />
-                    Context
-                  </button>
-
-                  <button
-                    type="button"
-                    onClick={handleMicToggle}
-                    className={`
-                      inline-flex
-                      h-7
-                      items-center
-                      gap-1.5
-                      rounded-[7px]
-                      px-2
-                      text-[9px]
-                      font-medium
-                      transition-colors
-                      ${
-                        isListening
-                          ? "bg-[#fff9e9] text-[#8d5d00]"
-                          : "text-muted hover:bg-shell hover:text-navy"
-                      }
-                    `}
-                  >
-                    {isListening ? (
-                      <>
-                        <Square className="h-3 w-3 fill-current" />
-                        Stop
-                      </>
-                    ) : (
-                      <>
-                        <Mic className="h-3 w-3" />
-                        Voice
-                      </>
-                    )}
-                  </button>
-                </div>
+              <div className="flex items-center justify-between border-t border-line/70 px-3 py-2 bg-slate-50/50">
+                <span className="text-[10px] text-muted/70 font-medium">
+                  Press Enter to send
+                </span>
 
                 <button
                   type="submit"
-                  disabled={
-                    loading ||
-                    isStreaming ||
-                    !query.trim()
-                  }
+                  disabled={loading || isStreaming || !query.trim()}
                   className="
                     flex
                     h-8
-                    w-8
+                    px-3.5
                     items-center
-                    justify-center
+                    gap-1.5
                     rounded-[9px]
                     bg-navy
                     text-white
+                    text-[11px]
+                    font-bold
                     transition-all
                     duration-150
                     hover:bg-navy-hover
                     active:scale-[0.97]
                     disabled:cursor-not-allowed
                     disabled:opacity-30
+                    shadow-2xs
                   "
                   title="Send message"
                   aria-label="Send message"
                 >
-                  <Send className="h-3.5 w-3.5" />
+                  <span>Send</span>
+                  <Send className="h-3 w-3" />
                 </button>
               </div>
             </div>
 
             <p className="mt-1.5 text-center text-[8px] text-muted/50">
-              GST Copilot uses the current page and available
-              account context.
+              GST Copilot uses the current page and active taxpayer account context.
             </p>
           </form>
         </section>
