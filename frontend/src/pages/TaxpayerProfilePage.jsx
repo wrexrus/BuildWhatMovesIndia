@@ -17,8 +17,13 @@ import {
   TrendingUp, 
   Mail, 
   MapPin, 
-  ExternalLink,
-  Sparkles
+  Edit3, 
+  KeyRound, 
+  Check, 
+  X, 
+  ShieldAlert,
+  Smartphone,
+  ExternalLink
 } from 'lucide-react';
 
 const TaxpayerProfilePage = () => {
@@ -26,19 +31,32 @@ const TaxpayerProfilePage = () => {
   const { showToast } = useToast() || {};
   const navigate = useNavigate();
 
-  // Active Taxpayer Details (Grounded on logged in user or default Ramesh profile)
-  const taxpayer = {
+  // Active Taxpayer Details State (Supports Dynamic Live Updates via Edit & OTP)
+  const [taxpayer, setTaxpayer] = useState({
     name: user?.name || "Ramesh Kumar",
     tradeName: user?.tradeName || "Nagpur Hardware & Sanitary Store",
     gstin: user?.gstin || "27AAAAA1234A1Z5",
     email: user?.email || "ramesh.nagpur@gst.gov.in",
+    mobile: user?.mobile || "+91 98765 43210",
     state: user?.state || "Maharashtra (27)",
     annualTurnover: user?.annualTurnover || "₹82,40,000",
     registrationType: "Regular Taxpayer (Composition Exempt)",
     dateOfRegistration: "01 Jul 2017",
-    jurisdiction: "Nagpur South Ward-4, Zone II",
+    jurisdiction: user?.jurisdiction || "Nagpur South Ward-4, Zone II",
     lastLogin: user?.lastLogin || "Today at 09:30 AM"
-  };
+  });
+
+  // Modal States
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isOtpModalOpen, setIsOtpModalOpen] = useState(false);
+
+  // Edit Form Temp State
+  const [editFormData, setEditFormData] = useState({ ...taxpayer });
+
+  // OTP Verification State
+  const [otpDigits, setOtpDigits] = useState(['', '', '', '']);
+  const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
+  const [otpError, setOtpError] = useState('');
 
   // Mock Tax Liability & Safety Health Summary
   const summary = {
@@ -91,6 +109,62 @@ const TaxpayerProfilePage = () => {
     }
   ];
 
+  const handleOpenEditModal = () => {
+    setEditFormData({ ...taxpayer });
+    setIsEditModalOpen(true);
+  };
+
+  const handleInitiateOtpVerification = (e) => {
+    e.preventDefault();
+    setIsEditModalOpen(false);
+    setOtpDigits(['', '', '', '']);
+    setOtpError('');
+    setIsOtpModalOpen(true);
+    if (showToast) showToast(`Synthetic OTP sent to registered mobile ${taxpayer.mobile}`, 'info', 'Mock OTP Dispatched');
+  };
+
+  const handleOtpChange = (index, value) => {
+    if (!/^\d*$/.test(value)) return;
+    const updated = [...otpDigits];
+    updated[index] = value.slice(-1);
+    setOtpDigits(updated);
+
+    // Auto focus next input
+    if (value && index < 3) {
+      const nextInput = document.getElementById(`otp-input-${index + 1}`);
+      if (nextInput) nextInput.focus();
+    }
+  };
+
+  const handleAutoFillOtp = () => {
+    setOtpDigits(['1', '2', '3', '4']);
+    setOtpError('');
+  };
+
+  const handleVerifyOtpAndSave = (e) => {
+    e.preventDefault();
+    const enteredOtp = otpDigits.join('');
+    
+    if (enteredOtp.length < 4) {
+      setOtpError('Please enter all 4 digits of the verification OTP.');
+      return;
+    }
+
+    setIsVerifyingOtp(true);
+    setOtpError('');
+
+    setTimeout(() => {
+      // Mock OTP Validation rule (accepts 1234 or any 4 digits for demo testing)
+      setTaxpayer({ ...editFormData });
+      setIsVerifyingOtp(false);
+      setIsOtpModalOpen(false);
+
+      if (showToast) {
+        showToast('Taxpayer Profile updated & verified via OTP successfully!', 'success', 'Profile Verified');
+      }
+    }, 800);
+  };
+
   const handlePrintSummary = () => {
     window.print();
   };
@@ -106,6 +180,7 @@ const TaxpayerProfilePage = () => {
       `Trade / Business    : ${taxpayer.tradeName}\n` +
       `GSTIN               : ${taxpayer.gstin}\n` +
       `Email               : ${taxpayer.email}\n` +
+      `Mobile Number       : ${taxpayer.mobile}\n` +
       `State               : ${taxpayer.state}\n` +
       `Annual Turnover     : ${taxpayer.annualTurnover}\n` +
       `Registration Type   : ${taxpayer.registrationType}\n` +
@@ -156,6 +231,7 @@ const TaxpayerProfilePage = () => {
                   <span className="bg-white/10 px-2 py-0.5 rounded border border-white/15">GSTIN: {taxpayer.gstin}</span>
                   <span className="flex items-center gap-1"><MapPin className="w-3 h-3 text-amber" /> {taxpayer.state}</span>
                   <span className="flex items-center gap-1"><Mail className="w-3 h-3 text-amber" /> {taxpayer.email}</span>
+                  <span className="flex items-center gap-1"><Smartphone className="w-3 h-3 text-amber" /> {taxpayer.mobile}</span>
                 </div>
               </div>
             </div>
@@ -163,10 +239,18 @@ const TaxpayerProfilePage = () => {
             <div className="flex flex-wrap gap-2.5 shrink-0">
               <button
                 type="button"
-                onClick={handleDownloadProfilePdf}
+                onClick={handleOpenEditModal}
                 className="bg-amber hover:bg-amber-500 text-navy font-bold text-xs px-4 py-2.5 rounded-xl shadow-md transition-all cursor-pointer flex items-center gap-1.5 hover:scale-[1.02]"
               >
-                <Download className="w-4 h-4 text-navy" />
+                <Edit3 className="w-4 h-4 text-navy" />
+                <span>Edit Profile Details</span>
+              </button>
+              <button
+                type="button"
+                onClick={handleDownloadProfilePdf}
+                className="bg-white/10 hover:bg-white/20 text-white font-semibold text-xs px-4 py-2.5 rounded-xl border border-white/25 transition-all cursor-pointer flex items-center gap-1.5"
+              >
+                <Download className="w-4 h-4" />
                 <span>Download Report</span>
               </button>
               <button
@@ -228,10 +312,20 @@ const TaxpayerProfilePage = () => {
           
           {/* Left Column: Taxpayer Registration & Business Details */}
           <div className="bg-white p-6 rounded-2xl shadow-md border border-slate-200/90 space-y-4">
-            <h2 className="text-base font-bold text-navy border-b border-slate-100 pb-3 flex items-center gap-2">
-              <Building2 className="w-4 h-4 text-blue-600" />
-              <span>Taxpayer Registration Info</span>
-            </h2>
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h2 className="text-base font-bold text-navy flex items-center gap-2">
+                <Building2 className="w-4 h-4 text-blue-600" />
+                <span>Taxpayer Registration Info</span>
+              </h2>
+              <button
+                type="button"
+                onClick={handleOpenEditModal}
+                className="text-xs text-blue-600 hover:text-blue-800 font-bold flex items-center gap-1 hover:underline cursor-pointer"
+              >
+                <Edit3 className="w-3.5 h-3.5" />
+                <span>Edit</span>
+              </button>
+            </div>
 
             <div className="space-y-3 text-xs">
               <div>
@@ -245,6 +339,14 @@ const TaxpayerProfilePage = () => {
               <div>
                 <span className="text-slate-400 font-medium block">GSTIN / Unique ID</span>
                 <span className="font-mono font-bold text-navy bg-slate-100 px-2 py-0.5 rounded">{taxpayer.gstin}</span>
+              </div>
+              <div>
+                <span className="text-slate-400 font-medium block">Email Address</span>
+                <span className="font-semibold text-slate-700">{taxpayer.email}</span>
+              </div>
+              <div>
+                <span className="text-slate-400 font-medium block">Mobile Number</span>
+                <span className="font-semibold text-slate-700">{taxpayer.mobile}</span>
               </div>
               <div>
                 <span className="text-slate-400 font-medium block">Registration Type</span>
@@ -368,6 +470,190 @@ const TaxpayerProfilePage = () => {
             </table>
           </div>
         </div>
+
+        {/* 1. EDIT PROFILE DETAILS MODAL */}
+        {isEditModalOpen && (
+          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 border border-slate-200">
+              <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
+                <div className="flex items-center gap-2">
+                  <Edit3 className="w-5 h-5 text-navy" />
+                  <h3 className="text-lg font-bold text-navy">Edit Taxpayer Details</h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsEditModalOpen(false)}
+                  className="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <form onSubmit={handleInitiateOtpVerification} className="space-y-4 text-xs">
+                <div>
+                  <label className="block text-slate-500 font-semibold mb-1">Legal Name (Regulated)</label>
+                  <input
+                    type="text"
+                    value={editFormData.name}
+                    disabled
+                    className="w-full bg-slate-100 border border-slate-200 rounded-xl px-3 py-2 text-slate-500 font-bold cursor-not-allowed"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-slate-700 font-semibold mb-1">Trade / Business Name</label>
+                  <input
+                    type="text"
+                    value={editFormData.tradeName}
+                    onChange={(e) => setEditFormData({ ...editFormData, tradeName: e.target.value })}
+                    required
+                    className="w-full border border-slate-300 rounded-xl px-3 py-2 font-medium focus:border-navy focus:ring-1 focus:ring-navy"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-slate-700 font-semibold mb-1">Email Address</label>
+                    <input
+                      type="email"
+                      value={editFormData.email}
+                      onChange={(e) => setEditFormData({ ...editFormData, email: e.target.value })}
+                      required
+                      className="w-full border border-slate-300 rounded-xl px-3 py-2 font-medium focus:border-navy focus:ring-1 focus:ring-navy"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-700 font-semibold mb-1">Mobile Number</label>
+                    <input
+                      type="text"
+                      value={editFormData.mobile}
+                      onChange={(e) => setEditFormData({ ...editFormData, mobile: e.target.value })}
+                      required
+                      className="w-full border border-slate-300 rounded-xl px-3 py-2 font-medium focus:border-navy focus:ring-1 focus:ring-navy"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-slate-700 font-semibold mb-1">Annual Turnover Category</label>
+                    <select
+                      value={editFormData.annualTurnover}
+                      onChange={(e) => setEditFormData({ ...editFormData, annualTurnover: e.target.value })}
+                      className="w-full border border-slate-300 rounded-xl px-3 py-2 font-medium focus:border-navy focus:ring-1 focus:ring-navy bg-white"
+                    >
+                      <option value="₹82,40,000">₹82,40,000 (₹40L - ₹1.5 Cr)</option>
+                      <option value="₹1,20,00,000">₹1.20 Cr (Medium SME)</option>
+                      <option value="₹35,00,00,000">₹35.00 Cr (Large Enterprise)</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-slate-700 font-semibold mb-1">Jurisdiction Ward</label>
+                    <input
+                      type="text"
+                      value={editFormData.jurisdiction}
+                      onChange={(e) => setEditFormData({ ...editFormData, jurisdiction: e.target.value })}
+                      required
+                      className="w-full border border-slate-300 rounded-xl px-3 py-2 font-medium focus:border-navy focus:ring-1 focus:ring-navy"
+                    />
+                  </div>
+                </div>
+
+                <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-2.5">
+                  <button
+                    type="button"
+                    onClick={() => setIsEditModalOpen(false)}
+                    className="px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 font-bold"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="bg-navy hover:bg-navy-hover text-white font-bold px-4 py-2.5 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+                  >
+                    <KeyRound className="w-4 h-4 text-amber" />
+                    <span>Save & Verify via OTP</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        {/* 2. MOCK OTP VERIFICATION MODAL */}
+        {isOtpModalOpen && (
+          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 border border-slate-200 text-center">
+              <div className="h-14 w-14 bg-amber/20 border-2 border-amber/40 rounded-2xl flex items-center justify-center text-amber mx-auto mb-4">
+                <KeyRound className="w-7 h-7 text-navy" />
+              </div>
+
+              <h3 className="text-lg font-extrabold text-navy">Synthetic OTP Verification</h3>
+              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                For security compliance, a 4-digit synthetic verification OTP has been sent to registered mobile <span className="font-bold text-slate-800">{taxpayer.mobile}</span> and email.
+              </p>
+
+              {/* Demo Helper Button */}
+              <div className="mt-3">
+                <button
+                  type="button"
+                  onClick={handleAutoFillOtp}
+                  className="bg-amber-100 hover:bg-amber-200 text-amber-900 text-[11px] font-extrabold px-3 py-1.5 rounded-lg border border-amber-300 transition-all cursor-pointer inline-flex items-center gap-1"
+                >
+                  <span>⚡ Auto-Fill Hackathon Mock OTP (1234)</span>
+                </button>
+              </div>
+
+              <form onSubmit={handleVerifyOtpAndSave} className="mt-6 space-y-4">
+                <div className="flex justify-center gap-3">
+                  {[0, 1, 2, 3].map((idx) => (
+                    <input
+                      key={idx}
+                      id={`otp-input-${idx}`}
+                      type="text"
+                      maxLength={1}
+                      value={otpDigits[idx]}
+                      onChange={(e) => handleOtpChange(idx, e.target.value)}
+                      className="w-12 h-12 text-center text-xl font-black border-2 border-slate-300 rounded-xl focus:border-navy focus:ring-2 focus:ring-navy/20 focus:outline-none bg-slate-50"
+                    />
+                  ))}
+                </div>
+
+                {otpError && (
+                  <p className="text-xs text-red-600 font-bold flex items-center justify-center gap-1">
+                    <ShieldAlert className="w-3.5 h-3.5" /> {otpError}
+                  </p>
+                )}
+
+                <div className="pt-2 flex items-center justify-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setIsOtpModalOpen(false)}
+                    className="px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 text-xs font-bold"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={isVerifyingOtp}
+                    className="bg-navy hover:bg-navy-hover text-white text-xs font-bold px-6 py-2.5 rounded-xl transition-all cursor-pointer shadow-sm flex items-center gap-2"
+                  >
+                    {isVerifyingOtp ? (
+                      <span>Verifying...</span>
+                    ) : (
+                      <>
+                        <Check className="w-4 h-4 text-emerald-400" />
+                        <span>Verify & Confirm Updates</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
 
       </div>
     </PageContainer>

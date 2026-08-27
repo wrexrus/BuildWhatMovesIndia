@@ -5,6 +5,7 @@ import SearchButton from "../../components/SearchButton";
 import Alert from "../../components/Alert";
 import { isValidGSTIN } from "../../utils/validators";
 import PageContainer from "../../components/PageContainer";
+import { CheckCircle2, ShieldCheck, Building2 } from "lucide-react";
 
 const states = [
     "Andhra Pradesh",
@@ -33,12 +34,13 @@ const states = [
 ];
 
 const SearchComposition = () => {
-    const [option, setOption] = useState("");
-    const [searchType, setSearchType] = useState("");
-    const [gstin, setGstin] = useState("");
-    const [state, setState] = useState("");
+    const [option, setOption] = useState("opt-out");
+    const [searchType, setSearchType] = useState("gstin");
+    const [gstin, setGstin] = useState("27AAAAA1234A1Z5");
+    const [state, setState] = useState("Maharashtra");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [result, setResult] = useState(null);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -53,7 +55,7 @@ const SearchComposition = () => {
             return;
         }
 
-        if (searchType === "gstin" && !isValidGSTIN(gstin)) {
+        if (searchType === "gstin" && gstin && !isValidGSTIN(gstin)) {
             setError("Please enter a valid 15-character GSTIN/UIN.");
             return;
         }
@@ -65,16 +67,19 @@ const SearchComposition = () => {
 
         setError("");
         setLoading(true);
+        setResult(null);
 
-        await new Promise((resolve) => setTimeout(resolve, 700));
+        await new Promise((resolve) => setTimeout(resolve, 600));
 
         setLoading(false);
-
-        console.log({
-            option,
-            searchType,
-            gstin,
-            state,
+        setResult({
+            option: option === "opt-in" ? "Opted IN for Composition Scheme (CMP-02)" : "Opted OUT of Composition Scheme (Regular Taxpayer)",
+            gstin: gstin.toUpperCase() || "27AAAAA1234A1Z5",
+            legalName: "Ramesh Kumar",
+            tradeName: "Nagpur Hardware & Sanitary Store",
+            effectiveDate: "01 Apr 2026",
+            financialYear: "FY 2026-27",
+            status: "ACTIVE_VERIFIED"
         });
     };
 
@@ -111,16 +116,15 @@ const SearchComposition = () => {
                                 setError("");
                             }}
                             className="
-              h-12 w-full rounded-md border border-slate-300
-              bg-white px-4 text-[0.95rem] text-slate-700
-              outline-none transition-all
-              focus:border-[#2e659d]
-              focus:ring-4 focus:ring-[#2e659d]/10
-            "
+                              h-12 w-full rounded-md border border-slate-300
+                              bg-white px-4 text-[0.95rem] text-slate-700
+                              outline-none transition-all
+                              focus:border-[#2e659d]
+                              focus:ring-4 focus:ring-[#2e659d]/10
+                            "
                         >
-                            <option value="">Select</option>
-                            <option value="opt-in">Opt In</option>
-                            <option value="opt-out">Opt Out</option>
+                            <option value="opt-out">Opt Out (Regular Taxpayer)</option>
+                            <option value="opt-in">Opt In (Composition Scheme)</option>
                         </select>
                     </div>
 
@@ -132,14 +136,13 @@ const SearchComposition = () => {
                         <div className="flex flex-wrap gap-3">
                             <label
                                 className={`
-                flex cursor-pointer items-center gap-3 rounded-md border
-                px-4 py-3 text-sm font-medium transition-all
-
-                ${searchType === "gstin"
-                                        ? "border-[#315b91] bg-[#eef5fb] text-[#173f6b]"
-                                        : "border-slate-200 bg-white text-slate-700 hover:border-slate-300"
-                                    }
-              `}
+                                  flex cursor-pointer items-center gap-3 rounded-md border
+                                  px-4 py-3 text-sm font-medium transition-all
+                                  ${searchType === "gstin"
+                                          ? "border-[#315b91] bg-[#eef5fb] text-[#173f6b]"
+                                          : "border-slate-200 bg-white text-slate-700 hover:border-slate-300"
+                                      }
+                                `}
                             >
                                 <input
                                     type="radio"
@@ -152,20 +155,18 @@ const SearchComposition = () => {
                                     }}
                                     className="h-4 w-4 accent-[#315b91]"
                                 />
-
                                 GSTIN/UIN
                             </label>
 
                             <label
                                 className={`
-                flex cursor-pointer items-center gap-3 rounded-md border
-                px-4 py-3 text-sm font-medium transition-all
-
-                ${searchType === "state"
-                                        ? "border-[#315b91] bg-[#eef5fb] text-[#173f6b]"
-                                        : "border-slate-200 bg-white text-slate-700 hover:border-slate-300"
-                                    }
-              `}
+                                  flex cursor-pointer items-center gap-3 rounded-md border
+                                  px-4 py-3 text-sm font-medium transition-all
+                                  ${searchType === "state"
+                                          ? "border-[#315b91] bg-[#eef5fb] text-[#173f6b]"
+                                          : "border-slate-200 bg-white text-slate-700 hover:border-slate-300"
+                                      }
+                                `}
                             >
                                 <input
                                     type="radio"
@@ -178,7 +179,6 @@ const SearchComposition = () => {
                                     }}
                                     className="h-4 w-4 accent-[#315b91]"
                                 />
-
                                 State
                             </label>
                         </div>
@@ -222,15 +222,13 @@ const SearchComposition = () => {
                                         setError("");
                                     }}
                                     className="
-                  h-12 w-full rounded-md border border-slate-300
-                  bg-white px-4 text-[0.95rem] text-slate-700
-                  outline-none transition-all
-                  focus:border-[#2e659d]
-                  focus:ring-4 focus:ring-[#2e659d]/10
-                "
+                                      h-12 w-full rounded-md border border-slate-300
+                                      bg-white px-4 text-[0.95rem] text-slate-700
+                                      outline-none transition-all
+                                      focus:border-[#2e659d]
+                                      focus:ring-4 focus:ring-[#2e659d]/10
+                                    "
                                 >
-                                    <option value="">Select State</option>
-
                                     {states.map((item) => (
                                         <option key={item} value={item}>
                                             {item}
@@ -253,6 +251,27 @@ const SearchComposition = () => {
                         <SearchButton loading={loading} />
                     </div>
                 </form>
+
+                {result && (
+                    <div className="mt-8 max-w-2xl bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <div className="flex justify-between items-start mb-4 border-b border-slate-100 pb-3">
+                            <div>
+                                <h3 className="text-lg font-bold text-[#071b30]">{result.tradeName}</h3>
+                                <p className="text-xs text-slate-500 font-mono">GSTIN: {result.gstin}</p>
+                            </div>
+                            <span className="px-3 py-1 text-xs font-bold rounded-full bg-blue-100 text-blue-800 border border-blue-200 flex items-center gap-1">
+                                <CheckCircle2 className="w-3.5 h-3.5 text-blue-600" />
+                                <span>{result.status}</span>
+                            </span>
+                        </div>
+
+                        <div className="space-y-2 text-xs text-slate-700 bg-slate-50 p-4 rounded-xl border border-slate-200">
+                            <p><strong>Composition Status:</strong> {result.option}</p>
+                            <p><strong>Legal Name:</strong> {result.legalName}</p>
+                            <p><strong>Effective Date:</strong> {result.effectiveDate} ({result.financialYear})</p>
+                        </div>
+                    </div>
+                )}
             </SearchPageShell>
         </PageContainer>
     );

@@ -30,6 +30,7 @@ import Footer from "./components/Footer";
 import Registration from "./pages/register/Registration";
 import TrackApplicationStatus from "./pages/register/TrackApplicationStatus";
 import HomeStateGSK from "./pages/register/HomeStategGSK";
+import FilingClarifications from "./pages/register/FilingClarifications";
 import VerifyRFN from "./pages/userServices/VerifyRFN";
 import HolidayList from "./pages/userServices/HolidayList";
 import CauseList from "./pages/userServices/CauseList";
@@ -129,6 +130,10 @@ const router = createBrowserRouter([
       {
         path: "/registration/home-state-gsk",
         element: <HomeStateGSK />,
+      },
+      {
+        path: "/registration/filing-clarifications",
+        element: <FilingClarifications />,
       },
       {
         path: "/services/user-services/verify-rfn",

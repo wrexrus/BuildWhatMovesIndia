@@ -39,7 +39,7 @@ const megaMenus = {
         },
         {
           label: "Application for Filing Clarifications",
-          to: "#",
+          to: "/registration/filing-clarifications",
         },
         {
           label:

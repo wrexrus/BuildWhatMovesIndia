@@ -3,11 +3,43 @@ const { reconcileInvoices } = require('./reconciliationService');
 const { getAccountHarnessContext } = require('./accountHarnessService');
 
 /**
+ * Auto-Detect Spoken Language from Query (Hindi, Marathi, Tamil, Punjabi, English)
+ */
+function detectSpokenLanguage(query) {
+  if (!query || typeof query !== 'string') return 'HI';
+  const text = query.trim();
+
+  // 1. Script Range Inspection (Devanagari, Tamil, Gurmukhi)
+  if (/[\u0B80-\u0BFF]/.test(text)) return 'TA'; // Tamil Script
+  if (/[\u0A00-\u0A7F]/.test(text)) return 'PA'; // Gurmukhi (Punjabi) Script
+  
+  // 2. Marathi vs Hindi Devanagari Keyword Differentiation
+  if (/[\u0900-\u097F]/.test(text)) {
+    const marathiKeywords = ['आहे', 'काय', 'कसे', 'किती', 'भरायचा', 'दाखवा', 'पाहिजे', 'करा', 'नाही'];
+    if (marathiKeywords.some(kw => text.includes(kw))) return 'MR';
+    return 'HI'; // Default Hindi Devanagari
+  }
+
+  // 3. Hinglish / Phonetic Script Inspection (Roman Script)
+  const lower = text.toLowerCase();
+  if (lower.includes('kiti') || lower.includes('kasa') || lower.includes('bharaycha') || lower.includes('aahe')) return 'MR';
+  if (lower.includes('kya') || lower.includes('kaise') || lower.includes('kab') || lower.includes('hai') || lower.includes('bharna')) return 'HI';
+  if (lower.includes('eppadi') || lower.includes('ethanai') || lower.includes('irukku')) return 'TA';
+  if (lower.includes('kine') || lower.includes('kiddan') || lower.includes('bhaad')) return 'PA';
+
+  return 'EN'; // Default English
+}
+
+/**
  * Unified GST Copilot Engine ("Understand. Fix. File.")
  * Combines page context, active invoice state, intent detection, and structured diagnostic payloads.
  */
 async function processCopilotRequest({ query, language = 'HI', pageContext = 'HOME', userGstin = null, explanationMode = 'SHOPKEEPER' }) {
-  const langKey = (language || 'HI').toUpperCase();
+  let langKey = (language || 'HI').toUpperCase();
+  if (langKey === 'AUTO' || !language) {
+    langKey = detectSpokenLanguage(query);
+  }
+
   const mode = (explanationMode || 'SHOPKEEPER').toUpperCase();
   const gstin = userGstin || "27AAAAA1234A1Z5";
 
@@ -61,6 +93,7 @@ async function processCopilotRequest({ query, language = 'HI', pageContext = 'HO
     },
     answer: aiResult.answer,
     language: langKey,
+    detectedLanguage: langKey,
     explanationMode: mode,
     source: aiResult.source || "GST Copilot Engine",
     timestamp: new Date().toISOString()
@@ -68,5 +101,6 @@ async function processCopilotRequest({ query, language = 'HI', pageContext = 'HO
 }
 
 module.exports = {
-  processCopilotRequest
+  processCopilotRequest,
+  detectSpokenLanguage
 };

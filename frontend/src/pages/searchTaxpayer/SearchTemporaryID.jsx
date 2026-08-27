@@ -5,6 +5,7 @@ import SearchButton from "../../components/SearchButton";
 import CaptchaCard from "../../components/CaptchaCard";
 import { isValidMobile } from "../../utils/validators";
 import PageContainer from "../../components/PageContainer";
+import { CheckCircle2, ShieldCheck, User } from "lucide-react";
 
 const states = [
     "Andhra Pradesh",
@@ -39,15 +40,15 @@ const SearchTemporaryID = () => {
     const [captcha, setCaptcha] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [result, setResult] = useState(null);
 
     const updateTemporaryId = (value) => {
-        setTemporaryId(value);
+        setTemporaryId(value.toUpperCase());
         setError("");
     };
 
     const updateMobile = (value) => {
         const cleaned = value.replace(/\D/g, "").slice(0, 10);
-
         setMobile(cleaned);
         setError("");
     };
@@ -84,16 +85,19 @@ const SearchTemporaryID = () => {
 
         setError("");
         setLoading(true);
+        setResult(null);
 
-        await new Promise((resolve) => setTimeout(resolve, 800));
+        await new Promise((resolve) => setTimeout(resolve, 600));
 
         setLoading(false);
-
-        console.log({
-            temporaryId,
-            state,
-            mobile,
-            captcha,
+        setResult({
+            temporaryId: temporaryId.trim() || "TRN2026998877",
+            applicantName: "Ramesh Kumar (Nagpur Hardware)",
+            tradeName: "Nagpur Hardware & Sanitary Store",
+            state: state || "Maharashtra",
+            mobile: mobile ? `+91 ${mobile}` : "+91 98765 43210",
+            status: "APPROVED_ACTIVE",
+            assignedGstin: "27AAAAA1234A1Z5"
         });
     };
 
@@ -115,14 +119,12 @@ const SearchTemporaryID = () => {
                 >
                     <FormField
                         id="temporaryId"
-                        label="Enter Temporary ID"
-                        required
+                        label="Enter Temporary ID (TRN)"
                         value={temporaryId}
                         onChange={(event) =>
                             updateTemporaryId(event.target.value)
                         }
-                        placeholder="Enter Temporary ID"
-                        error={""}
+                        placeholder="Enter TRN (e.g. TRN2026998877)"
                     />
 
                     <div className="my-7 flex items-center gap-4">
@@ -141,7 +143,6 @@ const SearchTemporaryID = () => {
                             className="mb-2 block text-[0.95rem] font-semibold text-[#112f58]"
                         >
                             Select State
-                            <span className="ml-1 text-red-500">*</span>
                         </label>
 
                         <select
@@ -152,12 +153,12 @@ const SearchTemporaryID = () => {
                                 setError("");
                             }}
                             className="
-              h-12 w-full rounded-md border border-slate-300
-              bg-white px-4 text-[0.95rem] text-slate-700
-              outline-none transition-all
-              focus:border-[#2e659d]
-              focus:ring-4 focus:ring-[#2e659d]/10
-            "
+                              h-12 w-full rounded-md border border-slate-300
+                              bg-white px-4 text-[0.95rem] text-slate-700
+                              outline-none transition-all
+                              focus:border-[#2e659d]
+                              focus:ring-4 focus:ring-[#2e659d]/10
+                            "
                         >
                             <option value="">Select State</option>
 
@@ -173,7 +174,6 @@ const SearchTemporaryID = () => {
                         <FormField
                             id="mobile"
                             label="Enter Mobile Number"
-                            required
                             type="tel"
                             value={mobile}
                             onChange={(event) =>
@@ -204,6 +204,40 @@ const SearchTemporaryID = () => {
                         <SearchButton loading={loading} />
                     </div>
                 </form>
+
+                {result && (
+                    <div className="mt-8 max-w-3xl bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <div className="flex justify-between items-start mb-4 border-b border-slate-100 pb-3">
+                            <div>
+                                <h3 className="text-lg font-bold text-[#071b30]">{result.applicantName}</h3>
+                                <p className="text-xs text-slate-500 font-mono">TRN: {result.temporaryId}</p>
+                            </div>
+                            <span className="px-3 py-1 text-xs font-bold rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1">
+                                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                                <span>{result.status}</span>
+                            </span>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-700">
+                            <div>
+                                <span className="font-medium text-slate-400 block">Trade Name</span>
+                                <span className="font-semibold text-slate-800">{result.tradeName}</span>
+                            </div>
+                            <div>
+                                <span className="font-medium text-slate-400 block">State Jurisdiction</span>
+                                <span>{result.state}</span>
+                            </div>
+                            <div>
+                                <span className="font-medium text-slate-400 block">Mobile Contact</span>
+                                <span>{result.mobile}</span>
+                            </div>
+                            <div>
+                                <span className="font-medium text-slate-400 block">Assigned Active GSTIN</span>
+                                <span className="font-mono font-bold text-[#071b30]">{result.assignedGstin}</span>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </SearchPageShell>
         </PageContainer>
     );

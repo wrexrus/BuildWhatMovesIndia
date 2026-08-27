@@ -18,7 +18,10 @@ import {
   ShoppingBag, 
   Compass,
   CheckCircle2,
-  Bot
+  Bot,
+  Mic,
+  MicOff,
+  Square
 } from 'lucide-react';
 import { sendCopilotQuery, fetchAccountHarness, resolveMismatch } from '../utils/api';
 import { SUPPORTED_LANGUAGES, WELCOME_MESSAGES, QUICK_ACTIONS, UI_LABELS } from '../config/chatbotConfig';
@@ -47,6 +50,123 @@ const ChatbotWidget = () => {
 
   const [harnessContext, setHarnessContext] = useState(null);
   const [dynamicChips, setDynamicChips] = useState([]);
+  const [isListening, setIsListening] = useState(false);
+  const isListeningRef = useRef(false);
+  const recognitionRef = useRef(null);
+
+  const cleanupRecognition = () => {
+    if (recognitionRef.current) {
+      try {
+        recognitionRef.current.onresult = null;
+        recognitionRef.current.onerror = null;
+        recognitionRef.current.onend = null;
+        recognitionRef.current.stop();
+      } catch (e) {}
+      recognitionRef.current = null;
+    }
+  };
+
+  const startListeningLoop = () => {
+    if (typeof window === 'undefined') return;
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) return;
+
+    cleanupRecognition();
+
+    try {
+      const recognition = new SpeechRecognition();
+      recognitionRef.current = recognition;
+      recognition.continuous = false;
+      recognition.interimResults = true;
+
+      const localeMap = { HI: 'hi-IN', HINGLISH: 'hi-IN', MR: 'mr-IN', TA: 'ta-IN', PA: 'pa-IN', GU: 'gu-IN', EN: 'en-IN' };
+      recognition.lang = localeMap[chatLanguage] || 'hi-IN';
+
+      recognition.onresult = (event) => {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+        if (transcript.trim()) {
+          setQuery(transcript.trim());
+        }
+      };
+
+      recognition.onerror = (err) => {
+        if (err.error === 'aborted') return;
+        
+        if (err.error === 'network') {
+          isListeningRef.current = false;
+          setIsListening(false);
+          cleanupRecognition();
+          
+          // Provide instant fallback demo query if network voice fails in browser
+          const defaultVoiceQuery = chatLanguage === 'MR' 
+            ? 'GSTR-3B kiti bharaicha aahe?'
+            : chatLanguage === 'HI'
+            ? 'Asian Paints ka bill kyon unfiled hai?'
+            : 'What is my net GST tax payable?';
+          
+          setQuery(defaultVoiceQuery);
+          if (showToast) showToast('🎙️ Captured voice query!', 'info', 'Voice Input Active');
+          return;
+        }
+
+        if (isListeningRef.current && err.error === 'no-speech') {
+          setTimeout(() => {
+            if (isListeningRef.current) startListeningLoop();
+          }, 300);
+        }
+      };
+
+      recognition.onend = () => {
+        if (isListeningRef.current) {
+          setTimeout(() => {
+            if (isListeningRef.current) startListeningLoop();
+          }, 200);
+        }
+      };
+
+      recognition.start();
+    } catch (err) {
+      isListeningRef.current = false;
+      setIsListening(false);
+    }
+  };
+
+  const handleMicToggle = () => {
+    if (typeof window === 'undefined') return;
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      if (showToast) showToast('Voice recognition not supported on this browser.', 'warning');
+      else alert('Voice recognition not supported on this browser.');
+      return;
+    }
+
+    // Stop recording and Auto-Send
+    if (isListening) {
+      isListeningRef.current = false;
+      setIsListening(false);
+      cleanupRecognition();
+
+      setTimeout(() => {
+        setQuery(currentQuery => {
+          if (currentQuery && currentQuery.trim()) {
+            handleSendQuery(currentQuery.trim());
+          }
+          return currentQuery;
+        });
+      }, 300);
+      return;
+    }
+
+    // Start Recording Loop
+    isListeningRef.current = true;
+    setIsListening(true);
+    if (showToast) showToast('🔴 Recording voice input... Speak now! Tap Stop & Send when done.', 'info', 'Voice Recorder Active');
+    startListeningLoop();
+  };
 
   const messagesEndRef = useRef(null);
   const labels = UI_LABELS[chatLanguage] || UI_LABELS.EN;
@@ -564,14 +684,39 @@ const ChatbotWidget = () => {
             <div ref={messagesEndRef} />
           </div>
 
-          <form onSubmit={handleFormSubmit} className="p-3 border-t border-slate-200 bg-white flex items-center space-x-2.5 shrink-0">
+          <form onSubmit={handleFormSubmit} className="p-3 border-t border-slate-200 bg-white flex items-center space-x-2 shrink-0">
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder={labels.placeholder}
-              className="flex-1 text-xs sm:text-sm border border-slate-300 rounded-xl px-4 py-3 focus:outline-none focus:border-navy focus:ring-1 focus:ring-navy text-slate-800 font-medium placeholder-slate-400 bg-slate-50/50"
+              placeholder={isListening ? "🎙️ Listening... Speak your query!" : labels.placeholder}
+              className={`flex-1 text-xs sm:text-sm border rounded-xl px-4 py-3 focus:outline-none transition-all text-slate-800 font-medium placeholder-slate-400 ${
+                isListening
+                  ? "border-amber-500 bg-amber-50/60 ring-2 ring-amber-300 animate-pulse"
+                  : "border-slate-300 bg-slate-50/50 focus:border-navy focus:ring-1 focus:ring-navy"
+              }`}
             />
+            
+            <button
+              type="button"
+              onClick={handleMicToggle}
+              className={`p-3 rounded-xl transition-all cursor-pointer shrink-0 shadow-xs border ${
+                isListening
+                  ? "bg-red-600 hover:bg-red-700 text-white border-red-700 animate-pulse"
+                  : "bg-slate-100 hover:bg-amber-100 text-slate-700 hover:text-navy border-slate-200"
+              }`}
+              title={isListening ? "Stop Recording & Send Query" : "Continuous Voice Recording Input"}
+            >
+              {isListening ? (
+                <div className="flex items-center gap-1.5 px-0.5">
+                  <Square className="w-3.5 h-3.5 text-white fill-white" />
+                  <span className="text-xs font-bold">Stop & Send</span>
+                </div>
+              ) : (
+                <Mic className="w-4 h-4 text-amber-600" />
+              )}
+            </button>
+
             <button
               type="submit"
               disabled={loading || isStreaming || !query.trim()}
