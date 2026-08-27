@@ -2,7 +2,6 @@ import React, { useMemo, useState } from "react";
 import { Download, Play, FileText, CheckCircle2 } from "lucide-react";
 import { useToast } from "../context/ToastContext";
 
-// Reference "today" for this prototype — GST portal shows Aug 2026 dates.
 const TODAY = new Date("2026-08-24");
 
 const dueDates = [
@@ -80,14 +79,13 @@ const DueDatesAndMedia = () => {
   return (
     <section className="bg-paper pb-14 font-sans">
       <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-8 px-6 lg:grid-cols-[1.3fr_1fr]">
-        {/* Upcoming due dates — clean table matching official portal layout */}
         <div>
           <div className="mb-5 flex items-end justify-between">
-            <h2 className="text-[1.4rem] font-bold tracking-tight text-ink">Upcoming due dates</h2>
+            <h2 className="text-2xl font-bold tracking-tight text-ink sm:text-[1.65rem]">Upcoming due dates</h2>
             <button
               type="button"
               onClick={handleDownloadPdf}
-              className="inline-flex items-center gap-1.5 text-[0.87rem] font-bold text-navy hover:text-blue-800 transition-colors cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2"
+              className="inline-flex items-center gap-1.5 text-[0.87rem] font-bold text-navy hover:text-navy transition-colors cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2"
               title="Download PDF filing schedule"
             >
               <Download size={14} className="text-navy" /> PDF
@@ -155,10 +153,9 @@ const DueDatesAndMedia = () => {
           </div>
         </div>
 
-        {/* GST media */}
         <div>
           <div className="mb-5 flex items-end justify-between">
-            <h2 className="text-[1.4rem] font-bold tracking-tight text-ink">GST media</h2>
+            <h2 className="text-2xl font-bold tracking-tight text-ink sm:text-[1.65rem]">GST media</h2>
             <a
               href="#"
               className="text-[0.87rem] font-medium text-navy focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2"

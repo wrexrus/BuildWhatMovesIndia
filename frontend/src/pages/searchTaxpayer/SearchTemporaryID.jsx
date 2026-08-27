@@ -113,7 +113,6 @@ const SearchTemporaryID = () => {
                     className="max-w-3xl"
                     noValidate
                 >
-                    {/* Temporary ID */}
                     <FormField
                         id="temporaryId"
                         label="Enter Temporary ID"
@@ -126,7 +125,6 @@ const SearchTemporaryID = () => {
                         error={""}
                     />
 
-                    {/* OR divider */}
                     <div className="my-7 flex items-center gap-4">
                         <div className="h-px flex-1 bg-slate-200" />
 
@@ -137,7 +135,6 @@ const SearchTemporaryID = () => {
                         <div className="h-px flex-1 bg-slate-200" />
                     </div>
 
-                    {/* State */}
                     <div>
                         <label
                             htmlFor="state"
@@ -172,7 +169,6 @@ const SearchTemporaryID = () => {
                         </select>
                     </div>
 
-                    {/* Mobile */}
                     <div className="mt-6">
                         <FormField
                             id="mobile"
@@ -188,7 +184,6 @@ const SearchTemporaryID = () => {
                         />
                     </div>
 
-                    {/* CAPTCHA */}
                     <div className="mt-6">
                         <CaptchaCard
                             value={captcha}

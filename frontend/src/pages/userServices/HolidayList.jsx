@@ -92,13 +92,13 @@ const HolidayList = () => {
           ]}
         />
 
-        <div className="mx-auto max-w-[1400px] px-5 pb-24 pt-8 sm:px-8 lg:px-10">
-          <header className="border-b border-[#eaeaea] pb-10">
+        <div className="mx-auto max-w-[1400px] px-5 pb-16 pt-8 sm:px-8 lg:px-10">
+          <header className="border-b border-[#eaeaea] pb-7">
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#1f6c9f]">
               User service
             </p>
 
-            <h1 className="text-3xl font-semibold tracking-[-0.03em] text-[#20282d] sm:text-4xl">
+            <h1 className="text-2xl font-semibold tracking-[-0.02em] text-balance text-[#20282d] sm:text-[1.75rem]">
               Holiday list
             </h1>
 
@@ -108,8 +108,7 @@ const HolidayList = () => {
             </p>
           </header>
 
-          {/* Filters */}
-          <section className="border-b border-[#eaeaea] py-8">
+          <section className="border-b border-[#eaeaea] py-6">
             <div className="grid gap-5 sm:grid-cols-[180px_260px_auto] sm:items-end">
               <div>
                 <label
@@ -196,7 +195,6 @@ const HolidayList = () => {
             </div>
           </section>
 
-          {/* View controls */}
           <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#eaeaea] py-5">
             <p className="text-sm text-[#6f7375]">
               {holidays.length} holiday
@@ -242,7 +240,6 @@ const HolidayList = () => {
             </div>
           </div>
 
-          {/* List */}
           {view === "list" && (
             <section className="pt-6">
               <div className="grid grid-cols-[150px_1fr_180px] border-y border-[#dcdcdc] bg-[#f1f0ed] px-4 py-3 text-xs font-semibold uppercase tracking-[0.05em] text-[#616567] sm:grid-cols-[180px_1fr_200px]">
@@ -331,7 +328,6 @@ const HolidayList = () => {
             </section>
           )}
 
-          {/* Calendar */}
           {view === "calendar" && (
             <section className="pt-8">
               <div className="grid gap-px border border-[#eaeaea] bg-[#eaeaea] sm:grid-cols-2 lg:grid-cols-3">

@@ -9,7 +9,6 @@ const Home = () => {
   return (
     <div>
       <Hero />
-      {/* Landing Page Copilot Service Card ("Understand. Fix. File.") */}
       <CopilotHeroCard />
       <NoticeBar />
       <NewsAndHelp />

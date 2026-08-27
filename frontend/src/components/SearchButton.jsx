@@ -12,13 +12,13 @@ const SearchButton = ({
       disabled={disabled || loading}
       className="
         inline-flex h-11 items-center justify-center gap-2
-        rounded-md bg-[#315b91]
+        rounded-md bg-navy
         px-7
         text-sm font-bold uppercase tracking-wide text-white
         shadow-sm
         transition-all
 
-        hover:bg-[#284e80]
+        hover:bg-navy-hover
         hover:shadow-md
 
         active:translate-y-[1px]

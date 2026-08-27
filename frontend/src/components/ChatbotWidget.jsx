@@ -36,32 +36,27 @@ const ChatbotWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
   
-  // Independent Chatbot Language State (defaults to global language, but operates independently)
   const [chatLanguage, setChatLanguage] = useState(globalLanguage || 'HI');
 
-  const [explanationMode, setExplanationMode] = useState('SHOPKEEPER'); // 'SHOPKEEPER' vs 'CA_TECHNICAL'
+  const [explanationMode, setExplanationMode] = useState('SHOPKEEPER');
   const [loading, setLoading] = useState(false);
   const [showQuickActions, setShowQuickActions] = useState(true);
   const [speakingIndex, setSpeakingIndex] = useState(null);
 
-  // Streaming Text State
   const [isStreaming, setIsStreaming] = useState(false);
 
-  // Dynamic Account Harness State
   const [harnessContext, setHarnessContext] = useState(null);
   const [dynamicChips, setDynamicChips] = useState([]);
 
   const messagesEndRef = useRef(null);
   const labels = UI_LABELS[chatLanguage] || UI_LABELS.EN;
 
-  // Sync initial chatbot language when global language loads initially
   useEffect(() => {
     if (globalLanguage) {
       setChatLanguage(globalLanguage);
     }
   }, [globalLanguage]);
 
-  // Listen for Escape Key & custom 'open-gst-copilot' events
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' && isOpen) {
@@ -88,7 +83,6 @@ const ChatbotWidget = () => {
     };
   }, [isOpen, chatLanguage, explanationMode, harnessContext]);
 
-  // Load account harness
   useEffect(() => {
     let isMounted = true;
     async function loadHarness() {
@@ -149,7 +143,6 @@ const ChatbotWidget = () => {
     });
   }, [user, isLoggedIn, chatLanguage]);
 
-  // Audio Playback
   const handleSpeak = (text, index) => {
     if (speakingIndex === index) {
       stopSpeech();
@@ -177,7 +170,6 @@ const ChatbotWidget = () => {
 
   const toggleChat = () => setIsOpen(!isOpen);
 
-  // Independent chatbot language switch
   const handleChatLanguageChange = (newLang) => {
     stopSpeech();
     setSpeakingIndex(null);
@@ -187,13 +179,12 @@ const ChatbotWidget = () => {
       ...prev,
       {
         sender: 'bot',
-        text: `🌐 Chatbot language set to ${newLang}.\n\n${welcome}`,
+        text: `Chatbot language set to ${newLang}.\n\n${welcome}`,
         time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       }
     ]);
   };
 
-  // Simulated Streaming Response Effect
   const streamBotResponse = (fullText, status, source) => {
     setIsStreaming(true);
     const words = fullText.split(' ');
@@ -306,11 +297,10 @@ const ChatbotWidget = () => {
 
   return (
     <div className="fixed bottom-6 right-6 z-50 font-sans">
-      {/* Floating Launcher Button */}
       {!isOpen && (
         <button
           onClick={toggleChat}
-          className="bg-[#071b30] hover:bg-navy text-white px-4 py-3.5 rounded-full shadow-2xl flex items-center justify-center space-x-2.5 transition-all duration-300 hover:scale-105 border-2 border-white/20 cursor-pointer group"
+          className="bg-navy-2 hover:bg-navy text-white px-4 py-3.5 rounded-full shadow-lg flex items-center justify-center space-x-2.5 transition-colors duration-200 border border-white/15 cursor-pointer group active:translate-y-px"
           title="GST Copilot - Understand. Fix. File. (Press Esc to close)"
           aria-label="Open GST Copilot Assistant"
         >
@@ -322,12 +312,10 @@ const ChatbotWidget = () => {
         </button>
       )}
 
-      {/* Popup Window with background scrolling enabled and Escape key listener */}
       {isOpen && (
         <div className="bg-white rounded-2xl shadow-2xl w-[95vw] sm:w-[500px] border border-slate-200/90 flex flex-col h-[670px] max-h-[90vh] transition-all overflow-hidden">
           
-          {/* Header */}
-          <div className="bg-gradient-to-r from-[#071b30] via-navy to-[#0a2f58] text-white px-5 py-3.5 flex items-center justify-between shadow-md shrink-0">
+          <div className="bg-gradient-to-r from-navy-2 via-navy to-navy-2 text-white px-5 py-3.5 flex items-center justify-between shadow-md shrink-0">
             <div className="flex items-center space-x-3 min-w-0">
               <div className="p-2 bg-white/10 rounded-xl relative shrink-0">
                 <Sparkles className="w-5 h-5 text-amber" />
@@ -352,7 +340,6 @@ const ChatbotWidget = () => {
                     )}
                   </p>
 
-                  {/* Safety Score Badge */}
                   {isLoggedIn && (
                     <button
                       type="button"
@@ -369,7 +356,6 @@ const ChatbotWidget = () => {
             </div>
 
             <div className="flex items-center space-x-2 shrink-0">
-              {/* Independent Chatbot Language Selector */}
               <select
                 value={chatLanguage}
                 onChange={(e) => handleChatLanguageChange(e.target.value)}
@@ -393,10 +379,9 @@ const ChatbotWidget = () => {
             </div>
           </div>
 
-          {/* Mode Switcher Segmented Control */}
           <div className="bg-slate-100/90 border-b border-slate-200/80 px-4 py-1.5 flex items-center justify-between text-xs shrink-0">
             <span className="text-slate-600 font-semibold flex items-center gap-1.5 text-[11px]">
-              <Compass className="w-3.5 h-3.5 text-blue-600" />
+              <Compass className="w-3.5 h-3.5 text-navy" />
               {labels.modeLabel}
             </span>
             <div className="flex items-center gap-1 bg-white p-0.5 rounded-lg border border-slate-200 shadow-2xs">
@@ -427,7 +412,6 @@ const ChatbotWidget = () => {
             </div>
           </div>
 
-          {/* Pending Action Items Warning Bar */}
           {harnessContext?.pendingToDos && harnessContext.pendingToDos.length > 0 && (
             <button
               type="button"
@@ -446,15 +430,14 @@ const ChatbotWidget = () => {
             </button>
           )}
 
-          {/* Quick Action Chips Bar */}
           <div className="bg-slate-50 border-b border-slate-200/80 px-4 py-2 flex items-center justify-between shrink-0">
             <span className="text-[11px] font-semibold text-slate-700 flex items-center gap-1.5">
-              <HelpCircle className="w-3.5 h-3.5 text-blue-600" />
+              <HelpCircle className="w-3.5 h-3.5 text-navy" />
               {isLoggedIn ? labels.harnessTitle : labels.quickTitle}
             </span>
             <button
               onClick={() => setShowQuickActions(!showQuickActions)}
-              className="text-[10px] text-blue-700 hover:text-blue-900 font-bold cursor-pointer hover:underline"
+              className="text-[10px] text-navy hover:text-navy font-bold cursor-pointer hover:underline"
             >
               {showQuickActions ? labels.hide : labels.show}
             </button>
@@ -467,7 +450,7 @@ const ChatbotWidget = () => {
                   key={idx}
                   onClick={() => handleSendQuery(action.query)}
                   disabled={loading || isStreaming}
-                  className="text-xs bg-white hover:bg-blue-50 text-navy border border-slate-200/90 hover:border-blue-400 rounded-lg px-2.5 py-1.5 text-left font-medium shadow-2xs transition-all cursor-pointer disabled:opacity-50 flex items-center gap-1 hover:scale-[1.01]"
+                  className="text-xs bg-white hover:bg-navy/5 text-navy border border-slate-200/90 hover:border-navy/35 rounded-lg px-2.5 py-1.5 text-left font-medium shadow-2xs transition-colors cursor-pointer disabled:opacity-50 flex items-center gap-1"
                 >
                   <span>{action.label}</span>
                   <ChevronRight className="w-3 h-3 text-slate-400 shrink-0" />
@@ -476,7 +459,6 @@ const ChatbotWidget = () => {
             </div>
           )}
 
-          {/* Messages Stream Container */}
           <div className="flex-1 min-h-0 p-4 overflow-y-auto space-y-4 bg-[#f8fafc] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
             {messages.map((msg, index) => {
               const textLower = msg.text.toLowerCase();
@@ -498,7 +480,6 @@ const ChatbotWidget = () => {
                   >
                     <div className="whitespace-pre-line font-sans break-words">{msg.text}</div>
 
-                    {/* Interactive Action Cards */}
                     {msg.sender === 'bot' && !msg.isError && isAsianPaints && (
                       <div className="mt-3 pt-2.5 border-t border-slate-200/80 flex flex-col gap-2">
                         <p className="text-[11px] font-bold text-navy flex items-center gap-1">
@@ -508,9 +489,9 @@ const ChatbotWidget = () => {
                           <button
                             type="button"
                             onClick={() => handleActionCardClick('CALL_SUPPLIER', { supplier: 'Asian Paints' })}
-                            className="bg-blue-50 hover:bg-blue-100 text-blue-900 border border-blue-300 px-2.5 py-1 rounded-md text-[11px] font-semibold flex items-center gap-1 cursor-pointer transition-colors"
+                            className="bg-navy/5 hover:bg-navy/10 text-navy border border-navy/25 px-2.5 py-1 rounded-md text-[11px] font-semibold flex items-center gap-1 cursor-pointer transition-colors"
                           >
-                            <PhoneCall className="w-3 h-3 text-blue-700" />
+                            <PhoneCall className="w-3 h-3 text-navy" />
                             <span>{labels.remindSupplier}</span>
                           </button>
                           <button
@@ -525,7 +506,6 @@ const ChatbotWidget = () => {
                       </div>
                     )}
 
-                    {/* Multi-Language Listen Button */}
                     {msg.sender === 'bot' && !msg.isError && msg.text.length > 0 && (
                       <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
                         <button
@@ -567,7 +547,6 @@ const ChatbotWidget = () => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Form Input Bar */}
           <form onSubmit={handleFormSubmit} className="p-3 border-t border-slate-200 bg-white flex items-center space-x-2.5 shrink-0">
             <input
               type="text"
@@ -579,7 +558,7 @@ const ChatbotWidget = () => {
             <button
               type="submit"
               disabled={loading || isStreaming || !query.trim()}
-              className="bg-navy hover:bg-[#1a3f6e] disabled:opacity-40 text-white p-3 rounded-xl transition-all cursor-pointer shrink-0 shadow-sm hover:scale-105 active:scale-95"
+              className="bg-navy hover:bg-navy-hover disabled:opacity-40 text-white p-3 rounded-xl transition-colors cursor-pointer shrink-0 shadow-sm active:translate-y-px"
               title="Send Message"
             >
               <Send className="w-4 h-4" />

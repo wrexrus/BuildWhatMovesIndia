@@ -6,7 +6,7 @@ const CaptchaCard = ({ value, onChange }) => {
     <div>
       <label
         htmlFor="captcha"
-        className="mb-2 block text-[0.95rem] font-semibold text-[#112f58]"
+        className="mb-2 block text-[0.95rem] font-semibold text-navy"
       >
         Type the characters you see in the image below
         <span className="ml-1 text-red-500">*</span>
@@ -21,8 +21,8 @@ const CaptchaCard = ({ value, onChange }) => {
           h-12 w-full rounded-md border border-slate-300
           bg-white px-4 text-[0.95rem]
           outline-none transition-all
-          focus:border-[#2e659d]
-          focus:ring-4 focus:ring-[#2e659d]/10
+          focus:border-navy
+          focus:ring-4 focus:ring-navy/10
         "
       />
 
@@ -30,8 +30,12 @@ const CaptchaCard = ({ value, onChange }) => {
         <div className="relative flex h-16 min-w-[220px] items-center justify-center overflow-hidden rounded-md border border-slate-300 bg-slate-100">
           <div className="absolute inset-0 opacity-30 [background-image:linear-gradient(90deg,#64748b_1px,transparent_1px),linear-gradient(#64748b_1px,transparent_1px)] [background-size:10px_10px]" />
 
-          <span className="relative select-none text-2xl font-black tracking-[0.45em] text-slate-800 line-through">
-            7F2K9
+          <span className="relative flex select-none gap-0.5 text-2xl font-black text-slate-700">
+            <span className="-rotate-3">7</span>
+            <span className="rotate-2">F</span>
+            <span className="-rotate-1">2</span>
+            <span className="rotate-3">K</span>
+            <span className="-rotate-2">9</span>
           </span>
         </div>
 
@@ -39,7 +43,7 @@ const CaptchaCard = ({ value, onChange }) => {
           <button
             type="button"
             aria-label="Listen to CAPTCHA"
-            className="grid h-11 w-11 place-items-center rounded-md border border-slate-300 bg-white text-slate-600 transition-colors hover:border-[#315b91] hover:text-[#315b91]"
+            className="grid h-11 w-11 place-items-center rounded-md border border-slate-300 bg-white text-slate-600 transition-colors hover:border-navy hover:text-navy"
           >
             <Volume2 size={17} />
           </button>
@@ -47,7 +51,7 @@ const CaptchaCard = ({ value, onChange }) => {
           <button
             type="button"
             aria-label="Refresh CAPTCHA"
-            className="grid h-11 w-11 place-items-center rounded-md border border-slate-300 bg-white text-slate-600 transition-colors hover:border-[#315b91] hover:text-[#315b91]"
+            className="grid h-11 w-11 place-items-center rounded-md border border-slate-300 bg-white text-slate-600 transition-colors hover:border-navy hover:text-navy"
           >
             <RefreshCcw size={17} />
           </button>

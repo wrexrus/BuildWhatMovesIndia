@@ -17,7 +17,7 @@ const PageTransition = () => {
         fixed
         inset-x-0
         top-0
-        z-[9999]
+        z-[60]
         h-[3px]
         overflow-hidden
       "
@@ -29,10 +29,10 @@ const PageTransition = () => {
           w-[35%]
           rounded-r-full
           bg-gradient-to-r
-          from-[#315B91]
-          via-[#18B8B6]
-          to-[#F2B84B]
-          shadow-[0_0_8px_rgba(24,184,182,0.35)]
+          from-navy
+          via-navy-hover
+          to-amber
+          shadow-[0_0_8px_rgba(232,161,27,0.35)]
           animate-page-progress
         "
       />
