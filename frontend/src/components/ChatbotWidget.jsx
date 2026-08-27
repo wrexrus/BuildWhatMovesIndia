@@ -1,175 +1,341 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useLocation } from 'react-router-dom';
-import { 
-  MessageSquare, 
-  X, 
-  Send, 
-  Sparkles, 
-  ChevronRight, 
-  HelpCircle, 
-  UserCheck, 
-  AlertCircle, 
-  Volume2, 
-  VolumeX, 
-  PhoneCall, 
-  ArrowRight, 
-  ShieldCheck, 
-  Briefcase, 
-  ShoppingBag, 
-  Compass,
-  CheckCircle2,
-  Bot,
+import React, {
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import { useLocation } from "react-router-dom";
+import {
+  AlertCircle,
+  ArrowRight,
+  ChevronRight,
+  FileText,
+  HelpCircle,
+  MessageSquare,
   Mic,
-  MicOff,
-  Square
-} from 'lucide-react';
-import { sendCopilotQuery, fetchAccountHarness, resolveMismatch } from '../utils/api';
-import { SUPPORTED_LANGUAGES, WELCOME_MESSAGES, QUICK_ACTIONS, UI_LABELS } from '../config/chatbotConfig';
-import { useAuth } from '../context/AuthContext';
-import { useToast } from '../context/ToastContext';
-import { useLanguage } from '../context/LanguageContext';
-import { speakTextInLanguage, stopSpeech } from '../utils/speechUtils';
+  PhoneCall,
+  Send,
+  Square,
+  UserCheck,
+  Volume2,
+  VolumeX,
+  X,
+} from "lucide-react";
+
+import {
+  sendCopilotQuery,
+  fetchAccountHarness,
+  resolveMismatch,
+} from "../utils/api";
+
+import {
+  SUPPORTED_LANGUAGES,
+  WELCOME_MESSAGES,
+  QUICK_ACTIONS,
+  UI_LABELS,
+} from "../config/chatbotConfig";
+
+import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
+import { useLanguage } from "../context/LanguageContext";
+
+import {
+  speakTextInLanguage,
+  stopSpeech,
+} from "../utils/speechUtils";
 
 const ChatbotWidget = () => {
   const { user, isLoggedIn } = useAuth();
   const { showToast } = useToast() || {};
-  const { language: globalLanguage } = useLanguage();
+  const { language: globalLanguage } =
+    useLanguage();
+
   const location = useLocation();
 
+  /* ------------------------------------------------------------------
+   * Core widget state
+   * ---------------------------------------------------------------- */
+
   const [isOpen, setIsOpen] = useState(false);
-  const [query, setQuery] = useState('');
-  
-  const [chatLanguage, setChatLanguage] = useState(globalLanguage || 'HI');
+  const [query, setQuery] = useState("");
+  const [chatLanguage, setChatLanguage] =
+    useState(globalLanguage || "HI");
 
-  const [explanationMode, setExplanationMode] = useState('SHOPKEEPER');
+  const [explanationMode, setExplanationMode] =
+    useState("SHOPKEEPER");
+
   const [loading, setLoading] = useState(false);
-  const [showQuickActions, setShowQuickActions] = useState(true);
-  const [speakingIndex, setSpeakingIndex] = useState(null);
+  const [isStreaming, setIsStreaming] =
+    useState(false);
 
-  const [isStreaming, setIsStreaming] = useState(false);
+  const [showQuickActions, setShowQuickActions] =
+    useState(true);
 
-  const [harnessContext, setHarnessContext] = useState(null);
-  const [dynamicChips, setDynamicChips] = useState([]);
-  const [isListening, setIsListening] = useState(false);
+  const [speakingIndex, setSpeakingIndex] =
+    useState(null);
+
+  const [harnessContext, setHarnessContext] =
+    useState(null);
+
+  const [dynamicChips, setDynamicChips] =
+    useState([]);
+
+  /* ------------------------------------------------------------------
+   * Voice
+   * ---------------------------------------------------------------- */
+
+  const [isListening, setIsListening] =
+    useState(false);
+
   const isListeningRef = useRef(false);
   const recognitionRef = useRef(null);
 
+  /* ------------------------------------------------------------------
+   * Conversation
+   * ---------------------------------------------------------------- */
+
+  const messagesEndRef = useRef(null);
+
+  const labels =
+    UI_LABELS[chatLanguage] ||
+    UI_LABELS.EN;
+
+  /* ------------------------------------------------------------------
+   * Voice recognition
+   * ---------------------------------------------------------------- */
+
   const cleanupRecognition = () => {
-    if (recognitionRef.current) {
-      try {
-        recognitionRef.current.onresult = null;
-        recognitionRef.current.onerror = null;
-        recognitionRef.current.onend = null;
-        recognitionRef.current.stop();
-      } catch (e) {}
-      recognitionRef.current = null;
+    if (!recognitionRef.current) {
+      return;
     }
+
+    try {
+      recognitionRef.current.onresult = null;
+      recognitionRef.current.onerror = null;
+      recognitionRef.current.onend = null;
+      recognitionRef.current.stop();
+    } catch (error) {
+      // Recognition may already have ended.
+    }
+
+    recognitionRef.current = null;
   };
 
   const startListeningLoop = () => {
-    if (typeof window === 'undefined') return;
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) return;
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const SpeechRecognition =
+      window.SpeechRecognition ||
+      window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      return;
+    }
 
     cleanupRecognition();
 
     try {
-      const recognition = new SpeechRecognition();
-      recognitionRef.current = recognition;
+      const recognition =
+        new SpeechRecognition();
+
+      recognitionRef.current =
+        recognition;
+
       recognition.continuous = false;
       recognition.interimResults = true;
 
-      const localeMap = { HI: 'hi-IN', HINGLISH: 'hi-IN', MR: 'mr-IN', TA: 'ta-IN', PA: 'pa-IN', GU: 'gu-IN', EN: 'en-IN' };
-      recognition.lang = localeMap[chatLanguage] || 'hi-IN';
+      const localeMap = {
+        HI: "hi-IN",
+        HINGLISH: "hi-IN",
+        MR: "mr-IN",
+        TA: "ta-IN",
+        PA: "pa-IN",
+        GU: "gu-IN",
+        EN: "en-IN",
+      };
+
+      recognition.lang =
+        localeMap[chatLanguage] ||
+        "hi-IN";
 
       recognition.onresult = (event) => {
-        let transcript = '';
-        for (let i = event.resultIndex; i < event.results.length; i++) {
-          transcript += event.results[i][0].transcript;
+        let transcript = "";
+
+        for (
+          let i = event.resultIndex;
+          i < event.results.length;
+          i += 1
+        ) {
+          transcript +=
+            event.results[i][0].transcript;
         }
+
         if (transcript.trim()) {
           setQuery(transcript.trim());
         }
       };
 
-      recognition.onerror = (err) => {
-        if (err.error === 'aborted') return;
-        
-        if (err.error === 'network') {
-          isListeningRef.current = false;
-          setIsListening(false);
-          cleanupRecognition();
-          
-          // Provide instant fallback demo query if network voice fails in browser
-          const defaultVoiceQuery = chatLanguage === 'MR' 
-            ? 'GSTR-3B kiti bharaicha aahe?'
-            : chatLanguage === 'HI'
-            ? 'Asian Paints ka bill kyon unfiled hai?'
-            : 'What is my net GST tax payable?';
-          
-          setQuery(defaultVoiceQuery);
-          if (showToast) showToast('🎙️ Captured voice query!', 'info', 'Voice Input Active');
+      recognition.onerror = (event) => {
+        if (event.error === "aborted") {
           return;
         }
 
-        if (isListeningRef.current && err.error === 'no-speech') {
-          setTimeout(() => {
-            if (isListeningRef.current) startListeningLoop();
+        if (event.error === "network") {
+          isListeningRef.current = false;
+          setIsListening(false);
+          cleanupRecognition();
+
+          const fallbackQuery =
+            chatLanguage === "MR"
+              ? "GSTR-3B kiti bharaicha aahe?"
+              : chatLanguage === "HI"
+              ? "Asian Paints ka bill kyon unfiled hai?"
+              : "What is my net GST tax payable?";
+
+          setQuery(fallbackQuery);
+
+          if (showToast) {
+            showToast(
+              "Voice input captured.",
+              "info",
+              "Voice input"
+            );
+          }
+
+          return;
+        }
+
+        if (
+          isListeningRef.current &&
+          event.error === "no-speech"
+        ) {
+          window.setTimeout(() => {
+            if (isListeningRef.current) {
+              startListeningLoop();
+            }
           }, 300);
         }
       };
 
       recognition.onend = () => {
         if (isListeningRef.current) {
-          setTimeout(() => {
-            if (isListeningRef.current) startListeningLoop();
+          window.setTimeout(() => {
+            if (isListeningRef.current) {
+              startListeningLoop();
+            }
           }, 200);
         }
       };
 
       recognition.start();
-    } catch (err) {
+    } catch (error) {
       isListeningRef.current = false;
       setIsListening(false);
     }
   };
 
   const handleMicToggle = () => {
-    if (typeof window === 'undefined') return;
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-      if (showToast) showToast('Voice recognition not supported on this browser.', 'warning');
-      else alert('Voice recognition not supported on this browser.');
+    if (typeof window === "undefined") {
       return;
     }
 
-    // Stop recording and Auto-Send
+    const SpeechRecognition =
+      window.SpeechRecognition ||
+      window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      if (showToast) {
+        showToast(
+          "Voice recognition is not supported on this browser.",
+          "warning"
+        );
+      }
+
+      return;
+    }
+
     if (isListening) {
       isListeningRef.current = false;
       setIsListening(false);
       cleanupRecognition();
 
-      setTimeout(() => {
-        setQuery(currentQuery => {
-          if (currentQuery && currentQuery.trim()) {
-            handleSendQuery(currentQuery.trim());
+      window.setTimeout(() => {
+        setQuery((currentQuery) => {
+          if (currentQuery?.trim()) {
+            handleSendQuery(
+              currentQuery.trim()
+            );
           }
+
           return currentQuery;
         });
       }, 300);
+
       return;
     }
 
-    // Start Recording Loop
     isListeningRef.current = true;
     setIsListening(true);
-    if (showToast) showToast('🔴 Recording voice input... Speak now! Tap Stop & Send when done.', 'info', 'Voice Recorder Active');
+
+    if (showToast) {
+      showToast(
+        "Voice input is active.",
+        "info",
+        "Voice input"
+      );
+    }
+
     startListeningLoop();
   };
 
-  const messagesEndRef = useRef(null);
-  const labels = UI_LABELS[chatLanguage] || UI_LABELS.EN;
+  /* ------------------------------------------------------------------
+   * Welcome message
+   * ---------------------------------------------------------------- */
+
+  const getWelcomeMessage = (lang) => {
+    const defaultWelcome =
+      WELCOME_MESSAGES[lang] ||
+      WELCOME_MESSAGES.EN;
+
+    if (!isLoggedIn || !user) {
+      return defaultWelcome;
+    }
+
+    const name = user.name || "Taxpayer";
+
+    const store = user.tradeName
+      ? ` (${user.tradeName})`
+      : "";
+
+    if (lang === "HI") {
+      return `नमस्ते ${name} जी${store}! मैं आपका GST साथी Copilot हूँ। GSTR-3B, बिल में अंतर, टैक्स क्रेडिट या पोर्टल फाइलिंग में मदद के लिए तैयार हूँ।`;
+    }
+
+    if (lang === "MR") {
+      return `नमस्कार ${name} जी${store}! मी तुमचा GST साथी Copilot आहे. GSTR-3B, बिल फरक, टॅक्स क्रेडिट किंवा पोर्टल रिटर्नमध्ये मदत करण्यास तयार आहे।`;
+    }
+
+    return `Hello ${name} ji${store}! I am your GST Copilot. Ask me anything about GSTR-3B, supplier mismatches, tax credit rules, or portal filing.`;
+  };
+
+  const [messages, setMessages] = useState([
+    {
+      sender: "bot",
+      text: WELCOME_MESSAGES.HI,
+      time: new Date().toLocaleTimeString(
+        [],
+        {
+          hour: "2-digit",
+          minute: "2-digit",
+        }
+      ),
+    },
+  ]);
+
+  /* ------------------------------------------------------------------
+   * Language
+   * ---------------------------------------------------------------- */
 
   useEffect(() => {
     if (globalLanguage) {
@@ -178,92 +344,185 @@ const ChatbotWidget = () => {
   }, [globalLanguage]);
 
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape' && isOpen) {
+    setMessages((previous) => {
+      if (
+        previous.length === 1 &&
+        previous[0].sender === "bot"
+      ) {
+        return [
+          {
+            sender: "bot",
+            text: getWelcomeMessage(
+              chatLanguage
+            ),
+            time: new Date().toLocaleTimeString(
+              [],
+              {
+                hour: "2-digit",
+                minute: "2-digit",
+              }
+            ),
+          },
+        ];
+      }
+
+      return previous;
+    });
+  }, [
+    user,
+    isLoggedIn,
+    chatLanguage,
+  ]);
+
+  const handleChatLanguageChange = (
+    newLang
+  ) => {
+    stopSpeech();
+    setSpeakingIndex(null);
+    setChatLanguage(newLang);
+
+    setMessages((previous) => [
+      ...previous,
+      {
+        sender: "bot",
+        text: getWelcomeMessage(
+          newLang
+        ),
+        time:
+          new Date().toLocaleTimeString(
+            [],
+            {
+              hour: "2-digit",
+              minute: "2-digit",
+            }
+          ),
+      },
+    ]);
+  };
+
+  /* ------------------------------------------------------------------
+   * Global events
+   * ---------------------------------------------------------------- */
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (
+        event.key === "Escape" &&
+        isOpen
+      ) {
         setIsOpen(false);
         stopSpeech();
         setSpeakingIndex(null);
       }
     };
 
-    const handleOpenCopilotEvent = (e) => {
-      const targetQuery = e.detail?.query;
+    const handleOpenCopilotEvent = (
+      event
+    ) => {
+      const targetQuery =
+        event.detail?.query;
+
       setIsOpen(true);
+
       if (targetQuery) {
-        handleSendQuery(targetQuery);
+        handleSendQuery(
+          targetQuery
+        );
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
-    window.addEventListener('open-gst-copilot', handleOpenCopilotEvent);
+    window.addEventListener(
+      "keydown",
+      handleKeyDown
+    );
+
+    window.addEventListener(
+      "open-gst-copilot",
+      handleOpenCopilotEvent
+    );
 
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-      window.removeEventListener('open-gst-copilot', handleOpenCopilotEvent);
+      window.removeEventListener(
+        "keydown",
+        handleKeyDown
+      );
+
+      window.removeEventListener(
+        "open-gst-copilot",
+        handleOpenCopilotEvent
+      );
+
+      cleanupRecognition();
     };
-  }, [isOpen, chatLanguage, explanationMode, harnessContext]);
+  }, [
+    isOpen,
+    chatLanguage,
+    explanationMode,
+    harnessContext,
+  ]);
+
+  /* ------------------------------------------------------------------
+   * Account harness
+   * ---------------------------------------------------------------- */
 
   useEffect(() => {
     let isMounted = true;
-    async function loadHarness() {
+
+    const loadHarness = async () => {
       try {
-        const gstin = isLoggedIn && user ? user.gstin : '';
-        const harness = await fetchAccountHarness(gstin, chatLanguage);
-        if (isMounted && harness?.success) {
+        const gstin =
+          isLoggedIn && user
+            ? user.gstin
+            : "";
+
+        const harness =
+          await fetchAccountHarness(
+            gstin,
+            chatLanguage
+          );
+
+        if (
+          isMounted &&
+          harness?.success
+        ) {
           setHarnessContext(harness);
-          if (harness.quickActionChips && harness.quickActionChips.length > 0) {
-            setDynamicChips(harness.quickActionChips);
+
+          if (
+            harness.quickActionChips &&
+            harness.quickActionChips.length
+          ) {
+            setDynamicChips(
+              harness.quickActionChips
+            );
           }
         }
-      } catch (err) {
-        console.warn("Account harness fetch fallback:", err.message);
+      } catch (error) {
+        console.warn(
+          "Account harness fetch fallback:",
+          error.message
+        );
       }
-    }
+    };
+
     loadHarness();
-    return () => { isMounted = false; };
-  }, [user, isLoggedIn, chatLanguage]);
 
-  const getWelcomeMessage = (lang) => {
-    const defaultWelcome = WELCOME_MESSAGES[lang] || WELCOME_MESSAGES.EN;
-    if (!isLoggedIn || !user) {
-      return defaultWelcome;
-    }
-
-    const name = user.name || 'Taxpayer';
-    const store = user.tradeName ? ` (${user.tradeName})` : '';
-
-    if (lang === 'HI') {
-      return `नमस्ते ${name} जी${store}! मैं आपका GST साथी Copilot हूँ। GSTR-3B, बिल में अंतर, टैक्स क्रेडिट या पोर्टल फाइलिंग में मदद के लिए तैयार हूँ।`;
-    } else if (lang === 'MR') {
-      return `नमस्कार ${name} जी${store}! मी तुमचा GST साथी Copilot आहे. GSTR-3B, बिल फरक, टॅक्स क्रेडिट किंवा पोर्टल रिटर्नमध्ये मदत करण्यास तयार आहे।`;
-    }
-    return `Hello ${name} ji${store}! I am your GST Copilot. Ask me anything about GSTR-3B, supplier mismatches, tax credit rules, or portal filing.`;
-  };
-
-  const [messages, setMessages] = useState([
-    {
-      sender: 'bot',
-      text: WELCOME_MESSAGES.HI,
-      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    }
+    return () => {
+      isMounted = false;
+    };
+  }, [
+    user,
+    isLoggedIn,
+    chatLanguage,
   ]);
 
-  useEffect(() => {
-    setMessages(prev => {
-      if (prev.length === 1 && prev[0].sender === 'bot') {
-        return [
-          {
-            sender: 'bot',
-            text: getWelcomeMessage(chatLanguage),
-            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-          }
-        ];
-      }
-      return prev;
-    });
-  }, [user, isLoggedIn, chatLanguage]);
+  /* ------------------------------------------------------------------
+   * Speech
+   * ---------------------------------------------------------------- */
 
-  const handleSpeak = (text, index) => {
+  const handleSpeak = (
+    text,
+    index
+  ) => {
     if (speakingIndex === index) {
       stopSpeech();
       setSpeakingIndex(null);
@@ -271,462 +530,1071 @@ const ChatbotWidget = () => {
     }
 
     setSpeakingIndex(index);
-    speakTextInLanguage(text, chatLanguage, () => {
-      setSpeakingIndex(null);
-    }, () => {
-      setSpeakingIndex(null);
-    });
+
+    speakTextInLanguage(
+      text,
+      chatLanguage,
+      () => setSpeakingIndex(null),
+      () => setSpeakingIndex(null)
+    );
   };
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  /* ------------------------------------------------------------------
+   * Auto-scroll
+   * ---------------------------------------------------------------- */
 
   useEffect(() => {
-    if (isOpen) {
-      scrollToBottom();
+    if (!isOpen) {
+      return;
     }
-  }, [messages, loading, isStreaming, isOpen]);
 
-  const toggleChat = () => setIsOpen(!isOpen);
-
-  const handleChatLanguageChange = (newLang) => {
-    stopSpeech();
-    setSpeakingIndex(null);
-    setChatLanguage(newLang);
-    const welcome = getWelcomeMessage(newLang);
-    setMessages(prev => [
-      ...prev,
+    messagesEndRef.current?.scrollIntoView(
       {
-        sender: 'bot',
-        text: welcome,
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        behavior: "smooth",
       }
-    ]);
-  };
+    );
+  }, [
+    messages,
+    loading,
+    isStreaming,
+    isOpen,
+  ]);
 
-  const streamBotResponse = (fullText, status, source) => {
+  /* ------------------------------------------------------------------
+   * Stream response
+   * ---------------------------------------------------------------- */
+
+  const streamBotResponse = (
+    fullText,
+    status,
+    source
+  ) => {
     setIsStreaming(true);
-    const words = fullText.split(' ');
-    let currentText = '';
-    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-    setMessages(prev => [
-      ...prev,
+    const words = fullText.split(" ");
+    let currentText = "";
+
+    const time =
+      new Date().toLocaleTimeString(
+        [],
+        {
+          hour: "2-digit",
+          minute: "2-digit",
+        }
+      );
+
+    setMessages((previous) => [
+      ...previous,
       {
-        sender: 'bot',
-        text: '',
+        sender: "bot",
+        text: "",
         time,
         status,
-        source
-      }
+        source,
+      },
     ]);
 
-    let i = 0;
-    const interval = setInterval(() => {
-      if (i < words.length) {
-        currentText += (i === 0 ? '' : ' ') + words[i];
-        const textToUpdate = currentText;
-        setMessages(prev => {
-          const updated = [...prev];
-          const lastIdx = updated.length - 1;
-          if (lastIdx >= 0 && updated[lastIdx].sender === 'bot') {
-            updated[lastIdx] = { ...updated[lastIdx], text: textToUpdate };
-          }
-          return updated;
-        });
-        i++;
-      } else {
-        clearInterval(interval);
+    let index = 0;
+
+    const interval =
+      window.setInterval(() => {
+        if (index < words.length) {
+          currentText +=
+            (index === 0
+              ? ""
+              : " ") +
+            words[index];
+
+          const nextText =
+            currentText;
+
+          setMessages(
+            (previous) => {
+              const updated = [
+                ...previous,
+              ];
+
+              const lastIndex =
+                updated.length - 1;
+
+              if (
+                lastIndex >= 0 &&
+                updated[lastIndex]
+                  .sender === "bot"
+              ) {
+                updated[lastIndex] = {
+                  ...updated[lastIndex],
+                  text: nextText,
+                };
+              }
+
+              return updated;
+            }
+          );
+
+          index += 1;
+          return;
+        }
+
+        window.clearInterval(
+          interval
+        );
+
         setIsStreaming(false);
-      }
-    }, 48);
+      }, 48);
   };
 
-  const handleSendQuery = async (queryText) => {
-    const textToSend = queryText || query;
-    if (!textToSend.trim() || loading || isStreaming) return;
+  /* ------------------------------------------------------------------
+   * Send query
+   * ---------------------------------------------------------------- */
+
+  const handleSendQuery = async (
+    queryText
+  ) => {
+    const textToSend =
+      queryText || query;
+
+    if (
+      !textToSend.trim() ||
+      loading ||
+      isStreaming
+    ) {
+      return;
+    }
 
     stopSpeech();
     setSpeakingIndex(null);
-    setQuery('');
-    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    setQuery("");
 
-    setMessages(prev => [...prev, { sender: 'user', text: textToSend.trim(), time }]);
+    setMessages((previous) => [
+      ...previous,
+      {
+        sender: "user",
+        text: textToSend.trim(),
+        time:
+          new Date().toLocaleTimeString(
+            [],
+            {
+              hour: "2-digit",
+              minute: "2-digit",
+            }
+          ),
+      },
+    ]);
+
     setLoading(true);
 
     try {
-      const activePath = location.pathname;
-      const response = await sendCopilotQuery(
-        textToSend.trim(),
-        chatLanguage,
-        activePath,
-        user ? user.gstin : null,
-        explanationMode
+      const response =
+        await sendCopilotQuery(
+          textToSend.trim(),
+          chatLanguage,
+          location.pathname,
+          user
+            ? user.gstin
+            : null,
+          explanationMode
+        );
+
+      const botText =
+        response.data?.answer ||
+        getWelcomeMessage(
+          chatLanguage
+        );
+
+      setLoading(false);
+
+      streamBotResponse(
+        botText,
+        response.data?.status,
+        response.data?.source
       );
-
-      const botText = response.data?.answer || getWelcomeMessage(chatLanguage);
+    } catch (error) {
       setLoading(false);
-      
-      streamBotResponse(botText, response.data?.status, response.data?.source);
 
-    } catch (err) {
-      setLoading(false);
-      setMessages(prev => [
-        ...prev,
+      setMessages((previous) => [
+        ...previous,
         {
-          sender: 'bot',
-          text: chatLanguage === 'HI'
-            ? "क्षमा करें, GST साथी Copilot सर्वर से जुड़ने में समस्या हो रही है। कृपया पुनः प्रयास करें।"
-            : "Sorry, I am having trouble reaching the GST Copilot server. Please try again.",
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-          isError: true
-        }
+          sender: "bot",
+          text:
+            chatLanguage === "HI"
+              ? "क्षमा करें, GST साथी Copilot सर्वर से जुड़ने में समस्या हो रही है। कृपया पुनः प्रयास करें।"
+              : "Sorry, I am having trouble reaching the GST Copilot server. Please try again.",
+          time:
+            new Date().toLocaleTimeString(
+              [],
+              {
+                hour: "2-digit",
+                minute: "2-digit",
+              }
+            ),
+          isError: true,
+        },
       ]);
     }
   };
 
-  const handleActionCardClick = async (actionType, payload) => {
-    if (actionType === 'CALL_SUPPLIER') {
+  /* ------------------------------------------------------------------
+   * Contextual actions
+   * ---------------------------------------------------------------- */
+
+  const handleActionCardClick = async (
+    actionType,
+    payload
+  ) => {
+    if (
+      actionType ===
+      "CALL_SUPPLIER"
+    ) {
       if (showToast) {
-        showToast(`Calling ${payload.supplier || 'Asian Paints'} GSTR-1 Accounts Desk...`, 'info', 'Supplier Reminder Sent');
-      } else {
-        alert(`Reminder: Contacting ${payload.supplier} to request GSTR-1 upload.`);
+        showToast(
+          `Reminder sent to ${
+            payload.supplier ||
+            "supplier"
+          }'s GSTR-1 accounts desk.`,
+          "info",
+          "Supplier reminder"
+        );
       }
-    } else if (actionType === 'DEFER_ITC') {
+
+      return;
+    }
+
+    if (actionType === "DEFER_ITC") {
       try {
-        await resolveMismatch('INV-002', 'AP/2026/045', 'DEFER_TO_NEXT_MONTH');
+        await resolveMismatch(
+          "INV-002",
+          "AP/2026/045",
+          "DEFER_TO_NEXT_MONTH"
+        );
+
         if (showToast) {
-          showToast('₹4,500 ITC safely deferred to next month. Penalty avoided!', 'success', 'ITC Resolved');
+          showToast(
+            "₹4,500 ITC deferred to next month.",
+            "success",
+            "ITC resolution"
+          );
         }
-        handleSendQuery("Show my updated GSTR-3B tax payable breakdown.");
-      } catch (err) {
-        if (showToast) showToast('Failed to defer ITC.', 'error');
+
+        handleSendQuery(
+          "Show my updated GSTR-3B tax payable breakdown."
+        );
+      } catch (error) {
+        if (showToast) {
+          showToast(
+            "Failed to defer ITC.",
+            "error"
+          );
+        }
       }
     }
   };
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
+  const handleFormSubmit = (
+    event
+  ) => {
+    event.preventDefault();
     handleSendQuery(query);
   };
 
-  const activeQuickActions = (dynamicChips && dynamicChips.length > 0)
-    ? dynamicChips
-    : (QUICK_ACTIONS[chatLanguage] || QUICK_ACTIONS.EN);
+  const activeQuickActions =
+    dynamicChips?.length
+      ? dynamicChips
+      : QUICK_ACTIONS[
+          chatLanguage
+        ] || QUICK_ACTIONS.EN;
+
+  const hasPendingActions =
+    Boolean(
+      harnessContext?.pendingToDos
+        ?.length
+    );
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 font-sans">
-      <style>{`
-        @keyframes copilotPanelIn {
-          from { opacity: 0; transform: translateY(12px) scale(0.97); }
-          to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        @keyframes copilotFloat {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-3px); }
-        }
-        .copilot-panel-in { animation: copilotPanelIn 220ms cubic-bezier(0.16, 1, 0.3, 1) both; }
-        .copilot-launcher { animation: copilotFloat 3.2s ease-in-out infinite; }
-        .copilot-launcher:hover { animation-play-state: paused; }
-        @media (prefers-reduced-motion: reduce) {
-          .copilot-panel-in, .copilot-launcher { animation: none; }
-        }
-      `}</style>
-
+    <div
+      className="
+        fixed
+        bottom-[max(16px,env(safe-area-inset-bottom))]
+        right-[max(16px,env(safe-area-inset-right))]
+        z-50
+        font-sans
+      "
+    >
+      {/* ============================================================
+          FLOATING LAUNCHER
+      ============================================================= */}
       {!isOpen && (
         <button
-          onClick={toggleChat}
-          className="copilot-launcher bg-navy-2 hover:bg-navy text-white px-4 py-3.5 rounded-full shadow-lg hover:shadow-xl flex items-center justify-center space-x-2.5 transition-all duration-200 border border-white/15 cursor-pointer group active:translate-y-px hover:scale-[1.03]"
-          title="GST Copilot - Understand. Fix. File. (Press Esc to close)"
-          aria-label="Open GST Copilot Assistant"
+          type="button"
+          onClick={() =>
+            setIsOpen(true)
+          }
+          aria-label="Open GST Copilot"
+          title="Open GST Copilot"
+          className="
+            group
+            relative
+            flex
+            items-center
+            gap-2.5
+            rounded-[15px]
+            border
+            border-navy
+            bg-navy
+            px-3.5
+            py-2.5
+            text-sm
+            font-semibold
+            text-white
+            shadow-[0_10px_30px_rgba(8,54,95,0.20)]
+            transition-all
+            duration-200
+            hover:-translate-y-0.5
+            hover:bg-navy-hover
+            hover:shadow-[0_14px_34px_rgba(8,54,95,0.24)]
+            active:translate-y-px
+          "
         >
-          <Sparkles className="w-5 h-5 text-amber group-hover:rotate-12 transition-transform" />
-          <span className="text-xs font-bold text-white tracking-wide">GST Copilot</span>
-          <span className="bg-amber text-navy text-[10px] font-black px-1.5 py-0.5 rounded-full border border-white">
-            AI
+          <span
+            className="
+              flex
+              h-7
+              w-7
+              items-center
+              justify-center
+              rounded-[10px]
+              bg-white/10
+            "
+            aria-hidden="true"
+          >
+            <MessageSquare
+              className="h-4 w-4 text-white"
+              strokeWidth={1.8}
+            />
           </span>
+
+          <span>GST Copilot</span>
+
+          {/* meaningful activity / availability indicator */}
+          <span
+            className="
+              absolute
+              -right-1
+              -top-1
+              h-2.5
+              w-2.5
+              rounded-full
+              border-2
+              border-white
+              bg-amber
+            "
+            aria-hidden="true"
+          />
         </button>
       )}
 
+      {/* ============================================================
+          ASSISTANT WINDOW
+      ============================================================= */}
       {isOpen && (
-        <div className="copilot-panel-in origin-bottom-right bg-white rounded-2xl shadow-2xl w-[95vw] sm:w-[500px] border border-slate-200/90 flex flex-col h-[670px] max-h-[90vh] overflow-hidden">
-          
-          <div className="bg-gradient-to-r from-navy-2 via-navy to-navy-2 text-white px-5 py-3.5 flex items-center justify-between shadow-md shrink-0">
-            <div className="flex items-center space-x-3 min-w-0">
-              <div className="p-2 bg-white/10 rounded-xl relative shrink-0">
-                <Sparkles className="w-5 h-5 text-amber" />
-                <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-emerald-400 border border-navy animate-pulse" />
+        <section
+          aria-label="GST Copilot"
+          className="
+            flex
+            w-[min(420px,calc(100vw-24px))]
+            flex-col
+            overflow-hidden
+            rounded-[16px]
+            border
+            border-line/80
+            bg-white
+            shadow-[0_22px_60px_rgba(16,35,58,0.15)]
+          "
+          style={{
+            height:
+              "min(610px, calc(100dvh - 30px))",
+          }}
+        >
+          {/* ========================================================
+              HEADER
+          ========================================================= */}
+          <header className="shrink-0 bg-white">
+            <div className="flex items-center justify-between px-4 py-3.5">
+              <div className="flex min-w-0 items-center gap-2.5">
+                <div
+                  className="
+                    flex
+                    h-8
+                    w-8
+                    shrink-0
+                    items-center
+                    justify-center
+                    rounded-[10px]
+                    bg-shell
+                  "
+                >
+                  <MessageSquare
+                    className="h-4 w-4 text-navy"
+                    strokeWidth={1.7}
+                  />
+                </div>
+
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-[13px] font-semibold tracking-[-0.01em] text-ink">
+                      GST Copilot
+                    </h2>
+
+                    <span
+                      className="
+                        flex
+                        items-center
+                        gap-1.5
+                        text-[9px]
+                        font-medium
+                        text-green
+                      "
+                    >
+                      <span className="h-1.5 w-1.5 rounded-full bg-green" />
+                      Available
+                    </span>
+                  </div>
+
+                  <p className="mt-0.5 truncate text-[9px] text-muted">
+                    GST assistance for this page
+                  </p>
+                </div>
               </div>
-              <div className="min-w-0">
-                <h3 className="font-bold text-sm leading-tight text-white flex items-center gap-2 truncate">
-                  <span>GST Copilot</span>
-                  <span className="text-[10px] font-medium text-amber bg-amber/15 border border-amber/30 px-2 py-0.5 rounded-full">
-                    AI Assistant
+
+              <div className="flex items-center gap-1.5">
+                <select
+                  value={chatLanguage}
+                  onChange={(event) =>
+                    handleChatLanguageChange(
+                      event.target.value
+                    )
+                  }
+                  className="
+                    h-7
+                    rounded-[8px]
+                    border-0
+                    bg-shell
+                    px-2
+                    text-[10px]
+                    font-medium
+                    text-ink
+                    focus:outline-none
+                  "
+                  aria-label="Assistant language"
+                >
+                  {SUPPORTED_LANGUAGES.map(
+                    (lang) => (
+                      <option
+                        key={lang.code}
+                        value={lang.code}
+                      >
+                        {lang.name}
+                      </option>
+                    )
+                  )}
+                </select>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsOpen(false);
+                    stopSpeech();
+                    setSpeakingIndex(null);
+                  }}
+                  className="
+                    flex
+                    h-7
+                    w-7
+                    items-center
+                    justify-center
+                    rounded-[8px]
+                    text-muted
+                    transition-colors
+                    hover:bg-shell
+                    hover:text-ink
+                  "
+                  aria-label="Close GST Copilot"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+            </div>
+
+            <div className="border-t border-line/70 px-4 py-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5 text-[9px] text-muted">
+                  <span className="font-medium text-ink">
+                    Context
                   </span>
-                </h3>
-                <div className="flex items-center gap-2 mt-0.5">
-                  <p className="text-[11px] text-white/70 flex items-center gap-1 truncate">
-                    {isLoggedIn && user ? (
+
+                  <span className="text-line">
+                    /
+                  </span>
+
+                  <span className="truncate">
+                    {location.pathname
+                      .replace(
+                        /^\//,
+                        ""
+                      )
+                      .replace(
+                        /\//g,
+                        " / "
+                      ) ||
+                      "Current page"}
+                  </span>
+                </div>
+
+                {isLoggedIn && user && (
+                  <span className="flex items-center gap-1 text-[9px] text-green">
+                    <UserCheck className="h-3 w-3" />
+                    Account linked
+                  </span>
+                )}
+              </div>
+            </div>
+          </header>
+
+          {/* ========================================================
+              OPTIONAL ACCOUNT NOTICE
+          ========================================================= */}
+          {hasPendingActions && (
+            <button
+              type="button"
+              onClick={() =>
+                handleSendQuery(
+                  "What are my pending action items and how do I solve them step-by-step?"
+                )
+              }
+              className="
+                flex
+                shrink-0
+                items-center
+                justify-between
+                border-t
+                border-b
+                border-[#e8c980]
+                bg-[#fffaf0]
+                px-4
+                py-2
+                text-left
+                transition-colors
+                hover:bg-[#fff7e2]
+              "
+            >
+              <span className="flex items-center gap-2 text-[10px] font-medium text-[#6d5200]">
+                <AlertCircle className="h-3.5 w-3.5" />
+
+                {
+                  harnessContext.pendingToDos
+                    .length
+                }{" "}
+                pending action
+                {harnessContext.pendingToDos
+                  .length === 1
+                  ? ""
+                  : "s"}
+              </span>
+
+              <ArrowRight className="h-3.5 w-3.5 text-[#8d5d00]" />
+            </button>
+          )}
+
+          {/* ========================================================
+              SUGGESTED ACTIONS
+          ========================================================= */}
+          {showQuickActions && (
+            <div className="shrink-0 border-b border-line/70 bg-shell/30 px-4 py-2.5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <HelpCircle className="h-3 w-3 text-navy" />
+
+                  <span className="text-[9px] font-semibold uppercase tracking-[0.08em] text-muted">
+                    {isLoggedIn
+                      ? labels.harnessTitle
+                      : labels.quickTitle}
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    setShowQuickActions(
+                      false
+                    )
+                  }
+                  className="text-[9px] font-medium text-muted hover:text-navy"
+                >
+                  Hide
+                </button>
+              </div>
+
+              <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5">
+                {activeQuickActions
+                  .slice(0, 3)
+                  .map(
+                    (
+                      action,
+                      index
+                    ) => (
+                      <button
+                        key={index}
+                        type="button"
+                        onClick={() =>
+                          handleSendQuery(
+                            action.query
+                          )
+                        }
+                        disabled={
+                          loading ||
+                          isStreaming
+                        }
+                        className="
+                          group
+                          inline-flex
+                          items-center
+                          gap-1
+                          py-1
+                          text-left
+                          text-[10px]
+                          font-medium
+                          text-navy
+                          transition-colors
+                          hover:text-navy-hover
+                          disabled:opacity-50
+                        "
+                      >
+                        <span>
+                          {action.label}
+                        </span>
+
+                        <ChevronRight className="h-3 w-3 text-muted transition-transform group-hover:translate-x-0.5" />
+                      </button>
+                    )
+                  )}
+              </div>
+            </div>
+          )}
+
+          {/* ========================================================
+              CONVERSATION
+          ========================================================= */}
+          <div
+            className="
+              min-h-0
+              flex-1
+              overflow-y-auto
+              bg-[#fbfcfd]
+              px-4
+              py-5
+            "
+          >
+            <div className="mx-auto max-w-[65ch]">
+              <div className="space-y-6">
+                {messages.map(
+                  (
+                    message,
+                    index
+                  ) => {
+                    const textLower =
+                      message.text.toLowerCase();
+
+                    const isAsianPaints =
+                      textLower.includes(
+                        "asian paints"
+                      ) ||
+                      textLower.includes(
+                        "unfiled"
+                      );
+
+                    const isUser =
+                      message.sender ===
+                      "user";
+
+                    return (
+                      <article
+                        key={index}
+                        className={
+                          isUser
+                            ? "ml-8 border-l-2 border-navy/15 pl-3"
+                            : ""
+                        }
+                      >
+                        <div className="mb-1.5 flex items-center gap-2">
+                          <span
+                            className={`
+                              text-[9px]
+                              font-semibold
+                              uppercase
+                              tracking-[0.09em]
+                              ${
+                                isUser
+                                  ? "text-navy"
+                                  : "text-muted"
+                              }
+                            `}
+                          >
+                            {isUser
+                              ? "You"
+                              : "GST Copilot"}
+                          </span>
+
+                          <span className="text-[9px] text-muted/60">
+                            {message.time}
+                          </span>
+                        </div>
+
+                        <div
+                          className={`
+                            text-[12px]
+                            leading-[1.75]
+                            ${
+                              message.isError
+                                ? "text-red-800"
+                                : "text-ink"
+                            }
+                          `}
+                        >
+                          {message.text}
+                        </div>
+
+                        {/* ------------------------------------------
+                            CLEARLY SEPARATED ACTION AREA
+                        ------------------------------------------- */}
+                        {message.sender ===
+                          "bot" &&
+                          !message.isError &&
+                          isAsianPaints && (
+                            <div
+                              className="
+                                mt-4
+                                overflow-hidden
+                                rounded-[12px]
+                                border
+                                border-navy/10
+                                bg-white
+                                shadow-[0_2px_8px_rgba(16,35,58,0.035)]
+                              "
+                            >
+                              <div className="flex items-center justify-between border-b border-line bg-shell/45 px-3.5 py-2">
+                                <span className="text-[9px] font-semibold uppercase tracking-[0.08em] text-muted">
+                                  Available actions
+                                </span>
+
+                                <span className="text-[9px] text-muted/65">
+                                  Review before applying
+                                </span>
+                              </div>
+
+                              <div className="p-2">
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    handleActionCardClick(
+                                      "DEFER_ITC"
+                                    )
+                                  }
+                                  className="
+                                    flex
+                                    w-full
+                                    items-center
+                                    justify-between
+                                    rounded-[9px]
+                                    bg-navy
+                                    px-3
+                                    py-2.5
+                                    text-left
+                                    text-[11px]
+                                    font-semibold
+                                    text-white
+                                    transition-colors
+                                    hover:bg-navy-hover
+                                  "
+                                >
+                                  <span>
+                                    Defer ₹4,500 ITC
+                                  </span>
+
+                                  <ArrowRight className="h-3.5 w-3.5" />
+                                </button>
+
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    handleActionCardClick(
+                                      "CALL_SUPPLIER",
+                                      {
+                                        supplier:
+                                          "Asian Paints",
+                                      }
+                                    )
+                                  }
+                                  className="
+                                    mt-1
+                                    flex
+                                    w-full
+                                    items-center
+                                    justify-between
+                                    rounded-[9px]
+                                    px-3
+                                    py-2
+                                    text-left
+                                    text-[10px]
+                                    font-medium
+                                    text-ink
+                                    transition-colors
+                                    hover:bg-shell
+                                  "
+                                >
+                                  <span className="flex items-center gap-2">
+                                    <PhoneCall className="h-3.5 w-3.5 text-navy" />
+                                    {
+                                      labels.remindSupplier
+                                    }
+                                  </span>
+
+                                  <ChevronRight className="h-3.5 w-3.5 text-muted" />
+                                </button>
+                              </div>
+                            </div>
+                          )}
+
+                        {/* ------------------------------------------
+                            SPEAK ACTION
+                        ------------------------------------------- */}
+                        {message.sender ===
+                          "bot" &&
+                          !message.isError &&
+                          message.text.length >
+                            0 && (
+                            <div className="mt-2.5">
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  handleSpeak(
+                                    message.text,
+                                    index
+                                  )
+                                }
+                                className="
+                                  inline-flex
+                                  items-center
+                                  gap-1.5
+                                  rounded-[7px]
+                                  px-2
+                                  py-1
+                                  text-[9px]
+                                  font-medium
+                                  text-muted
+                                  transition-colors
+                                  hover:bg-shell
+                                  hover:text-navy
+                                "
+                              >
+                                {speakingIndex ===
+                                index ? (
+                                  <>
+                                    <VolumeX className="h-3 w-3" />
+                                    {
+                                      labels.stopAudio
+                                    }
+                                  </>
+                                ) : (
+                                  <>
+                                    <Volume2 className="h-3 w-3" />
+                                    {
+                                      labels.listen
+                                    }
+                                  </>
+                                )}
+                              </button>
+                            </div>
+                          )}
+                      </article>
+                    );
+                  }
+                )}
+
+                {/* ------------------------------------------
+                    LOADING
+                ------------------------------------------- */}
+                {loading && (
+                  <div className="border-l-2 border-navy/15 pl-3">
+                    <div className="flex items-center gap-2">
+                      <span className="h-1.5 w-1.5 rounded-full bg-navy" />
+
+                      <span className="text-[10px] text-muted">
+                        {labels.analyzing ||
+                          "Preparing your response"}
+                      </span>
+                    </div>
+
+                    <div className="mt-2 space-y-1.5">
+                      <div className="h-1.5 w-36 rounded-full bg-shell" />
+                      <div className="h-1.5 w-24 rounded-full bg-shell" />
+                    </div>
+                  </div>
+                )}
+
+                <div ref={messagesEndRef} />
+              </div>
+            </div>
+          </div>
+
+          {/* ========================================================
+              COMPOSER
+          ========================================================= */}
+          <form
+            onSubmit={handleFormSubmit}
+            className="shrink-0 bg-white px-3.5 pb-3.5 pt-2.5"
+          >
+            <div
+              className={`
+                overflow-hidden
+                rounded-[13px]
+                border
+                bg-white
+                shadow-[0_4px_16px_rgba(16,35,58,0.045)]
+                transition-all
+                duration-200
+                ${
+                  isListening
+                    ? "border-[#c09535] shadow-[0_0_0_3px_rgba(232,161,27,0.08)]"
+                    : "border-line focus-within:border-navy/30 focus-within:shadow-[0_7px_22px_rgba(16,35,58,0.07)]"
+                }
+              `}
+            >
+              <textarea
+                value={query}
+                onChange={(event) =>
+                  setQuery(
+                    event.target.value
+                  )
+                }
+                rows={2}
+                placeholder={
+                  isListening
+                    ? "Listening..."
+                    : labels.placeholder
+                }
+                className="
+                  block
+                  min-h-[58px]
+                  max-h-28
+                  w-full
+                  resize-none
+                  border-0
+                  bg-transparent
+                  px-3.5
+                  py-3
+                  text-[12px]
+                  leading-5
+                  text-ink
+                  placeholder:text-muted/55
+                  focus:outline-none
+                "
+                aria-label="Ask GST Copilot"
+              />
+
+              <div className="flex items-center justify-between border-t border-line/70 px-2 py-2">
+                <div className="flex items-center">
+                  <button
+                    type="button"
+                    className="
+                      inline-flex
+                      h-7
+                      items-center
+                      gap-1.5
+                      rounded-[7px]
+                      px-2
+                      text-[9px]
+                      font-medium
+                      text-muted
+                      transition-colors
+                      hover:bg-shell
+                      hover:text-navy
+                    "
+                  >
+                    <FileText className="h-3 w-3" />
+                    Context
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleMicToggle}
+                    className={`
+                      inline-flex
+                      h-7
+                      items-center
+                      gap-1.5
+                      rounded-[7px]
+                      px-2
+                      text-[9px]
+                      font-medium
+                      transition-colors
+                      ${
+                        isListening
+                          ? "bg-[#fff9e9] text-[#8d5d00]"
+                          : "text-muted hover:bg-shell hover:text-navy"
+                      }
+                    `}
+                  >
+                    {isListening ? (
                       <>
-                        <UserCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                        <span className="truncate max-w-[120px]">{user.name}</span>
+                        <Square className="h-3 w-3 fill-current" />
+                        Stop
                       </>
                     ) : (
-                      <span>{labels.officialHelper}</span>
+                      <>
+                        <Mic className="h-3 w-3" />
+                        Voice
+                      </>
                     )}
-                  </p>
-
-                  {isLoggedIn && (
-                    <button
-                      type="button"
-                      onClick={() => handleSendQuery("How do I get my GST filing safety score to 100%?")}
-                      className="bg-emerald-500/20 border border-emerald-400/30 hover:bg-emerald-500/30 text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 cursor-pointer transition-colors shrink-0"
-                      title="Click to view filing safety recommendations"
-                    >
-                      <ShieldCheck className="w-3 h-3 text-emerald-400" />
-                      <span>{labels.safeBadge}</span>
-                    </button>
-                  )}
+                  </button>
                 </div>
-              </div>
-            </div>
 
-            <div className="flex items-center space-x-2 shrink-0">
-              <select
-                value={chatLanguage}
-                onChange={(e) => handleChatLanguageChange(e.target.value)}
-                className="bg-white/10 hover:bg-white/20 text-white text-xs rounded-lg px-2.5 py-1 border border-white/20 focus:outline-none cursor-pointer font-medium"
-                title="Independent Chatbot Language"
-              >
-                {SUPPORTED_LANGUAGES.map(lang => (
-                  <option key={lang.code} value={lang.code} className="bg-navy text-white">
-                    {lang.name}
-                  </option>
-                ))}
-              </select>
-              <button
-                onClick={toggleChat}
-                className="text-white/80 hover:text-white p-1 rounded-lg hover:bg-white/10 transition-colors cursor-pointer"
-                title="Close Copilot (Press Esc)"
-                aria-label="Close Copilot"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-
-          <div className="bg-slate-100/90 border-b border-slate-200/80 px-4 py-1.5 flex items-center justify-between text-xs shrink-0">
-            <span className="text-slate-600 font-semibold flex items-center gap-1.5 text-[11px]">
-              <Compass className="w-3.5 h-3.5 text-navy" />
-              {labels.modeLabel}
-            </span>
-            <div className="flex items-center gap-1 bg-white p-0.5 rounded-lg border border-slate-200 shadow-2xs">
-              <button
-                type="button"
-                onClick={() => setExplanationMode('SHOPKEEPER')}
-                className={`px-3 py-1 rounded-md text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                  explanationMode === 'SHOPKEEPER'
-                    ? 'bg-navy text-amber shadow-2xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <ShoppingBag className="w-3 h-3" />
-                <span>{labels.shopkeeperMode}</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setExplanationMode('CA_TECHNICAL')}
-                className={`px-3 py-1 rounded-md text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                  explanationMode === 'CA_TECHNICAL'
-                    ? 'bg-navy text-white shadow-2xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <Briefcase className="w-3 h-3" />
-                <span>{labels.caMode}</span>
-              </button>
-            </div>
-          </div>
-
-          {harnessContext?.pendingToDos && harnessContext.pendingToDos.length > 0 && (
-            <button
-              type="button"
-              onClick={() => handleSendQuery("What are my pending action items and how do I solve them step-by-step?")}
-              className="w-full bg-amber-50/90 hover:bg-amber-100/90 border-b border-amber-200/70 px-4 py-1.5 flex items-center justify-between text-xs text-amber-900 font-medium cursor-pointer transition-colors shrink-0"
-              title="Click to review and resolve pending action items"
-            >
-              <div className="flex items-center gap-1.5">
-                <AlertCircle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                <span className="font-bold hover:underline">{harnessContext.pendingToDos.length} {labels.actionPending}</span>
-              </div>
-              <span className="text-[10px] bg-amber-200/80 px-2 py-0.5 rounded text-amber-900 font-extrabold flex items-center gap-1">
-                <span className="h-1.5 w-1.5 rounded-full bg-amber-600 animate-pulse" />
-                {labels.live}
-              </span>
-            </button>
-          )}
-
-          <div className="bg-slate-50 border-b border-slate-200/80 px-4 py-2 flex items-center justify-between shrink-0">
-            <span className="text-[11px] font-semibold text-slate-700 flex items-center gap-1.5">
-              <HelpCircle className="w-3.5 h-3.5 text-navy" />
-              {isLoggedIn ? labels.harnessTitle : labels.quickTitle}
-            </span>
-            <button
-              onClick={() => setShowQuickActions(!showQuickActions)}
-              className="text-[10px] text-navy hover:text-navy font-bold cursor-pointer hover:underline"
-            >
-              {showQuickActions ? labels.hide : labels.show}
-            </button>
-          </div>
-
-          {showQuickActions && (
-            <div className="bg-slate-50/80 px-3.5 py-2 border-b border-slate-200 flex flex-wrap gap-1.5 max-h-32 overflow-y-auto shrink-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-              {activeQuickActions.map((action, idx) => (
                 <button
-                  key={idx}
-                  onClick={() => handleSendQuery(action.query)}
-                  disabled={loading || isStreaming}
-                  className="text-xs bg-white hover:bg-navy/5 text-navy border border-slate-200/90 hover:border-navy/35 rounded-lg px-2.5 py-1.5 text-left font-medium shadow-2xs transition-colors cursor-pointer disabled:opacity-50 flex items-center gap-1"
+                  type="submit"
+                  disabled={
+                    loading ||
+                    isStreaming ||
+                    !query.trim()
+                  }
+                  className="
+                    flex
+                    h-8
+                    w-8
+                    items-center
+                    justify-center
+                    rounded-[9px]
+                    bg-navy
+                    text-white
+                    transition-all
+                    duration-150
+                    hover:bg-navy-hover
+                    active:scale-[0.97]
+                    disabled:cursor-not-allowed
+                    disabled:opacity-30
+                  "
+                  title="Send message"
+                  aria-label="Send message"
                 >
-                  <span>{action.label}</span>
-                  <ChevronRight className="w-3 h-3 text-slate-400 shrink-0" />
+                  <Send className="h-3.5 w-3.5" />
                 </button>
-              ))}
-            </div>
-          )}
-
-          <div className="flex-1 min-h-0 p-4 overflow-y-auto space-y-4 bg-[#f8fafc] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-            {messages.map((msg, index) => {
-              const textLower = msg.text.toLowerCase();
-              const isAsianPaints = textLower.includes("asian paints") || textLower.includes("unfiled");
-
-              return (
-                <div
-                  key={index}
-                  className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
-                >
-                  <div
-                    className={`max-w-[92%] px-4 py-3 rounded-2xl text-xs sm:text-[13px] leading-relaxed shadow-2xs relative group ${
-                      msg.sender === 'user'
-                        ? 'bg-navy text-white rounded-tr-xs font-medium'
-                        : msg.isError
-                        ? 'bg-red-50 text-red-900 border border-red-200 rounded-tl-xs'
-                        : 'bg-white text-slate-800 border border-slate-200/90 rounded-tl-xs'
-                    }`}
-                  >
-                    <div className="whitespace-pre-line font-sans break-words">{msg.text}</div>
-
-                    {msg.sender === 'bot' && !msg.isError && isAsianPaints && (
-                      <div className="mt-3 pt-2.5 border-t border-slate-200/80 flex flex-col gap-2">
-                        <p className="text-[11px] font-bold text-navy flex items-center gap-1">
-                          {labels.instantAction}
-                        </p>
-                        <div className="flex flex-wrap gap-2">
-                          <button
-                            type="button"
-                            onClick={() => handleActionCardClick('CALL_SUPPLIER', { supplier: 'Asian Paints' })}
-                            className="bg-navy/5 hover:bg-navy/10 text-navy border border-navy/25 px-2.5 py-1 rounded-md text-[11px] font-semibold flex items-center gap-1 cursor-pointer transition-colors"
-                          >
-                            <PhoneCall className="w-3 h-3 text-navy" />
-                            <span>{labels.remindSupplier}</span>
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => handleActionCardClick('DEFER_ITC')}
-                            className="bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border border-emerald-300 px-2.5 py-1 rounded-md text-[11px] font-semibold flex items-center gap-1 cursor-pointer transition-colors"
-                          >
-                            <ArrowRight className="w-3 h-3 text-emerald-700" />
-                            <span>{labels.deferItc}</span>
-                          </button>
-                        </div>
-                      </div>
-                    )}
-
-                    {msg.sender === 'bot' && !msg.isError && msg.text.length > 0 && (
-                      <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                        <button
-                          type="button"
-                          onClick={() => handleSpeak(msg.text, index)}
-                          className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all cursor-pointer ${
-                            speakingIndex === index
-                              ? 'bg-amber-100 text-amber-900 border border-amber-300 animate-pulse'
-                              : 'bg-slate-100 hover:bg-amber-50 text-slate-700 hover:text-amber-900 border border-slate-200'
-                          }`}
-                          title={speakingIndex === index ? labels.stopAudio : labels.listen}
-                        >
-                          {speakingIndex === index ? (
-                            <>
-                              <VolumeX className="w-3.5 h-3.5 text-amber-700 shrink-0" />
-                              <span>{labels.stopAudio}</span>
-                            </>
-                          ) : (
-                            <>
-                              <Volume2 className="w-3.5 h-3.5 text-navy shrink-0" />
-                              <span>{labels.listen}</span>
-                            </>
-                          )}
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                  <span className="text-[10px] text-slate-400 mt-1.5 px-1 font-mono">{msg.time}</span>
-                </div>
-              );
-            })}
-
-            {loading && (
-              <div className="flex items-center space-x-2 text-slate-500 text-xs py-2 px-3 bg-white rounded-xl border border-slate-200/80 shadow-2xs w-fit">
-                <Sparkles className="w-4 h-4 animate-spin text-amber" />
-                <span className="font-medium">{labels.analyzing}</span>
               </div>
-            )}
-            <div ref={messagesEndRef} />
-          </div>
+            </div>
 
-          <form onSubmit={handleFormSubmit} className="p-3 border-t border-slate-200 bg-white flex items-center space-x-2 shrink-0">
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder={isListening ? "🎙️ Listening... Speak your query!" : labels.placeholder}
-              className={`flex-1 text-xs sm:text-sm border rounded-xl px-4 py-3 focus:outline-none transition-all text-slate-800 font-medium placeholder-slate-400 ${
-                isListening
-                  ? "border-amber-500 bg-amber-50/60 ring-2 ring-amber-300 animate-pulse"
-                  : "border-slate-300 bg-slate-50/50 focus:border-navy focus:ring-1 focus:ring-navy"
-              }`}
-            />
-            
-            <button
-              type="button"
-              onClick={handleMicToggle}
-              className={`p-3 rounded-xl transition-all cursor-pointer shrink-0 shadow-xs border ${
-                isListening
-                  ? "bg-red-600 hover:bg-red-700 text-white border-red-700 animate-pulse"
-                  : "bg-slate-100 hover:bg-amber-100 text-slate-700 hover:text-navy border-slate-200"
-              }`}
-              title={isListening ? "Stop Recording & Send Query" : "Continuous Voice Recording Input"}
-            >
-              {isListening ? (
-                <div className="flex items-center gap-1.5 px-0.5">
-                  <Square className="w-3.5 h-3.5 text-white fill-white" />
-                  <span className="text-xs font-bold">Stop & Send</span>
-                </div>
-              ) : (
-                <Mic className="w-4 h-4 text-amber-600" />
-              )}
-            </button>
-
-            <button
-              type="submit"
-              disabled={loading || isStreaming || !query.trim()}
-              className="bg-navy hover:bg-navy-hover disabled:opacity-40 text-white p-3 rounded-xl transition-colors cursor-pointer shrink-0 shadow-sm active:translate-y-px"
-              title="Send Message"
-            >
-              <Send className="w-4 h-4" />
-            </button>
+            <p className="mt-1.5 text-center text-[8px] text-muted/50">
+              GST Copilot uses the current page and available
+              account context.
+            </p>
           </form>
-        </div>
+        </section>
       )}
     </div>
   );
