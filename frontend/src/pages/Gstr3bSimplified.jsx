@@ -1,45 +1,40 @@
-import React, { useState, useEffect } from 'react';
-import PageContainer from '../components/PageContainer';
-import Alert from '../components/Alert';
-import { useAuth } from '../context/AuthContext';
-import { useToast } from '../context/ToastContext';
-import { useLanguage } from '../context/LanguageContext';
-import { speakTextInLanguage, stopSpeech } from '../utils/speechUtils';
-import { 
-  runReconciliation, 
-  resolveMismatch, 
-  submitGstr3bReturn, 
-  lookupHSN, 
-  getVoiceExplanation 
-} from '../utils/api';
-import { 
-  FileCheck2, 
-  AlertCircle, 
-  ShieldCheck, 
-  Calculator, 
-  Volume2, 
-  Printer, 
-  Search, 
-  Users, 
-  ArrowRight, 
-  CheckCircle2, 
-  RefreshCw, 
-  Sparkles,
-  MessageSquare,
-  Building2,
-  MapPin,
-  TrendingUp,
-  ShieldAlert,
-  Upload,
-  FileText,
-  X,
+import React, { useState, useEffect } from "react";
+import PageContainer from "../components/PageContainer";
+import Alert from "../components/Alert";
+import { useAuth } from "../context/AuthContext";
+import { useToast } from "../context/ToastContext";
+import { useLanguage } from "../context/LanguageContext";
+import {
+  speakTextInLanguage,
+  stopSpeech,
+} from "../utils/speechUtils";
+import {
+  runReconciliation,
+  resolveMismatch,
+  submitGstr3bReturn,
+  lookupHSN,
+  getVoiceExplanation,
+} from "../utils/api";
+import {
+  AlertCircle,
+  Calculator,
   Check,
-  Eye,
-  Filter,
-  PlusCircle,
+  CheckCircle2,
   Download,
-  FileSpreadsheet
-} from 'lucide-react';
+  Eye,
+  FileCode2,
+  FileSpreadsheet,
+  FileText,
+  Filter,
+  MessageSquare,
+  Printer,
+  RefreshCw,
+  Search,
+  Upload,
+  Users,
+  Volume2,
+  X,
+} from "lucide-react";
 
 const DEMO_PERSONAS = [
   {
@@ -48,13 +43,15 @@ const DEMO_PERSONAS = [
     business: "Nagpur Hardware & Sanitary Store",
     location: "Nagpur, Maharashtra",
     turnover: "₹85 Lakhs",
-    problem: "Unfiled supplier bill #AP/2026/045 (Asian Paints) for ₹4,500 ITC.",
-    solution: "Auto-detects missing GSTR-1, defers ₹4,500 credit safely.",
+    problem:
+      "Unfiled supplier bill #AP/2026/045 (Asian Paints) for ₹4,500 ITC.",
+    solution:
+      "Auto-detects missing GSTR-1, defers ₹4,500 credit safely.",
     impact: "Saved ₹10,000 penalty notice & interest.",
     invoicesCount: 20,
     eligibleItc: 18200,
     mismatchesCount: 3,
-    netTax: 24300
+    netTax: 24300,
   },
   {
     gstin: "08BBBBS5678C1Z6",
@@ -62,13 +59,15 @@ const DEMO_PERSONAS = [
     business: "Jaipur Handicrafts & Textiles",
     location: "Jaipur, Rajasthan",
     turnover: "₹1.4 Crores",
-    problem: "Tax rate mismatch on Jaquar bill #JQ/2026/089 (Portal: ₹12k vs Shop: ₹18k).",
-    solution: "Auto-claims ₹12,000 portal limit; defers ₹6,000 for seller credit note.",
+    problem:
+      "Tax rate mismatch on Jaquar bill #JQ/2026/089 (Portal: ₹12k vs Shop: ₹18k).",
+    solution:
+      "Auto-claims ₹12,000 portal limit; defers ₹6,000 for seller credit note.",
     impact: "Avoided ₹6,000 excess claim notice.",
     invoicesCount: 25,
     eligibleItc: 42000,
     mismatchesCount: 2,
-    netTax: 38500
+    netTax: 38500,
   },
   {
     gstin: "03CCCCG9012D1Z7",
@@ -76,13 +75,14 @@ const DEMO_PERSONAS = [
     business: "Ludhiana Auto Parts Traders",
     location: "Ludhiana, Punjab",
     turnover: "₹62 Lakhs",
-    problem: "Supplier GSTIN cancelled by department on bill #LHW/2026/144.",
+    problem:
+      "Supplier GSTIN cancelled by department on bill #LHW/2026/144.",
     solution: "Blocks ₹2,700 ineligible tax credit completely.",
     impact: "Protected from fake invoice audit notice.",
     invoicesCount: 15,
     eligibleItc: 14500,
     mismatchesCount: 1,
-    netTax: 19200
+    netTax: 19200,
   },
   {
     gstin: "36DDDDK3456E1Z8",
@@ -90,13 +90,14 @@ const DEMO_PERSONAS = [
     business: "Hyderabad Electricals & Lighting",
     location: "Hyderabad, Telangana",
     turnover: "₹1.1 Crores",
-    problem: "Duplicate scanned entry for Polycab bill #POLY/2026/178.",
+    problem:
+      "Duplicate scanned entry for Polycab bill #POLY/2026/178.",
     solution: "Removes ₹3,600 duplicate claim automatically.",
     impact: "Saved from double claiming audit penalty.",
     invoicesCount: 18,
     eligibleItc: 29400,
     mismatchesCount: 2,
-    netTax: 31000
+    netTax: 31000,
   },
   {
     gstin: "24EEEEV7890F1Z9",
@@ -104,13 +105,15 @@ const DEMO_PERSONAS = [
     business: "Ahmedabad Industrial Chemicals",
     location: "Ahmedabad, Gujarat",
     turnover: "₹3.5 Crores",
-    problem: "Late upload after 11th monthly cutoff by UltraTech Cement.",
-    solution: "Defers ₹9,800 credit safely to next month's GSTR-2B.",
+    problem:
+      "Late upload after 11th monthly cutoff by UltraTech Cement.",
+    solution:
+      "Defers ₹9,800 credit safely to next month's GSTR-2B.",
     impact: "Prevented premature tax claim rejection.",
     invoicesCount: 32,
     eligibleItc: 84000,
     mismatchesCount: 1,
-    netTax: 62000
+    netTax: 62000,
   },
   {
     gstin: "33FFFFM1234G1Z0",
@@ -119,12 +122,13 @@ const DEMO_PERSONAS = [
     location: "Madurai, Tamil Nadu",
     turnover: "₹45 Lakhs",
     problem: "HSN classification discrepancy on yarn purchase.",
-    solution: "Auto-reconciles HSN rate at 5% instead of 12%.",
+    solution:
+      "Auto-reconciles HSN rate at 5% instead of 12%.",
     impact: "Correct tax calculation without penalty.",
     invoicesCount: 12,
     eligibleItc: 9800,
     mismatchesCount: 1,
-    netTax: 12400
+    netTax: 12400,
   },
   {
     gstin: "27GGGGA5678H1Z1",
@@ -133,12 +137,13 @@ const DEMO_PERSONAS = [
     location: "Pune, Maharashtra",
     turnover: "₹95 Lakhs",
     problem: "Unfiled supplier bill from local wholesaler.",
-    solution: "Notifies seller & holds ITC claim for next period.",
+    solution:
+      "Notifies seller & holds ITC claim for next period.",
     impact: "Protected ₹5,200 cash flow.",
     invoicesCount: 22,
     eligibleItc: 34000,
     mismatchesCount: 2,
-    netTax: 28900
+    netTax: 28900,
   },
   {
     gstin: "32HHHHP9012I1Z2",
@@ -146,13 +151,15 @@ const DEMO_PERSONAS = [
     business: "Kochi Spices & Dry Fruits Wholesale",
     location: "Kochi, Kerala",
     turnover: "₹1.8 Crores",
-    problem: "State GST code mismatch on interstate purchase.",
-    solution: "Auto-maps CGST+SGST to IGST ledger.",
+    problem:
+      "State GST code mismatch on interstate purchase.",
+    solution:
+      "Auto-maps CGST+SGST to IGST ledger.",
     impact: "Prevented wrong ledger head tax filing.",
     invoicesCount: 28,
     eligibleItc: 56000,
     mismatchesCount: 1,
-    netTax: 44200
+    netTax: 44200,
   },
   {
     gstin: "23IIIIR3456J1Z3",
@@ -161,12 +168,13 @@ const DEMO_PERSONAS = [
     location: "Indore, Madhya Pradesh",
     turnover: "₹78 Lakhs",
     problem: "Unfiled GSTR-1 bill for tiles purchase.",
-    solution: "Claims verified GSTR-2B limit with 1-click.",
+    solution:
+      "Claims verified GSTR-2B limit with 1-click.",
     impact: "Clean filing with 0 notice risk.",
     invoicesCount: 16,
     eligibleItc: 19500,
     mismatchesCount: 1,
-    netTax: 21800
+    netTax: 21800,
   },
   {
     gstin: "19JJJJA7890K1Z4",
@@ -174,23 +182,27 @@ const DEMO_PERSONAS = [
     business: "Kolkata Leather Goods & Store",
     location: "Kolkata, West Bengal",
     turnover: "₹52 Lakhs",
-    problem: "Duplicate billing entry on raw material purchase.",
-    solution: "Removes duplicate invoice before GSTR-3B submission.",
-    impact: "Prevented interest penalty on excess ITC.",
+    problem:
+      "Duplicate billing entry on raw material purchase.",
+    solution:
+      "Removes duplicate invoice before GSTR-3B submission.",
+    impact:
+      "Prevented interest penalty on excess ITC.",
     invoicesCount: 14,
     eligibleItc: 13200,
     mismatchesCount: 1,
-    netTax: 16500
-  }
+    netTax: 16500,
+  },
 ];
 
 const Gstr3bSimplified = () => {
   const { user } = useAuth();
   const { showToast } = useToast() || {};
-  const { language } = useLanguage() || { language: 'EN' };
+  const { language } = useLanguage() || { language: "EN" };
 
-  // State Management
-  const [selectedPersonaGstin, setSelectedPersonaGstin] = useState("27AAAAA1234A1Z5");
+  const [selectedPersonaGstin, setSelectedPersonaGstin] =
+    useState("27AAAAA1234A1Z5");
+
   const [reconciliationData, setReconciliationData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [resolvingId, setResolvingId] = useState(null);
@@ -198,52 +210,62 @@ const Gstr3bSimplified = () => {
   const [submissionResult, setSubmissionResult] = useState(null);
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
 
-  // Per-Persona Persistent State Dictionary (Preserves uploads & 1-click fixes per persona!)
   const [personaStateCache, setPersonaStateCache] = useState({});
+  const [activePersonaMetrics, setActivePersonaMetrics] =
+    useState(DEMO_PERSONAS[0]);
 
-  // Dynamic Persona Metrics State for Instant Live UI Updates
-  const [activePersonaMetrics, setActivePersonaMetrics] = useState(DEMO_PERSONAS[0]);
-
-  // Standalone Feature States
-  const [isPreFilingSummaryOpen, setIsPreFilingSummaryOpen] = useState(false);
-  const [isUploadDropzoneOpen, setIsUploadDropzoneOpen] = useState(false);
+  const [isPreFilingSummaryOpen, setIsPreFilingSummaryOpen] =
+    useState(false);
+  const [isUploadDropzoneOpen, setIsUploadDropzoneOpen] =
+    useState(false);
   const [selectedFileName, setSelectedFileName] = useState("");
   const [isParsingInvoices, setIsParsingInvoices] = useState(false);
   const [activeMismatchFilter, setActiveMismatchFilter] = useState("ALL");
 
-  // Load live reconciliation data from backend with per-persona caching
   const loadReconciliationData = async (gstinToLoad) => {
     setLoading(true);
     setSubmissionResult(null);
 
-    const basePersona = DEMO_PERSONAS.find(p => p.gstin === gstinToLoad) || DEMO_PERSONAS[0];
+    const basePersona =
+      DEMO_PERSONAS.find((p) => p.gstin === gstinToLoad) ||
+      DEMO_PERSONAS[0];
 
-    // Check if we have custom uploaded / resolved state cached for this persona
     if (personaStateCache[gstinToLoad]) {
       const cached = personaStateCache[gstinToLoad];
+
       setReconciliationData(cached.reconciliationData);
       setActivePersonaMetrics(cached.metrics);
       setLoading(false);
+
       return;
     }
 
     setActivePersonaMetrics(basePersona);
 
     try {
-      const data = await runReconciliation(language, gstinToLoad);
+      const data = await runReconciliation(
+        language,
+        gstinToLoad
+      );
+
       const fetchedData = data?.data || data;
+
       setReconciliationData(fetchedData);
 
-      // Cache initial state for this persona
-      setPersonaStateCache(prev => ({
+      setPersonaStateCache((prev) => ({
         ...prev,
         [gstinToLoad]: {
           reconciliationData: fetchedData,
-          metrics: basePersona
-        }
+          metrics: basePersona,
+        },
       }));
     } catch (err) {
-      if (showToast) showToast("Failed to fetch reconciliation data.", "error");
+      if (showToast) {
+        showToast(
+          "Failed to fetch reconciliation data.",
+          "error"
+        );
+      }
     } finally {
       setLoading(false);
     }
@@ -253,41 +275,58 @@ const Gstr3bSimplified = () => {
     loadReconciliationData(selectedPersonaGstin);
   }, [selectedPersonaGstin, language]);
 
-  // LIVE File Parser: MERGES newly uploaded invoices with existing persona invoices!
   const handleSimulatedFileUpload = (e) => {
     const file = e.target.files?.[0];
+
     if (!file) return;
 
     setSelectedFileName(file.name);
     setIsParsingInvoices(true);
 
     const reader = new FileReader();
+
     reader.onload = (event) => {
       try {
         const textContent = event.target.result;
         let parsedInvoices = [];
 
-        if (file.name.endsWith('.json')) {
+        if (file.name.endsWith(".json")) {
           const rawObj = JSON.parse(textContent);
-          parsedInvoices = Array.isArray(rawObj) ? rawObj : [rawObj];
+
+          parsedInvoices = Array.isArray(rawObj)
+            ? rawObj
+            : [rawObj];
         } else {
-          // Parse CSV cleanly with NaN protection
-          const lines = textContent.split('\n').filter(l => l.trim());
+          const lines = textContent
+            .split("\n")
+            .filter((l) => l.trim());
+
           if (lines.length > 1) {
             for (let i = 1; i < lines.length; i++) {
-              const cols = lines[i].split(',').map(c => c.trim());
+              const cols = lines[i]
+                .split(",")
+                .map((c) => c.trim());
+
               if (cols.length >= 3) {
-                const taxVal = Number(cols[8] || cols[4] || 5000);
-                const safeTax = isNaN(taxVal) ? 5000 : taxVal;
+                const taxVal = Number(
+                  cols[8] || cols[4] || 5000
+                );
+
+                const safeTax = Number.isNaN(taxVal)
+                  ? 5000
+                  : taxVal;
 
                 parsedInvoices.push({
-                  invoiceNumber: cols[0] || `UP-INV/${i}`,
-                  supplierName: cols[1] || 'Uploaded Supplier',
-                  supplierGstin: cols[2] || '27AAACA9999Z1',
+                  invoiceNumber:
+                    cols[0] || `UP-INV/${i}`,
+                  supplierName:
+                    cols[1] || "Uploaded Supplier",
+                  supplierGstin:
+                    cols[2] || "27AAACA9999Z1",
                   claimedTotalTax: safeTax,
                   allowedItcAmount: safeTax,
-                  status: 'MATCHED',
-                  errorCode: null
+                  status: "MATCHED",
+                  errorCode: null,
                 });
               }
             }
@@ -295,33 +334,61 @@ const Gstr3bSimplified = () => {
         }
 
         if (parsedInvoices.length > 0) {
-          const formattedNewResults = parsedInvoices.map((inv, idx) => ({
-            invoiceId: `UP-${Date.now()}-${idx}`,
-            invoiceNumber: inv.invoiceNumber || `INV/2026/${idx + 101}`,
-            supplierName: inv.supplierName || 'Uploaded Supplier',
-            supplierGstin: inv.supplierGstin || '27AAACA9999Z1',
-            claimedTotalTax: Number(inv.claimedTotalTax || inv.totalTax || 5000),
-            allowedItcAmount: inv.status === 'MATCHED' ? Number(inv.claimedTotalTax || 5000) : Number(inv.gstr2bData?.totalTax || 0),
-            status: inv.status || 'MATCHED',
-            errorCode: inv.errorCode || null,
-            isUploaded: true // Mark as newly uploaded invoice!
-          }));
+          const formattedNewResults =
+            parsedInvoices.map((inv, idx) => ({
+              invoiceId: `UP-${Date.now()}-${idx}`,
+              invoiceNumber:
+                inv.invoiceNumber ||
+                `INV/2026/${idx + 101}`,
+              supplierName:
+                inv.supplierName || "Uploaded Supplier",
+              supplierGstin:
+                inv.supplierGstin || "27AAACA9999Z1",
+              claimedTotalTax: Number(
+                inv.claimedTotalTax ||
+                  inv.totalTax ||
+                  5000
+              ),
+              allowedItcAmount:
+                inv.status === "MATCHED"
+                  ? Number(inv.claimedTotalTax || 5000)
+                  : Number(
+                      inv.gstr2bData?.totalTax || 0
+                    ),
+              status: inv.status || "MATCHED",
+              errorCode: inv.errorCode || null,
+              isUploaded: true,
+            }));
 
-          // MERGE newly uploaded invoices into current persona's invoice list!
-          const existingResults = reconciliationData?.results || [];
-          const combinedResults = [...formattedNewResults, ...existingResults];
+          const existingResults =
+            reconciliationData?.results || [];
 
-          const mismatchedCount = combinedResults.filter(r => r.status !== 'MATCHED').length;
-          const totalEligibleItc = combinedResults.reduce((acc, curr) => acc + (curr.allowedItcAmount || 0), 0);
+          const combinedResults = [
+            ...formattedNewResults,
+            ...existingResults,
+          ];
+
+          const mismatchedCount =
+            combinedResults.filter(
+              (r) => r.status !== "MATCHED"
+            ).length;
+
+          const totalEligibleItc =
+            combinedResults.reduce(
+              (acc, curr) =>
+                acc + (curr.allowedItcAmount || 0),
+              0
+            );
 
           const updatedReconciliationData = {
             results: combinedResults,
             summary: {
               totalInvoices: combinedResults.length,
-              matchedCount: combinedResults.length - mismatchedCount,
+              matchedCount:
+                combinedResults.length - mismatchedCount,
               mismatchCount: mismatchedCount,
-              eligibleItc: totalEligibleItc
-            }
+              eligibleItc: totalEligibleItc,
+            },
           };
 
           const updatedMetrics = {
@@ -329,27 +396,42 @@ const Gstr3bSimplified = () => {
             invoicesCount: combinedResults.length,
             mismatchesCount: mismatchedCount,
             eligibleItc: totalEligibleItc,
-            netTax: Math.max(0, 42500 - totalEligibleItc)
+            netTax: Math.max(
+              0,
+              42500 - totalEligibleItc
+            ),
           };
 
-          setReconciliationData(updatedReconciliationData);
+          setReconciliationData(
+            updatedReconciliationData
+          );
+
           setActivePersonaMetrics(updatedMetrics);
 
-          // Update Per-Persona Cache
-          setPersonaStateCache(prev => ({
+          setPersonaStateCache((prev) => ({
             ...prev,
             [selectedPersonaGstin]: {
-              reconciliationData: updatedReconciliationData,
-              metrics: updatedMetrics
-            }
+              reconciliationData:
+                updatedReconciliationData,
+              metrics: updatedMetrics,
+            },
           }));
 
           if (showToast) {
-            showToast(`Merged ${formattedNewResults.length} uploaded invoices into ${activePersonaMetrics.name}'s register!`, "success", `Invoices Added (${activePersonaMetrics.name})`);
+            showToast(
+              `Merged ${formattedNewResults.length} uploaded invoices into ${activePersonaMetrics.name}'s register.`,
+              "success",
+              `Invoices Added (${activePersonaMetrics.name})`
+            );
           }
         }
       } catch (parseErr) {
-        if (showToast) showToast("Could not parse file structure. Loaded sample datasets.", "info");
+        if (showToast) {
+          showToast(
+            "Could not parse file structure. Loaded sample datasets.",
+            "info"
+          );
+        }
       } finally {
         setIsParsingInvoices(false);
         setIsUploadDropzoneOpen(false);
@@ -359,104 +441,270 @@ const Gstr3bSimplified = () => {
     reader.readAsText(file);
   };
 
-  // Download Invoice List as CSV / Excel
   const handleDownloadCsv = () => {
-    const currentInvoices = reconciliationData?.results || [];
+    const currentInvoices =
+      reconciliationData?.results || [];
+
     if (currentInvoices.length === 0) {
-      if (showToast) showToast("No invoices available to export.", "warning");
+      if (showToast) {
+        showToast(
+          "No invoices available to export.",
+          "warning"
+        );
+      }
+
       return;
     }
 
-    let csvContent = "Invoice Number,Supplier Name,Supplier GSTIN,Billed Tax (INR),GSTR-2B Credit (INR),Rule Status,Error Code\n";
-    currentInvoices.forEach(item => {
-      const billed = item.claimedTotalTax ?? item.billedTax ?? item.totalTax ?? 0;
-      const allowed = item.allowedItcAmount ?? item.allowedItc ?? item.gstr2bTax ?? 0;
-      const status = item.status || 'MATCHED';
-      const err = item.errorCode || item.ruleCode || 'NONE';
-      csvContent += `"${item.invoiceNumber}","${item.supplierName}","${item.supplierGstin}",${billed},${allowed},"${status}","${err}"\n`;
+    let csvContent =
+      "Invoice Number,Supplier Name,Supplier GSTIN,Billed Tax (INR),GSTR-2B Credit (INR),Rule Status,Error Code\n";
+
+    currentInvoices.forEach((item) => {
+      const billed =
+        item.claimedTotalTax ??
+        item.billedTax ??
+        item.totalTax ??
+        0;
+
+      const allowed =
+        item.allowedItcAmount ??
+        item.allowedItc ??
+        item.gstr2bTax ??
+        0;
+
+      const status =
+        item.status || "MATCHED";
+
+      const err =
+        item.errorCode ||
+        item.ruleCode ||
+        "NONE";
+
+      csvContent +=
+        `"${item.invoiceNumber}","${item.supplierName}","${item.supplierGstin}",${billed},${allowed},"${status}","${err}"\n`;
     });
 
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob([csvContent], {
+      type: "text/csv;charset=utf-8;",
+    });
+
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
+
     link.href = url;
-    link.setAttribute('download', `GST_Invoice_Register_${activePersonaMetrics.name.replace(/\s+/g, '_')}_July2026.csv`);
+    link.setAttribute(
+      "download",
+      `GST_Invoice_Register_${activePersonaMetrics.name.replace(
+        /\s+/g,
+        "_"
+      )}_July2026.csv`
+    );
+
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
 
-    if (showToast) showToast(`Downloaded invoice register CSV for ${activePersonaMetrics.name}!`, "success");
+    if (showToast) {
+      showToast(
+        `Downloaded invoice register CSV for ${activePersonaMetrics.name}.`,
+        "success"
+      );
+    }
   };
 
-  // Download Invoice List as Printable PDF Statement
   const handleDownloadPdf = () => {
-    const currentInvoices = reconciliationData?.results || [];
-    const printWin = window.open('', '_blank', 'width=900,height=1000');
-    
-    const tableRowsHtml = currentInvoices.map((item) => `
-      <tr style="border-bottom: 1px solid #e2e8f0; font-size: 12px;">
-        <td style="padding: 10px; font-weight: bold; font-family: monospace;">${item.invoiceNumber}</td>
-        <td style="padding: 10px;">${item.supplierName}<br><small style="color: #64748b;">${item.supplierGstin}</small></td>
-        <td style="padding: 10px; font-weight: bold;">₹${(item.claimedTotalTax || 0).toLocaleString()}</td>
-        <td style="padding: 10px; font-weight: bold; color: #059669;">₹${(item.allowedItcAmount || 0).toLocaleString()}</td>
-        <td style="padding: 10px;">
-          <span style="padding: 3px 8px; border-radius: 12px; font-size: 11px; font-weight: bold; background-color: ${item.status === 'MATCHED' ? '#d1fae5' : '#fef3c7'}; color: ${item.status === 'MATCHED' ? '#065f46' : '#92400e'};">
-            ${item.status === 'MATCHED' ? 'MATCHED' : (item.errorCode || 'MISMATCH')}
-          </span>
-        </td>
-      </tr>
-    `).join('');
+    const currentInvoices =
+      reconciliationData?.results || [];
+
+    const printWin = window.open(
+      "",
+      "_blank",
+      "width=900,height=1000"
+    );
+
+    if (!printWin) return;
+
+    const tableRowsHtml = currentInvoices
+      .map(
+        (item) => `
+          <tr style="border-bottom:1px solid #d8d9d7;font-size:12px;">
+            <td style="padding:10px;font-weight:600;font-family:monospace;">
+              ${item.invoiceNumber}
+            </td>
+            <td style="padding:10px;">
+              ${item.supplierName}
+              <br />
+              <small style="color:#536271;">
+                ${item.supplierGstin}
+              </small>
+            </td>
+            <td style="padding:10px;font-weight:600;">
+              ₹${(item.claimedTotalTax || 0).toLocaleString()}
+            </td>
+            <td style="padding:10px;font-weight:600;color:#4c9a5a;">
+              ₹${(item.allowedItcAmount || 0).toLocaleString()}
+            </td>
+            <td style="padding:10px;">
+              ${
+                item.status === "MATCHED"
+                  ? "MATCHED"
+                  : item.errorCode || "MISMATCH"
+              }
+            </td>
+          </tr>
+        `
+      )
+      .join("");
 
     const htmlContent = `
       <!DOCTYPE html>
       <html>
-      <head>
-        <title>GST Inward Invoice Reconciliation Register - ${activePersonaMetrics.name}</title>
-        <style>
-          body { font-family: Arial, sans-serif; padding: 30px; color: #1e293b; }
-          .header { border-bottom: 2px solid #0f172a; padding-bottom: 15px; margin-bottom: 20px; }
-          .title { font-size: 20px; font-weight: bold; color: #0f172a; }
-          .subtitle { font-size: 12px; color: #64748b; margin-top: 5px; }
-          .metrics { display: flex; gap: 15px; margin-bottom: 25px; }
-          .card { background: #f8fafc; border: 1px solid #e2e8f0; padding: 12px 18px; border-radius: 8px; flex: 1; }
-          .card-title { font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: bold; }
-          .card-val { font-size: 18px; font-weight: bold; margin-top: 5px; }
-          table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-          th { background: #0f172a; color: white; padding: 10px; font-size: 11px; text-align: left; text-transform: uppercase; }
-        </style>
-      </head>
-      <body>
-        <div class="header">
-          <div class="title">GST Inward Invoice Reconciliation Statement</div>
-          <div class="subtitle">Taxpayer: <strong>${activePersonaMetrics.name}</strong> (${activePersonaMetrics.business}) | GSTIN: <strong>${activePersonaMetrics.gstin}</strong> | Return Period: <strong>July 2026</strong></div>
-        </div>
+        <head>
+          <title>
+            GST Inward Invoice Reconciliation Register -
+            ${activePersonaMetrics.name}
+          </title>
 
-        <div class="metrics">
-          <div class="card"><div class="card-title">Total Invoices</div><div class="card-val">${currentInvoices.length}</div></div>
-          <div class="card"><div class="card-title">Eligible ITC Credit</div><div class="card-val" style="color: #059669;">₹${(activePersonaMetrics.eligibleItc || 0).toLocaleString()}</div></div>
-          <div class="card"><div class="card-title">Pending Mismatches</div><div class="card-val" style="color: #d97706;">${activePersonaMetrics.mismatchesCount}</div></div>
-          <div class="card"><div class="card-title">Net Cash Tax Payable</div><div class="card-val" style="color: #0f172a;">₹${(activePersonaMetrics.netTax || 0).toLocaleString()}</div></div>
-        </div>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              padding: 30px;
+              color: #10233a;
+            }
 
-        <table>
-          <thead>
-            <tr>
-              <th>Invoice #</th>
-              <th>Supplier Details</th>
-              <th>Billed Tax</th>
-              <th>GSTR-2B Credit</th>
-              <th>Reconciliation Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${tableRowsHtml}
-          </tbody>
-        </table>
+            .header {
+              border-bottom: 2px solid #08365f;
+              padding-bottom: 15px;
+              margin-bottom: 20px;
+            }
 
-        <script>
-          window.onload = function() { window.print(); }
-        </script>
-      </body>
+            .title {
+              font-size: 20px;
+              font-weight: 700;
+            }
+
+            .subtitle {
+              font-size: 12px;
+              color: #536271;
+              margin-top: 5px;
+            }
+
+            .metrics {
+              display: flex;
+              gap: 12px;
+              margin-bottom: 25px;
+            }
+
+            .metric {
+              border: 1px solid #d8d9d7;
+              padding: 12px 16px;
+              flex: 1;
+            }
+
+            .metric-title {
+              font-size: 10px;
+              text-transform: uppercase;
+              color: #536271;
+              font-weight: 700;
+            }
+
+            .metric-value {
+              font-size: 17px;
+              font-weight: 700;
+              margin-top: 5px;
+            }
+
+            table {
+              width: 100%;
+              border-collapse: collapse;
+            }
+
+            th {
+              background: #08365f;
+              color: white;
+              padding: 10px;
+              font-size: 10px;
+              text-align: left;
+              text-transform: uppercase;
+            }
+          </style>
+        </head>
+
+        <body>
+          <div class="header">
+            <div class="title">
+              GST Inward Invoice Reconciliation Statement
+            </div>
+
+            <div class="subtitle">
+              Taxpayer:
+              <strong>${activePersonaMetrics.name}</strong>
+              (${activePersonaMetrics.business})
+              &nbsp;|&nbsp;
+              GSTIN:
+              <strong>${activePersonaMetrics.gstin}</strong>
+              &nbsp;|&nbsp;
+              Return Period:
+              <strong>July 2026</strong>
+            </div>
+          </div>
+
+          <div class="metrics">
+            <div class="metric">
+              <div class="metric-title">Total Invoices</div>
+              <div class="metric-value">
+                ${currentInvoices.length}
+              </div>
+            </div>
+
+            <div class="metric">
+              <div class="metric-title">Eligible ITC</div>
+              <div class="metric-value">
+                ₹${(
+                  activePersonaMetrics.eligibleItc || 0
+                ).toLocaleString()}
+              </div>
+            </div>
+
+            <div class="metric">
+              <div class="metric-title">Pending Mismatches</div>
+              <div class="metric-value">
+                ${activePersonaMetrics.mismatchesCount}
+              </div>
+            </div>
+
+            <div class="metric">
+              <div class="metric-title">Net Tax Payable</div>
+              <div class="metric-value">
+                ₹${(
+                  activePersonaMetrics.netTax || 0
+                ).toLocaleString()}
+              </div>
+            </div>
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Invoice #</th>
+                <th>Supplier Details</th>
+                <th>Billed Tax</th>
+                <th>GSTR-2B Credit</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              ${tableRowsHtml}
+            </tbody>
+          </table>
+
+          <script>
+            window.onload = function() {
+              window.print();
+            };
+          </script>
+        </body>
       </html>
     `;
 
@@ -464,8 +712,11 @@ const Gstr3bSimplified = () => {
     printWin.document.close();
   };
 
-  // INSTANT LIVE 1-CLICK MISMATCH RESOLUTION (Persisted Per-Persona)
-  const handleResolveAction = async (invoiceId, invoiceNumber, actionType) => {
+  const handleResolveAction = async (
+    invoiceId,
+    invoiceNumber,
+    actionType
+  ) => {
     setResolvingId(invoiceId);
 
     setTimeout(() => {
@@ -473,34 +724,63 @@ const Gstr3bSimplified = () => {
       let newMismatchesCount = 0;
       let newEligibleItc = 0;
 
-      setReconciliationData(prev => {
-        if (!prev || !prev.results) return prev;
+      setReconciliationData((prev) => {
+        if (!prev || !prev.results) {
+          return prev;
+        }
 
-        if (actionType === 'DELETE_DUPLICATE') {
-          updatedResults = prev.results.filter(item => item.invoiceNumber !== invoiceNumber && item.invoiceId !== invoiceId);
+        if (actionType === "DELETE_DUPLICATE") {
+          updatedResults = prev.results.filter(
+            (item) =>
+              item.invoiceNumber !== invoiceNumber &&
+              item.invoiceId !== invoiceId
+          );
         } else {
-          updatedResults = prev.results.map(item => {
-            if (item.invoiceNumber === invoiceNumber || item.invoiceId === invoiceId) {
-              const gstr2bLimit = item.gstr2bData?.totalTax || item.allowedItcAmount || item.claimedTotalTax || 0;
+          updatedResults = prev.results.map((item) => {
+            if (
+              item.invoiceNumber === invoiceNumber ||
+              item.invoiceId === invoiceId
+            ) {
+              const gstr2bLimit =
+                item.gstr2bData?.totalTax ||
+                item.allowedItcAmount ||
+                item.claimedTotalTax ||
+                0;
+
               return {
                 ...item,
-                status: 'MATCHED',
+                status: "MATCHED",
                 errorCode: null,
-                allowedItcAmount: actionType === 'DEFER_TO_NEXT_MONTH' ? 0 : gstr2bLimit
+                allowedItcAmount:
+                  actionType === "DEFER_TO_NEXT_MONTH"
+                    ? 0
+                    : gstr2bLimit,
               };
             }
+
             return item;
           });
         }
 
-        newMismatchesCount = updatedResults.filter(r => r.status !== 'MATCHED').length;
-        newEligibleItc = updatedResults.reduce((acc, curr) => acc + (curr.allowedItcAmount || 0), 0);
+        newMismatchesCount =
+          updatedResults.filter(
+            (r) => r.status !== "MATCHED"
+          ).length;
+
+        newEligibleItc = updatedResults.reduce(
+          (acc, curr) =>
+            acc + (curr.allowedItcAmount || 0),
+          0
+        );
 
         const updatedMetrics = {
           ...activePersonaMetrics,
           mismatchesCount: newMismatchesCount,
           eligibleItc: newEligibleItc,
-          netTax: Math.max(0, 42500 - newEligibleItc)
+          netTax: Math.max(
+            0,
+            42500 - newEligibleItc
+          ),
         };
 
         const updatedReconcilData = {
@@ -508,58 +788,84 @@ const Gstr3bSimplified = () => {
           results: updatedResults,
           summary: {
             ...prev?.summary,
-            matchedCount: updatedResults.length - newMismatchesCount,
+            matchedCount:
+              updatedResults.length -
+              newMismatchesCount,
             mismatchCount: newMismatchesCount,
-            eligibleItc: newEligibleItc
-          }
+            eligibleItc: newEligibleItc,
+          },
         };
 
         setActivePersonaMetrics(updatedMetrics);
 
-        // Update Per-Persona Cache
-        setPersonaStateCache(prevCache => ({
+        setPersonaStateCache((prevCache) => ({
           ...prevCache,
           [selectedPersonaGstin]: {
             reconciliationData: updatedReconcilData,
-            metrics: updatedMetrics
-          }
+            metrics: updatedMetrics,
+          },
         }));
 
         return updatedReconcilData;
       });
 
       setResolvingId(null);
+
       if (showToast) {
-        showToast(`Invoice #${invoiceNumber} resolved for ${activePersonaMetrics.name}!`, "success", "1-Click Fix Applied");
+        showToast(
+          `Invoice #${invoiceNumber} resolved for ${activePersonaMetrics.name}.`,
+          "success",
+          "Resolution Applied"
+        );
       }
     }, 400);
   };
 
-  // Handle Final GSTR-3B Submission
   const handleSubmitReturn = async () => {
     setSubmitting(true);
+
     try {
-      const result = await submitGstr3bReturn({ gstin: selectedPersonaGstin });
+      const result = await submitGstr3bReturn({
+        gstin: selectedPersonaGstin,
+      });
+
       setSubmissionResult(result);
       setIsPreFilingSummaryOpen(false);
+
       if (showToast) {
-        showToast(`GSTR-3B Return Filed for ${activePersonaMetrics.name}! ARN: ${result.arn}`, "success", "Filing Complete");
+        showToast(
+          `GSTR-3B Return filed for ${activePersonaMetrics.name}. ARN: ${result.arn}`,
+          "success",
+          "Filing Complete"
+        );
       }
     } catch (err) {
-      if (showToast) showToast("Return submission failed.", "error");
+      if (showToast) {
+        showToast(
+          "Return submission failed.",
+          "error"
+        );
+      }
     } finally {
       setSubmitting(false);
     }
   };
 
-  // Open Printable HTML Summary Receipt
   const handleOpenReceipt = () => {
-    const arn = submissionResult?.arn || "AA270726889900V";
-    const receiptUrl = `/api/gstr3b/receipt/${arn}/html`;
-    window.open(receiptUrl, '_blank', 'width=800,height=900,scrollbars=yes');
+    const arn =
+      submissionResult?.arn ||
+      "AA270726889900V";
+
+    const receiptUrl =
+      `/api/gstr3b/receipt/${arn}/html`;
+
+    window.open(
+      receiptUrl,
+      "_blank",
+      "width=800,height=900,scrollbars=yes"
+    );
   };
 
-  // Speak SSML Voice Explainer out loud
   const handleVoicePlayback = async () => {
     if (isPlayingAudio) {
       stopSpeech();
@@ -569,475 +875,850 @@ const Gstr3bSimplified = () => {
 
     try {
       setIsPlayingAudio(true);
-      const voiceRes = await getVoiceExplanation('AP/2026/045', language);
-      const textToSpeak = voiceRes.script || voiceRes.voicePayload?.plainText || "Asian Paints bill AP/2026/045 is unfiled. Claim credit safely next month.";
-      
-      const cleanText = textToSpeak.replace(/<[^>]*>/g, '').trim();
 
-      speakTextInLanguage(cleanText, language, () => {
-        setIsPlayingAudio(false);
-      }, () => {
-        setIsPlayingAudio(false);
-      });
+      const voiceRes = await getVoiceExplanation(
+        "AP/2026/045",
+        language
+      );
+
+      const textToSpeak =
+        voiceRes.script ||
+        voiceRes.voicePayload?.plainText ||
+        "Asian Paints bill AP/2026/045 is unfiled. Claim credit safely next month.";
+
+      const cleanText = textToSpeak
+        .replace(/<[^>]*>/g, "")
+        .trim();
+
+      speakTextInLanguage(
+        cleanText,
+        language,
+        () => setIsPlayingAudio(false),
+        () => setIsPlayingAudio(false)
+      );
     } catch (err) {
       setIsPlayingAudio(false);
     }
   };
 
-  // Trigger Chatbot explaining specific mismatch
   const handleAskChatbot = (item) => {
-    const q = `Explain invoice mismatch for invoice #${item.invoiceNumber} from supplier ${item.supplierName} (${item.errorCode || 'mismatch'}) and tell me step-by-step how to resolve it safely.`;
-    window.dispatchEvent(new CustomEvent('open-gst-copilot', { detail: { query: q } }));
+    const q =
+      `Explain invoice mismatch for invoice #${item.invoiceNumber} ` +
+      `from supplier ${item.supplierName} ` +
+      `(${item.errorCode || "mismatch"}) and tell me ` +
+      `step-by-step how to resolve it safely.`;
+
+    window.dispatchEvent(
+      new CustomEvent("open-gst-copilot", {
+        detail: { query: q },
+      })
+    );
   };
 
   const items = reconciliationData?.results || [];
-  const mismatchedItems = items.filter(item => item.status !== 'MATCHED');
+  const mismatchedItems = items.filter(
+    (item) => item.status !== "MATCHED"
+  );
 
-  const filteredMismatches = mismatchedItems.filter(item => {
-    if (activeMismatchFilter === 'ALL') return true;
-    if (activeMismatchFilter === 'CRITICAL') return item.errorCode === 'ERR_SUPPLIER_UNFILED' || item.errorCode === 'ERR_DUPLICATE_CLAIM' || item.errorCode === 'ERR_SUPPLIER_CANCELLED';
-    if (activeMismatchFilter === 'WARNING') return item.errorCode === 'ERR_TAX_AMOUNT_MISMATCH';
-    if (activeMismatchFilter === 'DEFERRED') return item.errorCode === 'ERR_DEFERRED_ITC_LATE_UPLOAD';
-    return true;
-  });
+  const filteredMismatches =
+    mismatchedItems.filter((item) => {
+      if (activeMismatchFilter === "ALL") {
+        return true;
+      }
+
+      if (activeMismatchFilter === "CRITICAL") {
+        return (
+          item.errorCode === "ERR_SUPPLIER_UNFILED" ||
+          item.errorCode === "ERR_DUPLICATE_CLAIM" ||
+          item.errorCode === "ERR_SUPPLIER_CANCELLED"
+        );
+      }
+
+      if (activeMismatchFilter === "WARNING") {
+        return (
+          item.errorCode ===
+          "ERR_TAX_AMOUNT_MISMATCH"
+        );
+      }
+
+      if (activeMismatchFilter === "DEFERRED") {
+        return (
+          item.errorCode ===
+          "ERR_DEFERRED_ITC_LATE_UPLOAD"
+        );
+      }
+
+      return true;
+    });
+
+  const matchedCount =
+    Math.max(
+      0,
+      items.length - mismatchedItems.length
+    ) || activePersonaMetrics.invoicesCount -
+      activePersonaMetrics.mismatchesCount;
 
   return (
     <PageContainer>
-      <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 font-sans">
-        
-        {/* Top Synthetic Environment Indicator Badge */}
-        <div className="mb-4 bg-amber-500/10 border border-amber-500/30 text-amber-900 px-4 py-2 rounded-xl text-xs font-bold flex items-center justify-between shadow-2xs">
-          <div className="flex items-center gap-2">
-            <span className="bg-amber-500 text-slate-900 font-extrabold px-2 py-0.5 rounded text-[10px] uppercase tracking-wider">
-              SYNTHETIC TEST ENVIRONMENT
+      <div className="mx-auto max-w-7xl px-4 py-7 font-sans sm:px-6 lg:px-8">
+        {/* =========================================================
+            DEMO ENVIRONMENT NOTICE
+        ========================================================== */}
+        <div className="mb-6 flex flex-col gap-2 border border-[#e8c980] bg-[#fff9e9] px-4 py-3 text-xs text-[#6d5200] sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <span className="mr-2 font-semibold uppercase tracking-[0.08em]">
+              Demo environment
             </span>
-            <span>All taxpayer data, invoice statements, and payment gateways operate on simulated mock GSTN records.</span>
+
+            <span>
+              Taxpayer data, invoice statements and payment
+              gateways are operating on simulated GSTN records.
+            </span>
           </div>
-          <span className="font-mono text-[11px] font-extrabold text-amber-800 hidden sm:inline">[MOCK DATA ACTIVE]</span>
+
+          <span className="font-mono text-[10px] font-semibold text-[#876700]">
+            MOCK DATA ACTIVE
+          </span>
         </div>
 
-        {/* Top Banner: Interactive Hackathon Demo Persona Switcher */}
-        <div className="mb-8 bg-gradient-to-r from-navy via-navy-2 to-blue-900 text-white p-6 rounded-2xl shadow-lg border border-white/10 relative overflow-hidden">
-          <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-            <Users className="w-48 h-48 text-white" />
-          </div>
-
-          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6 relative z-10">
+        {/* =========================================================
+            PAGE HEADER
+        ========================================================== */}
+        <header className="border-b border-line pb-6">
+          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div>
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber/20 border border-amber/40 text-amber text-xs font-bold mb-2">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>10 TAXPAYER DEMO PERSONAS & CASE STUDIES</span>
-              </div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-white">GSTR-3B Simplified Filing Dashboard</h1>
-              <p className="text-xs sm:text-sm text-white/80 mt-1 max-w-xl">
-                Automatic GSTR-2B reconciliation, 1-click mismatch resolution, and penalty-free return submission.
+              <p className="text-xs font-semibold uppercase tracking-[0.12em] text-navy/65">
+                Return filing
+              </p>
+
+              <h1 className="mt-2 font-serif text-[2rem] leading-tight tracking-[-0.025em] text-ink sm:text-[2.5rem]">
+                GSTR-3B Filing Dashboard
+              </h1>
+
+              <p className="mt-2 max-w-3xl text-sm leading-6 text-muted">
+                Review inward invoice reconciliation, resolve
+                exceptions and prepare the GSTR-3B return for
+                submission.
               </p>
             </div>
 
-            {/* Persona Switcher Dropdown */}
-            <div className="bg-white/10 backdrop-blur-md p-3.5 rounded-xl border border-white/20 w-full lg:w-auto shrink-0">
-              <label htmlFor="persona-select" className="block text-[11px] font-bold text-amber uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                <Users className="w-3.5 h-3.5" />
-                Select Live Taxpayer Persona (10 Available):
-              </label>
-              <select
-                id="persona-select"
-                value={selectedPersonaGstin}
-                onChange={(e) => setSelectedPersonaGstin(e.target.value)}
-                className="bg-navy border border-white/30 text-white font-bold text-xs rounded-lg px-3 py-2 w-full lg:w-80 focus:outline-none focus:ring-2 focus:ring-amber"
+            <div className="w-full lg:w-[360px]">
+              <label
+                htmlFor="persona-select"
+                className="mb-2 block text-xs font-semibold uppercase tracking-[0.08em] text-muted"
               >
-                {DEMO_PERSONAS.map(p => (
-                  <option key={p.gstin} value={p.gstin}>
-                    {p.name} — {p.business} ({p.location})
-                  </option>
-                ))}
-              </select>
-              <p className="text-[10px] text-white/70 mt-1.5 font-mono">
-                Active GSTIN: <span className="text-amber font-semibold">{activePersonaMetrics.gstin}</span>
-              </p>
-            </div>
-          </div>
+                Taxpayer
+              </label>
 
-          {/* Active Persona Case Details Card */}
-          <div className="mt-6 pt-5 border-t border-white/15 grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10 text-xs">
-            <div className="bg-white/10 backdrop-blur-sm p-3.5 rounded-xl border border-white/10">
-              <div className="flex items-center gap-1.5 text-amber font-bold mb-1">
-                <Building2 className="w-3.5 h-3.5" />
-                <span>{activePersonaMetrics.name} • {activePersonaMetrics.business}</span>
+              <div className="relative">
+                <select
+                  id="persona-select"
+                  value={selectedPersonaGstin}
+                  onChange={(e) =>
+                    setSelectedPersonaGstin(
+                      e.target.value
+                    )
+                  }
+                  className="h-11 w-full appearance-none border border-line bg-white px-3 pr-9 text-sm font-medium text-ink transition-colors focus:border-navy focus:outline-none"
+                >
+                  {DEMO_PERSONAS.map((persona) => (
+                    <option
+                      key={persona.gstin}
+                      value={persona.gstin}
+                    >
+                      {persona.name} — {persona.business}
+                    </option>
+                  ))}
+                </select>
+
+                <Users className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
               </div>
-              <p className="text-white/80 text-[11px] flex items-center gap-2">
-                <span className="flex items-center gap-1"><MapPin className="w-3 h-3 text-white/60" /> {activePersonaMetrics.location}</span>
-                <span className="flex items-center gap-1"><TrendingUp className="w-3 h-3 text-white/60" /> Turnover: {activePersonaMetrics.turnover}</span>
+
+              <p className="mt-2 text-xs text-muted">
+                GSTIN:{" "}
+                <span className="font-mono font-semibold text-ink">
+                  {activePersonaMetrics.gstin}
+                </span>
+              </p>
+            </div>
+          </div>
+        </header>
+
+        {/* =========================================================
+            TAXPAYER SUMMARY
+        ========================================================== */}
+        <section className="mt-6 border border-line bg-white">
+          <div className="border-b border-line px-5 py-4 sm:px-6">
+            <h2 className="text-sm font-semibold text-ink">
+              Taxpayer summary
+            </h2>
+          </div>
+
+          <div className="grid divide-y divide-line sm:grid-cols-2 lg:grid-cols-4 lg:divide-x lg:divide-y-0">
+            <div className="px-5 py-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.06em] text-muted">
+                Taxpayer
+              </p>
+
+              <p className="mt-1.5 text-sm font-semibold text-ink">
+                {activePersonaMetrics.name}
+              </p>
+
+              <p className="mt-1 text-xs text-muted">
+                {activePersonaMetrics.business}
               </p>
             </div>
 
-            <div className="bg-amber-500/20 backdrop-blur-sm p-3.5 rounded-xl border border-amber-400/30">
-              <div className="flex items-center gap-1.5 text-amber font-bold mb-1">
-                <ShieldAlert className="w-3.5 h-3.5 text-amber" />
-                <span>Portal Problem & Barrier</span>
+            <div className="px-5 py-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.06em] text-muted">
+                Registration
+              </p>
+
+              <p className="mt-1.5 font-mono text-sm font-semibold text-ink">
+                {activePersonaMetrics.gstin}
+              </p>
+
+              <p className="mt-1 text-xs text-muted">
+                {activePersonaMetrics.location}
+              </p>
+            </div>
+
+            <div className="px-5 py-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.06em] text-muted">
+                Turnover
+              </p>
+
+              <p className="mt-1.5 text-sm font-semibold text-ink">
+                {activePersonaMetrics.turnover}
+              </p>
+
+              <p className="mt-1 text-xs text-muted">
+                Return period: July 2026
+              </p>
+            </div>
+
+            <div className="px-5 py-4">
+              <p className="text-xs font-semibold uppercase tracking-[0.06em] text-muted">
+                Current issue
+              </p>
+
+              <p className="mt-1.5 text-sm leading-5 text-ink">
+                {activePersonaMetrics.problem}
+              </p>
+            </div>
+          </div>
+
+          <div className="border-t border-line px-5 py-4 sm:px-6">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.06em] text-muted">
+                  Recommended handling
+                </p>
+
+                <p className="mt-1 text-sm text-ink/80">
+                  {activePersonaMetrics.solution}
+                </p>
               </div>
-              <p className="text-amber-100 text-[11px]">{activePersonaMetrics.problem}</p>
-            </div>
 
-            <div className="bg-emerald-500/20 backdrop-blur-sm p-3.5 rounded-xl border border-emerald-400/30">
-              <div className="flex items-center gap-1.5 text-emerald-300 font-bold mb-1">
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-300" />
-                <span>Our Solution & Impact</span>
-              </div>
-              <p className="text-emerald-100 text-[11px]">
-                {activePersonaMetrics.solution} <span className="font-bold underline text-white">({activePersonaMetrics.impact})</span>
-              </p>
+              <span className="text-xs font-medium text-green">
+                {activePersonaMetrics.impact}
+              </span>
             </div>
           </div>
-        </div>
+        </section>
 
-        {/* Live Tax Payable Summary Cards Row */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
-            <div>
-              <p className="text-xs font-bold text-slate-500 uppercase">Scanned Invoices</p>
-              <p className="text-2xl font-black text-navy mt-1">{items.length || activePersonaMetrics.invoicesCount}</p>
-              <p className="text-[11px] text-emerald-600 font-semibold mt-1">
-                {items.length - mismatchedItems.length} Matched Invoices
-              </p>
-            </div>
-            <div className="p-3 bg-blue-50 text-blue-700 rounded-xl">
-              <FileCheck2 className="w-6 h-6" />
-            </div>
+        {/* =========================================================
+            KEY FIGURES
+        ========================================================== */}
+        <section className="mt-6 grid border-y border-line bg-white sm:grid-cols-2 lg:grid-cols-4">
+          <div className="border-b border-line px-5 py-5 sm:border-r lg:border-b-0">
+            <p className="text-xs font-semibold uppercase tracking-[0.07em] text-muted">
+              Scanned invoices
+            </p>
+
+            <p className="mt-2 font-mono text-2xl font-semibold tracking-tight text-ink">
+              {items.length ||
+                activePersonaMetrics.invoicesCount}
+            </p>
+
+            <p className="mt-1 text-xs text-green">
+              {matchedCount} matched
+            </p>
           </div>
 
-          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
-            <div>
-              <p className="text-xs font-bold text-slate-500 uppercase">Eligible ITC Credit</p>
-              <p className="text-2xl font-black text-emerald-600 mt-1">₹{(activePersonaMetrics.eligibleItc || 0).toLocaleString()}</p>
-              <p className="text-[11px] text-slate-500 mt-1">GSTR-2B Verified</p>
-            </div>
-            <div className="p-3 bg-emerald-50 text-emerald-700 rounded-xl">
-              <ShieldCheck className="w-6 h-6" />
-            </div>
+          <div className="border-b border-line px-5 py-5 lg:border-b-0 lg:border-r">
+            <p className="text-xs font-semibold uppercase tracking-[0.07em] text-muted">
+              Eligible ITC
+            </p>
+
+            <p className="mt-2 font-mono text-2xl font-semibold tracking-tight text-ink">
+              ₹
+              {(
+                activePersonaMetrics.eligibleItc || 0
+              ).toLocaleString()}
+            </p>
+
+            <p className="mt-1 text-xs text-muted">
+              GSTR-2B verified
+            </p>
           </div>
 
-          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
-            <div>
-              <p className="text-xs font-bold text-slate-500 uppercase">Pending Mismatches</p>
-              <p className="text-2xl font-black text-amber-600 mt-1">{mismatchedItems.length}</p>
-              <p className="text-[11px] text-amber-700 font-semibold mt-1">{mismatchedItems.length === 0 ? 'All Mismatches Resolved!' : 'Requires 1-Click Fix'}</p>
-            </div>
-            <div className="p-3 bg-amber-50 text-amber-700 rounded-xl">
-              <AlertCircle className="w-6 h-6" />
-            </div>
-          </div>
+          <div className="border-b border-line px-5 py-5 sm:border-r lg:border-b-0">
+            <p className="text-xs font-semibold uppercase tracking-[0.07em] text-muted">
+              Pending mismatches
+            </p>
 
-          <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-xs flex items-center justify-between">
-            <div>
-              <p className="text-xs font-bold text-slate-500 uppercase">Net Cash Tax Payable</p>
-              <p className="text-2xl font-black text-navy mt-1">₹{(activePersonaMetrics.netTax || 0).toLocaleString()}</p>
-              <p className="text-[11px] text-slate-500 mt-1">Due: 20th August 2026</p>
-            </div>
-            <div className="p-3 bg-slate-100 text-navy rounded-xl">
-              <Calculator className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
-
-        {/* Action Controls, Audio Bar & Standalone Modals */}
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex flex-wrap items-center gap-2.5 w-full sm:w-auto">
-            <button
-              onClick={handleVoicePlayback}
-              className={`px-4 py-2.5 rounded-xl text-xs font-bold flex items-center space-x-2 transition-all cursor-pointer shadow-xs ${
-                isPlayingAudio ? 'bg-amber text-navy animate-pulse' : 'bg-navy hover:bg-[#1a3f6e] text-white'
+            <p
+              className={`mt-2 font-mono text-2xl font-semibold tracking-tight ${
+                mismatchedItems.length > 0
+                  ? "text-[#8d5d00]"
+                  : "text-green"
               }`}
             >
-              <Volume2 className="w-4 h-4 text-amber" />
-              <span>{isPlayingAudio ? 'Playing Voice Guidance...' : '1-Tap Voice Audio Explanation'}</span>
+              {mismatchedItems.length}
+            </p>
+
+            <p className="mt-1 text-xs text-muted">
+              {mismatchedItems.length > 0
+                ? "Requires review"
+                : "No pending exceptions"}
+            </p>
+          </div>
+
+          <div className="px-5 py-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.07em] text-muted">
+              Net cash tax payable
+            </p>
+
+            <p className="mt-2 font-mono text-2xl font-semibold tracking-tight text-ink">
+              ₹
+              {(
+                activePersonaMetrics.netTax || 0
+              ).toLocaleString()}
+            </p>
+
+            <p className="mt-1 text-xs text-muted">
+              Due: 20 August 2026
+            </p>
+          </div>
+        </section>
+
+        {/* =========================================================
+            PRIMARY ACTION BAR
+        ========================================================== */}
+        <section className="mt-6 flex flex-col gap-4 border-y border-line bg-white px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={handleVoicePlayback}
+              className={`inline-flex items-center gap-2 border px-3.5 py-2.5 text-xs font-semibold transition-colors ${
+                isPlayingAudio
+                  ? "border-navy bg-navy text-white"
+                  : "border-line bg-white text-ink hover:border-navy/35 hover:bg-shell"
+              }`}
+            >
+              <Volume2 className="h-4 w-4" />
+              {isPlayingAudio
+                ? "Playing guidance"
+                : "Voice guidance"}
             </button>
 
             <button
-              onClick={() => setIsUploadDropzoneOpen(true)}
-              className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 shadow-sm"
+              type="button"
+              onClick={() =>
+                setIsUploadDropzoneOpen(true)
+              }
+              className="inline-flex items-center gap-2 border border-line bg-white px-3.5 py-2.5 text-xs font-semibold text-ink transition-colors hover:border-navy/35 hover:bg-shell"
             >
-              <Upload className="w-4 h-4 text-white" />
-              <span>📤 Upload Raw Invoices for {activePersonaMetrics.name}</span>
+              <Upload className="h-4 w-4 text-navy" />
+              Upload invoices
             </button>
 
             <button
-              onClick={() => setIsPreFilingSummaryOpen(true)}
-              className="bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold px-3.5 py-2.5 rounded-xl border border-slate-300 transition-all cursor-pointer flex items-center gap-1.5"
+              type="button"
+              onClick={() =>
+                setIsPreFilingSummaryOpen(true)
+              }
+              className="inline-flex items-center gap-2 border border-line bg-white px-3.5 py-2.5 text-xs font-semibold text-ink transition-colors hover:border-navy/35 hover:bg-shell"
             >
-              <Eye className="w-4 h-4 text-amber-600" />
-              <span>📊 Pre-Filing Summary</span>
+              <Eye className="h-4 w-4 text-navy" />
+              Pre-filing review
             </button>
           </div>
 
-          {/* Return Filing Trigger Button */}
-          <div className="flex items-center space-x-3 w-full sm:w-auto justify-end">
+          <div className="flex flex-wrap items-center gap-2">
             {submissionResult ? (
-              <div className="flex items-center space-x-2">
-                <span className="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-2 rounded-xl border border-emerald-300 flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <span>Filed (ARN: {submissionResult.arn})</span>
-                </span>
+              <>
+                <div className="border border-green/30 bg-green/5 px-3.5 py-2.5 text-xs font-semibold text-green">
+                  Filed · ARN:{" "}
+                  <span className="font-mono">
+                    {submissionResult.arn}
+                  </span>
+                </div>
 
                 <button
+                  type="button"
                   onClick={handleOpenReceipt}
-                  className="bg-navy hover:bg-[#1a3f6e] text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-xs transition-all cursor-pointer flex items-center gap-1.5"
+                  className="inline-flex items-center gap-2 bg-navy px-4 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-navy-hover"
                 >
-                  <Printer className="w-4 h-4 text-amber" />
-                  <span>View Printable Receipt</span>
+                  <Printer className="h-4 w-4" />
+                  View receipt
                 </button>
-              </div>
+              </>
             ) : (
               <button
-                onClick={() => setIsPreFilingSummaryOpen(true)}
+                type="button"
+                onClick={() =>
+                  setIsPreFilingSummaryOpen(true)
+                }
                 disabled={submitting}
-                className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 disabled:opacity-50 text-white font-bold text-xs sm:text-sm py-2.5 px-6 rounded-xl shadow-sm transition-all cursor-pointer flex items-center justify-center space-x-2"
+                className="inline-flex items-center gap-2 bg-navy px-5 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-navy-hover disabled:cursor-not-allowed disabled:opacity-50"
               >
-                <CheckCircle2 className="w-4 h-4" />
-                <span>{submitting ? 'Filing GSTR-3B...' : 'Review & Submit Return'}</span>
+                <CheckCircle2 className="h-4 w-4" />
+                {submitting
+                  ? "Filing GSTR-3B..."
+                  : "Review & Submit Return"}
               </button>
             )}
           </div>
-        </div>
+        </section>
 
-        {/* 1. STANDALONE COLOR-CODED MISMATCH & ERROR CARDS SECTION */}
-        <div className="mb-10 bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-4 gap-3">
+        {/* =========================================================
+            MISMATCH REVIEW
+        ========================================================== */}
+        <section className="mt-8 border border-line bg-white">
+          <div className="flex flex-col gap-4 border-b border-line px-5 py-5 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <div className="flex items-center gap-2">
-                <ShieldAlert className="w-5 h-5 text-amber-600" />
-                <h3 className="text-base font-bold text-navy">Standalone Mismatch & Error Cards — {activePersonaMetrics.name} ({mismatchedItems.length})</h3>
-              </div>
-              <p className="text-xs text-slate-500 mt-0.5">Color-coded severity badges with 1-click plain-language tax fixes</p>
+              <h2 className="text-base font-semibold text-ink">
+                Reconciliation exceptions
+              </h2>
+
+              <p className="mt-1 text-xs leading-5 text-muted">
+                Review invoices that require attention before
+                submitting the return.
+              </p>
             </div>
 
-            {/* Severity Filters */}
-            <div className="flex items-center gap-1.5 text-xs">
-              <span className="text-slate-400 font-medium mr-1 flex items-center gap-1">
-                <Filter className="w-3 h-3" /> Filter:
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className="mr-1 text-xs text-muted">
+                <Filter className="mr-1 inline h-3.5 w-3.5" />
+                Filter
               </span>
+
               {[
-                { id: 'ALL', label: 'All Mismatches' },
-                { id: 'CRITICAL', label: '🔴 Critical' },
-                { id: 'WARNING', label: '🟠 Warning' },
-                { id: 'DEFERRED', label: '🔵 Deferred' }
-              ].map(f => (
+                { id: "ALL", label: "All" },
+                { id: "CRITICAL", label: "Critical" },
+                { id: "WARNING", label: "Warning" },
+                { id: "DEFERRED", label: "Deferred" },
+              ].map((filter) => (
                 <button
-                  key={f.id}
+                  key={filter.id}
                   type="button"
-                  onClick={() => setActiveMismatchFilter(f.id)}
-                  className={`px-2.5 py-1 rounded-lg font-bold border transition-all cursor-pointer ${
-                    activeMismatchFilter === f.id
-                      ? 'bg-navy text-white border-navy'
-                      : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'
+                  onClick={() =>
+                    setActiveMismatchFilter(
+                      filter.id
+                    )
+                  }
+                  className={`border px-3 py-1.5 text-xs font-medium transition-colors ${
+                    activeMismatchFilter ===
+                    filter.id
+                      ? "border-navy bg-navy text-white"
+                      : "border-line bg-white text-muted hover:border-navy/30 hover:text-ink"
                   }`}
                 >
-                  {f.label}
+                  {filter.label}
                 </button>
               ))}
             </div>
           </div>
 
           {filteredMismatches.length === 0 ? (
-            <div className="p-8 bg-emerald-50 rounded-xl border border-emerald-200 text-center text-emerald-800">
-              <CheckCircle2 className="w-10 h-10 text-emerald-600 mx-auto mb-2" />
-              <h4 className="font-bold text-base">All Invoice Mismatches Resolved for {activePersonaMetrics.name}! 🎉</h4>
-              <p className="text-xs text-emerald-700 mt-1">100% of purchase invoices are now matched against GSTR-2B. Safe to file GSTR-3B return!</p>
+            <div className="px-6 py-12 text-center">
+              <div className="mx-auto flex h-10 w-10 items-center justify-center border border-green/25 bg-green/5 text-green">
+                <Check className="h-5 w-5" />
+              </div>
+
+              <h3 className="mt-4 text-base font-semibold text-ink">
+                No pending reconciliation exceptions
+              </h3>
+
+              <p className="mx-auto mt-1.5 max-w-lg text-sm leading-6 text-muted">
+                All currently filtered invoices have been
+                reconciled and can proceed to the next filing
+                step.
+              </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div className="divide-y divide-line">
               {filteredMismatches.map((item, idx) => {
-                const ruleCode = item.errorCode || item.ruleCode;
-                const isCritical = ruleCode === 'ERR_SUPPLIER_UNFILED' || ruleCode === 'ERR_DUPLICATE_CLAIM' || ruleCode === 'ERR_SUPPLIER_CANCELLED';
-                const isWarning = ruleCode === 'ERR_TAX_AMOUNT_MISMATCH';
+                const ruleCode =
+                  item.errorCode ||
+                  item.ruleCode;
 
-                const badgeStyle = isCritical
-                  ? 'bg-red-100 text-red-900 border-red-300'
-                  : isWarning
-                    ? 'bg-amber-100 text-amber-900 border-amber-300'
-                    : 'bg-blue-100 text-blue-900 border-blue-300';
+                const isCritical =
+                  ruleCode ===
+                    "ERR_SUPPLIER_UNFILED" ||
+                  ruleCode ===
+                    "ERR_DUPLICATE_CLAIM" ||
+                  ruleCode ===
+                    "ERR_SUPPLIER_CANCELLED";
 
-                const cardBorder = isCritical
-                  ? 'border-red-200 bg-red-50/30'
-                  : isWarning
-                    ? 'border-amber-200 bg-amber-50/30'
-                    : 'border-blue-200 bg-blue-50/30';
+                const isWarning =
+                  ruleCode ===
+                  "ERR_TAX_AMOUNT_MISMATCH";
+
+                const severity =
+                  isCritical
+                    ? "CRITICAL"
+                    : isWarning
+                    ? "WARNING"
+                    : "DEFERRED";
+
+                const billedTax =
+                  item.claimedTotalTax ??
+                  item.billedTax ??
+                  item.totalTax ??
+                  0;
+
+                const allowedCredit =
+                  item.allowedItcAmount ??
+                  item.allowedItc ??
+                  item.gstr2bTax ??
+                  0;
 
                 return (
-                  <div key={idx} className={`p-4 rounded-xl border ${cardBorder} shadow-2xs space-y-3 flex flex-col justify-between relative`}>
-                    <div>
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1.5">
-                          <span className="font-bold text-navy font-mono text-sm">#{item.invoiceNumber}</span>
+                  <div
+                    key={item.invoiceId || idx}
+                    className="px-5 py-5 sm:px-6"
+                  >
+                    <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
+                      <div className="min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <span className="font-mono text-sm font-semibold text-navy">
+                            {item.invoiceNumber}
+                          </span>
+
+                          <span
+                            className={`inline-flex border px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.06em] ${
+                              isCritical
+                                ? "border-red-200 bg-red-50 text-red-800"
+                                : isWarning
+                                ? "border-[#e6cf9c] bg-[#fff9e9] text-[#805c00]"
+                                : "border-blue-200 bg-blue-50 text-blue-800"
+                            }`}
+                          >
+                            {severity}
+                          </span>
+
                           {item.isUploaded && (
-                            <span className="bg-blue-100 text-blue-800 font-extrabold text-[9px] px-1.5 py-0.5 rounded border border-blue-300 uppercase">
-                              NEWLY UPLOADED
+                            <span className="border border-navy/20 bg-shell px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.05em] text-navy">
+                              Uploaded
                             </span>
                           )}
                         </div>
-                        <span className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded-full border ${badgeStyle}`}>
-                          {isCritical ? '🔴 CRITICAL' : isWarning ? '🟠 WARNING' : '🔵 DEFERRED'}
-                        </span>
+
+                        <div className="mt-2">
+                          <p className="text-sm font-semibold text-ink">
+                            {item.supplierName}
+                          </p>
+
+                          <p className="mt-0.5 font-mono text-xs text-muted">
+                            {item.supplierGstin}
+                          </p>
+                        </div>
                       </div>
 
-                      <h4 className="font-bold text-slate-800 text-xs mt-2">{item.supplierName}</h4>
-                      <p className="text-[11px] font-mono text-slate-500">{item.supplierGstin}</p>
+                      <div className="grid gap-4 sm:grid-cols-2 xl:w-[360px]">
+                        <div>
+                          <p className="text-[10px] font-semibold uppercase tracking-[0.07em] text-muted">
+                            Billed tax
+                          </p>
 
-                      <div className="mt-2.5 text-xs bg-white/80 p-2.5 rounded-lg border border-slate-200/80 space-y-1">
-                        <div className="flex justify-between">
-                          <span className="text-slate-500">Billed Tax:</span>
-                          <span className="font-bold text-slate-800">₹{(item.claimedTotalTax || item.billedTax || 0).toLocaleString()}</span>
+                          <p className="mt-1 font-mono text-sm font-semibold text-ink">
+                            ₹
+                            {billedTax.toLocaleString()}
+                          </p>
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-slate-500">GSTR-2B Limit:</span>
-                          <span className="font-bold text-emerald-700">₹{(item.allowedItcAmount || item.gstr2bTax || 0).toLocaleString()}</span>
+
+                        <div>
+                          <p className="text-[10px] font-semibold uppercase tracking-[0.07em] text-muted">
+                            GSTR-2B credit
+                          </p>
+
+                          <p className="mt-1 font-mono text-sm font-semibold text-ink">
+                            ₹
+                            {allowedCredit.toLocaleString()}
+                          </p>
                         </div>
+                      </div>
+
+                      <div className="flex flex-wrap gap-2 xl:justify-end">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleAskChatbot(item)
+                          }
+                          className="inline-flex items-center gap-1.5 border border-line bg-white px-3 py-2 text-xs font-medium text-muted transition-colors hover:border-navy/30 hover:text-navy"
+                        >
+                          <MessageSquare className="h-3.5 w-3.5" />
+                          Explain
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() =>
+                            handleResolveAction(
+                              item.invoiceId || idx,
+                              item.invoiceNumber,
+                              isCritical
+                                ? "DEFER_TO_NEXT_MONTH"
+                                : "CLAIM_LOWER_LIMIT"
+                            )
+                          }
+                          disabled={
+                            resolvingId ===
+                            (item.invoiceId || idx)
+                          }
+                          className="inline-flex items-center gap-1.5 bg-navy px-3.5 py-2 text-xs font-semibold text-white transition-colors hover:bg-navy-hover disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                          {resolvingId ===
+                          (item.invoiceId || idx)
+                            ? "Applying..."
+                            : "Apply resolution"}
+                        </button>
                       </div>
                     </div>
 
-                    <div className="pt-2 border-t border-slate-200/60 flex items-center justify-between gap-2">
-                      <button
-                        type="button"
-                        onClick={() => handleAskChatbot(item)}
-                        className="text-[11px] bg-white hover:bg-slate-100 text-slate-700 font-bold px-2.5 py-1.5 rounded-lg border border-slate-300 flex items-center gap-1 cursor-pointer"
-                      >
-                        <MessageSquare className="w-3 h-3 text-blue-600" />
-                        <span>Explain</span>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => handleResolveAction(item.invoiceId || idx, item.invoiceNumber, isCritical ? 'DEFER_TO_NEXT_MONTH' : 'CLAIM_LOWER_LIMIT')}
-                        disabled={resolvingId === (item.invoiceId || idx)}
-                        className="bg-navy hover:bg-navy-hover text-white text-[11px] font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer shadow-2xs shrink-0"
-                      >
-                        {resolvingId === (item.invoiceId || idx) ? 'Fixing...' : '⚡ 1-Click Fix'}
-                      </button>
+                    <div className="mt-4 border-t border-line pt-3">
+                      <p className="text-xs leading-5 text-muted">
+                        Rule:
+                        <span className="ml-1 font-mono font-medium text-ink">
+                          {ruleCode ||
+                            "MISMATCH"}
+                        </span>
+                      </p>
                     </div>
                   </div>
                 );
               })}
             </div>
           )}
-        </div>
+        </section>
 
-        {/* 2. STANDALONE SCANNED INVOICE LIST & RECONCILIATION TABLE */}
-        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden mb-10">
-          <div className="p-5 border-b border-slate-200 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        {/* =========================================================
+            RECONCILIATION REGISTER
+        ========================================================== */}
+        <section className="mt-8 border border-line bg-white">
+          <div className="flex flex-col gap-4 border-b border-line px-5 py-5 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <h3 className="text-base font-bold text-navy flex items-center gap-2">
-                <FileCheck2 className="w-5 h-5 text-blue-600" />
-                <span>GSTR-1 vs GSTR-2B Inward Invoice List ({activePersonaMetrics.name})</span>
-              </h3>
-              <p className="text-xs text-slate-500 mt-0.5">Showing merged scanned purchase invoices & GSTR-2B reconciliation status</p>
+              <h2 className="text-base font-semibold text-ink">
+                Inward invoice reconciliation
+              </h2>
+
+              <p className="mt-1 text-xs leading-5 text-muted">
+                GSTR-1 vs GSTR-2B reconciliation register for{" "}
+                <span className="font-semibold text-ink">
+                  {activePersonaMetrics.name}
+                </span>
+                .
+              </p>
             </div>
-            
-            {/* Export & Add Invoice Action Buttons */}
-            <div className="flex flex-wrap items-center gap-2">
+
+            <div className="flex flex-wrap gap-2">
               <button
                 type="button"
                 onClick={handleDownloadCsv}
-                className="text-xs bg-white hover:bg-slate-100 text-slate-700 font-bold px-3 py-1.5 rounded-lg border border-slate-300 flex items-center gap-1.5 cursor-pointer shadow-2xs"
-                title="Download invoice list as CSV / Excel spreadsheet"
+                className="inline-flex items-center gap-1.5 border border-line bg-white px-3 py-2 text-xs font-semibold text-ink transition-colors hover:border-navy/30 hover:bg-shell"
               >
-                <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
-                <span>📥 CSV / Excel</span>
+                <FileSpreadsheet className="h-3.5 w-3.5 text-green" />
+                Export CSV
               </button>
 
               <button
                 type="button"
                 onClick={handleDownloadPdf}
-                className="text-xs bg-white hover:bg-slate-100 text-slate-700 font-bold px-3 py-1.5 rounded-lg border border-slate-300 flex items-center gap-1.5 cursor-pointer shadow-2xs"
-                title="Print or save invoice reconciliation statement as PDF"
+                className="inline-flex items-center gap-1.5 border border-line bg-white px-3 py-2 text-xs font-semibold text-ink transition-colors hover:border-navy/30 hover:bg-shell"
               >
-                <Printer className="w-3.5 h-3.5 text-navy" />
-                <span>🖨️ PDF Statement</span>
+                <Printer className="h-3.5 w-3.5 text-navy" />
+                Print / PDF
               </button>
 
               <button
                 type="button"
-                onClick={() => setIsUploadDropzoneOpen(true)}
-                className="text-xs bg-blue-600 hover:bg-blue-700 text-white font-bold px-3.5 py-1.5 rounded-lg flex items-center gap-1.5 shadow-xs cursor-pointer"
+                onClick={() =>
+                  setIsUploadDropzoneOpen(true)
+                }
+                className="inline-flex items-center gap-1.5 bg-navy px-3.5 py-2 text-xs font-semibold text-white transition-colors hover:bg-navy-hover"
               >
-                <PlusCircle className="w-3.5 h-3.5 text-white" />
-                <span>Add / Upload Invoices</span>
+                <Upload className="h-3.5 w-3.5" />
+                Add invoices
               </button>
             </div>
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse text-xs sm:text-sm">
-              <thead className="bg-slate-100/80 text-slate-700 font-bold uppercase text-[11px] border-b border-slate-200">
-                <tr>
-                  <th className="p-3.5">Invoice #</th>
-                  <th className="p-3.5">Supplier Name & GSTIN</th>
-                  <th className="p-3.5">Billed Tax</th>
-                  <th className="p-3.5">GSTR-2B Credit</th>
-                  <th className="p-3.5">Rule Check Status</th>
-                  <th className="p-3.5 text-right">1-Click Resolution Action</th>
+            <table className="min-w-[920px] w-full border-collapse text-sm">
+              <thead>
+                <tr className="border-b border-line bg-shell text-left">
+                  <th className="px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted">
+                    Invoice
+                  </th>
+                  <th className="px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted">
+                    Supplier
+                  </th>
+                  <th className="px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted">
+                    Billed tax
+                  </th>
+                  <th className="px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted">
+                    GSTR-2B credit
+                  </th>
+                  <th className="px-4 py-3 text-[11px] font-semibold uppercase tracking-[0.06em] text-muted">
+                    Status
+                  </th>
+                  <th className="px-4 py-3 text-right text-[11px] font-semibold uppercase tracking-[0.06em] text-muted">
+                    Action
+                  </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200 font-sans">
+
+              <tbody className="divide-y divide-line">
                 {loading ? (
                   <tr>
-                    <td colSpan={6} className="p-8 text-center text-slate-500">
-                      <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-2 text-navy" />
-                      Running live GSTR-2B reconciliation engine for {activePersonaMetrics.name}...
+                    <td
+                      colSpan={6}
+                      className="px-4 py-12 text-center"
+                    >
+                      <RefreshCw className="mx-auto h-5 w-5 animate-spin text-navy" />
+
+                      <p className="mt-3 text-sm font-medium text-ink">
+                        Running reconciliation
+                      </p>
+
+                      <p className="mt-1 text-xs text-muted">
+                        Loading GSTR-2B data for{" "}
+                        {activePersonaMetrics.name}.
+                      </p>
                     </td>
                   </tr>
                 ) : items.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="p-6 text-center text-slate-500">No invoices found for {activePersonaMetrics.name}.</td>
+                    <td
+                      colSpan={6}
+                      className="px-4 py-12 text-center text-sm text-muted"
+                    >
+                      No invoices found for{" "}
+                      {activePersonaMetrics.name}.
+                    </td>
                   </tr>
                 ) : (
                   items.map((item, idx) => {
-                    const hasIssue = item.status !== 'MATCHED';
-                    const ruleCode = item.errorCode || item.ruleCode;
+                    const hasIssue =
+                      item.status !== "MATCHED";
 
-                    const billedTax = item.claimedTotalTax ?? item.billedTax ?? item.totalTax ?? 0;
-                    const allowedCredit = item.allowedItcAmount ?? item.allowedItc ?? item.gstr2bTax ?? 0;
+                    const ruleCode =
+                      item.errorCode ||
+                      item.ruleCode;
+
+                    const billedTax =
+                      item.claimedTotalTax ??
+                      item.billedTax ??
+                      item.totalTax ??
+                      0;
+
+                    const allowedCredit =
+                      item.allowedItcAmount ??
+                      item.allowedItc ??
+                      item.gstr2bTax ??
+                      0;
 
                     return (
-                      <tr key={idx} className={`hover:bg-slate-50 transition-colors ${hasIssue ? 'bg-amber-50/40 border-l-4 border-l-amber-500' : ''}`}>
-                        <td className="p-3.5 font-bold font-mono text-navy flex items-center gap-2">
-                          <span>{item.invoiceNumber}</span>
+                      <tr
+                        key={
+                          item.invoiceId || idx
+                        }
+                        className="transition-colors hover:bg-shell/55"
+                      >
+                        <td className="px-4 py-4 align-top">
+                          <div className="font-mono text-sm font-semibold text-navy">
+                            {item.invoiceNumber}
+                          </div>
+
                           {item.isUploaded && (
-                            <span className="bg-blue-100 text-blue-800 font-extrabold text-[9px] px-1.5 py-0.5 rounded border border-blue-300 uppercase">
-                              NEW
+                            <span className="mt-1 inline-block border border-navy/20 bg-shell px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-[0.05em] text-navy">
+                              Uploaded
                             </span>
                           )}
                         </td>
-                        <td className="p-3.5">
-                          <div className="font-semibold text-slate-800">{item.supplierName}</div>
-                          <div className="text-[11px] text-slate-500 font-mono">{item.supplierGstin}</div>
+
+                        <td className="px-4 py-4 align-top">
+                          <p className="font-medium text-ink">
+                            {item.supplierName}
+                          </p>
+
+                          <p className="mt-1 font-mono text-[11px] text-muted">
+                            {item.supplierGstin}
+                          </p>
                         </td>
-                        <td className="p-3.5 font-bold tabular-nums">₹{billedTax.toLocaleString()}</td>
-                        <td className="p-3.5 font-bold tabular-nums text-emerald-600">₹{allowedCredit.toLocaleString()}</td>
-                        <td className="p-3.5">
+
+                        <td className="px-4 py-4 align-top font-mono font-medium text-ink">
+                          ₹
+                          {billedTax.toLocaleString()}
+                        </td>
+
+                        <td className="px-4 py-4 align-top font-mono font-medium text-ink">
+                          ₹
+                          {allowedCredit.toLocaleString()}
+                        </td>
+
+                        <td className="px-4 py-4 align-top">
                           {hasIssue ? (
-                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-900 border border-amber-300">
-                              <AlertCircle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
-                              <span>{ruleCode || 'MISMATCH'}</span>
-                            </span>
+                            <div>
+                              <span className="inline-flex border border-[#e6cf9c] bg-[#fff9e9] px-2.5 py-1 text-xs font-semibold text-[#805c00]">
+                                Review required
+                              </span>
+
+                              <p className="mt-1 font-mono text-[10px] text-muted">
+                                {ruleCode ||
+                                  "MISMATCH"}
+                              </p>
+                            </div>
                           ) : (
-                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
-                              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                              <span>MATCHED</span>
+                            <span className="inline-flex border border-green/25 bg-green/5 px-2.5 py-1 text-xs font-semibold text-green">
+                              Matched
                             </span>
                           )}
                         </td>
-                        <td className="p-3.5 text-right">
+
+                        <td className="px-4 py-4 text-right align-top">
                           {hasIssue ? (
                             <button
-                              onClick={() => handleResolveAction(item.invoiceId || idx, item.invoiceNumber, ruleCode === 'ERR_TAX_AMOUNT_MISMATCH' ? 'CLAIM_LOWER_LIMIT' : 'DEFER_TO_NEXT_MONTH')}
-                              disabled={resolvingId === (item.invoiceId || idx)}
-                              className="bg-navy hover:bg-navy-hover disabled:opacity-50 text-white text-xs font-bold px-3 py-1.5 rounded-lg transition-all cursor-pointer shadow-2xs"
+                              type="button"
+                              onClick={() =>
+                                handleResolveAction(
+                                  item.invoiceId || idx,
+                                  item.invoiceNumber,
+                                  ruleCode ===
+                                    "ERR_TAX_AMOUNT_MISMATCH"
+                                    ? "CLAIM_LOWER_LIMIT"
+                                    : "DEFER_TO_NEXT_MONTH"
+                                )
+                              }
+                              disabled={
+                                resolvingId ===
+                                (item.invoiceId ||
+                                  idx)
+                              }
+                              className="border border-navy bg-white px-3 py-1.5 text-xs font-semibold text-navy transition-colors hover:bg-shell disabled:cursor-not-allowed disabled:opacity-50"
                             >
-                              {resolvingId === (item.invoiceId || idx) ? 'Fixing...' : '⚡ 1-Click Fix'}
+                              {resolvingId ===
+                              (item.invoiceId ||
+                                idx)
+                                ? "Applying..."
+                                : "Resolve"}
                             </button>
                           ) : (
-                            <span className="text-xs text-emerald-700 font-bold flex items-center justify-end gap-1">
-                              <Check className="w-3.5 h-3.5" /> 100% Matched
+                            <span className="text-xs font-medium text-green">
+                              Complete
                             </span>
                           )}
                         </td>
@@ -1048,103 +1729,261 @@ const Gstr3bSimplified = () => {
               </tbody>
             </table>
           </div>
-        </div>
+        </section>
 
-        {/* 3. STANDALONE UPLOAD DROPZONE MODAL */}
+        {/* =========================================================
+            UPLOAD MODAL
+        ========================================================== */}
         {isUploadDropzoneOpen && (
-          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 border border-slate-200">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
-                <div className="flex items-center gap-2">
-                  <Upload className="w-5 h-5 text-blue-600" />
-                  <h3 className="text-lg font-bold text-navy">Upload Raw Invoices ({activePersonaMetrics.name})</h3>
-                </div>
-                <button type="button" onClick={() => setIsUploadDropzoneOpen(false)} className="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 p-4"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="upload-title"
+          >
+            <div className="w-full max-w-lg border border-line bg-white">
+              <div className="flex items-center justify-between border-b border-line px-6 py-4">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.08em] text-navy/65">
+                    Invoice import
+                  </p>
 
-              <div className="p-8 border-2 border-dashed border-slate-300 rounded-2xl bg-slate-50 text-center space-y-3">
-                <FileText className="w-12 h-12 text-blue-600 mx-auto" />
-                <h4 className="font-bold text-slate-800 text-sm">Drag & Drop Invoice Files (CSV, Excel, JSON)</h4>
-                <p className="text-xs text-slate-500">Upload sample_invoices_clean.csv or sample_invoices_mismatch.json to merge into {activePersonaMetrics.name}'s register.</p>
-                <input type="file" onChange={handleSimulatedFileUpload} className="hidden" id="raw-file-input" />
-                <label htmlFor="raw-file-input" className="inline-block bg-navy hover:bg-navy-hover text-white font-bold text-xs px-5 py-2.5 rounded-xl cursor-pointer shadow-sm">
-                  {isParsingInvoices ? 'Parsing & Reconciling...' : 'Browse Files'}
-                </label>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* 4. PRE-FILING TAX RECONCILIATION SUMMARY MODAL */}
-        {isPreFilingSummaryOpen && (
-          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-            <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 border border-slate-200">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
-                <div className="flex items-center gap-2">
-                  <Calculator className="w-5 h-5 text-emerald-600" />
-                  <h3 className="text-lg font-bold text-navy">Pre-Filing Tax Reconciliation Summary</h3>
-                </div>
-                <button type="button" onClick={() => setIsPreFilingSummaryOpen(false)} className="text-slate-400 hover:text-slate-600 p-1 rounded-lg">
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              <div className="space-y-4 text-xs">
-                <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
-                  <div className="flex justify-between font-medium text-slate-600">
-                    <span>Taxpayer Name:</span>
-                    <span className="font-bold text-slate-800">{activePersonaMetrics.name} ({activePersonaMetrics.business})</span>
-                  </div>
-                  <div className="flex justify-between font-medium text-slate-600">
-                    <span>GSTIN:</span>
-                    <span className="font-mono font-bold text-navy">{activePersonaMetrics.gstin}</span>
-                  </div>
-                  <div className="flex justify-between font-medium text-slate-600">
-                    <span>Filing Return Period:</span>
-                    <span className="font-semibold text-slate-800">July 2026</span>
-                  </div>
-                </div>
-
-                <div className="space-y-2 pt-2 border-t border-slate-100">
-                  <div className="flex justify-between">
-                    <span className="text-slate-500 font-medium">Total Outward Sales Tax Liability:</span>
-                    <span className="font-bold text-slate-800">₹42,500</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-500 font-medium">Total Eligible Input Tax Credit (ITC):</span>
-                    <span className="font-bold text-emerald-600">₹{(activePersonaMetrics.eligibleItc || 0).toLocaleString()}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-500 font-medium">Blocked / Deferred Pending Credit:</span>
-                    <span className="font-bold text-amber-700">₹6,500</span>
-                  </div>
-                  <div className="flex justify-between text-sm font-black pt-3 border-t border-slate-200">
-                    <span className="text-navy">Net Cash Tax Payable:</span>
-                    <span className="text-navy">₹{(activePersonaMetrics.netTax || 0).toLocaleString()}</span>
-                  </div>
-                </div>
-
-                <div className="pt-4 flex justify-end gap-3 border-t border-slate-100">
-                  <button type="button" onClick={() => setIsPreFilingSummaryOpen(false)} className="px-4 py-2 rounded-xl text-slate-600 font-bold">
-                    Close
-                  </button>
-                  <button
-                    type="button"
-                    onClick={handleSubmitReturn}
-                    disabled={submitting}
-                    className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 py-2.5 rounded-xl shadow-sm transition-all cursor-pointer flex items-center gap-2"
+                  <h2
+                    id="upload-title"
+                    className="mt-1 text-lg font-semibold text-ink"
                   >
-                    <CheckCircle2 className="w-4 h-4" />
-                    <span>{submitting ? 'Filing GSTR-3B...' : 'Confirm & File GSTR-3B Return'}</span>
-                  </button>
+                    Upload invoices
+                  </h2>
                 </div>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    setIsUploadDropzoneOpen(false)
+                  }
+                  className="p-1 text-muted transition-colors hover:text-ink"
+                  aria-label="Close upload dialog"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              <div className="px-6 py-5">
+                <div className="border border-dashed border-line bg-shell/60 px-6 py-10 text-center">
+                  <FileText className="mx-auto h-8 w-8 text-navy" />
+
+                  <h3 className="mt-4 text-sm font-semibold text-ink">
+                    Import invoice data
+                  </h3>
+
+                  <p className="mx-auto mt-2 max-w-md text-xs leading-5 text-muted">
+                    Supported formats: CSV, Excel and JSON.
+                    The imported records will be merged into
+                    the current reconciliation register.
+                  </p>
+
+                  {selectedFileName && (
+                    <p className="mt-3 text-xs font-medium text-ink">
+                      Selected:{" "}
+                      <span className="font-mono">
+                        {selectedFileName}
+                      </span>
+                    </p>
+                  )}
+
+                  <input
+                    type="file"
+                    onChange={
+                      handleSimulatedFileUpload
+                    }
+                    className="hidden"
+                    id="raw-file-input"
+                    accept=".csv,.xlsx,.xls,.json"
+                  />
+
+                  <label
+                    htmlFor="raw-file-input"
+                    className="mt-5 inline-flex cursor-pointer items-center gap-2 bg-navy px-5 py-2.5 text-xs font-semibold text-white transition-colors hover:bg-navy-hover"
+                  >
+                    <Upload className="h-4 w-4" />
+                    {isParsingInvoices
+                      ? "Parsing..."
+                      : "Choose file"}
+                  </label>
+                </div>
+              </div>
+
+              <div className="border-t border-line px-6 py-4 text-right">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setIsUploadDropzoneOpen(false)
+                  }
+                  className="border border-line bg-white px-4 py-2 text-sm font-medium text-muted hover:bg-shell"
+                >
+                  Cancel
+                </button>
               </div>
             </div>
           </div>
         )}
 
+        {/* =========================================================
+            PRE-FILING MODAL
+        ========================================================== */}
+        {isPreFilingSummaryOpen && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 p-4"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="prefiling-title"
+          >
+            <div className="w-full max-w-xl border border-line bg-white">
+              <div className="flex items-center justify-between border-b border-line px-6 py-4">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.08em] text-navy/65">
+                    Return review
+                  </p>
+
+                  <h2
+                    id="prefiling-title"
+                    className="mt-1 text-lg font-semibold text-ink"
+                  >
+                    Pre-filing tax summary
+                  </h2>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    setIsPreFilingSummaryOpen(false)
+                  }
+                  className="p-1 text-muted transition-colors hover:text-ink"
+                  aria-label="Close pre-filing review"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              <div className="px-6 py-5">
+                <div className="border border-line">
+                  <div className="grid gap-4 border-b border-line bg-shell/60 px-5 py-4 sm:grid-cols-3">
+                    <div>
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.06em] text-muted">
+                        Taxpayer
+                      </p>
+
+                      <p className="mt-1 text-sm font-semibold text-ink">
+                        {activePersonaMetrics.name}
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.06em] text-muted">
+                        GSTIN
+                      </p>
+
+                      <p className="mt-1 font-mono text-xs font-semibold text-ink">
+                        {activePersonaMetrics.gstin}
+                      </p>
+                    </div>
+
+                    <div>
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.06em] text-muted">
+                        Return period
+                      </p>
+
+                      <p className="mt-1 text-sm font-semibold text-ink">
+                        July 2026
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="divide-y divide-line">
+                    <div className="flex items-center justify-between gap-5 px-5 py-4">
+                      <span className="text-sm text-muted">
+                        Total outward sales tax liability
+                      </span>
+
+                      <span className="font-mono text-sm font-semibold text-ink">
+                        ₹42,500
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between gap-5 px-5 py-4">
+                      <span className="text-sm text-muted">
+                        Eligible input tax credit
+                      </span>
+
+                      <span className="font-mono text-sm font-semibold text-ink">
+                        ₹
+                        {(
+                          activePersonaMetrics.eligibleItc ||
+                          0
+                        ).toLocaleString()}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between gap-5 px-5 py-4">
+                      <span className="text-sm text-muted">
+                        Blocked / deferred pending credit
+                      </span>
+
+                      <span className="font-mono text-sm font-semibold text-[#8d5d00]">
+                        ₹6,500
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between gap-5 bg-shell/45 px-5 py-4">
+                      <span className="text-sm font-semibold text-ink">
+                        Net cash tax payable
+                      </span>
+
+                      <span className="font-mono text-base font-semibold text-navy">
+                        ₹
+                        {(
+                          activePersonaMetrics.netTax ||
+                          0
+                        ).toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-4 border border-[#e8c980] bg-[#fff9e9] px-4 py-3">
+                  <p className="text-xs leading-5 text-[#6d5200]">
+                    Review the reconciled amounts above before
+                    confirming the GSTR-3B submission.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-2 border-t border-line px-6 py-4">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setIsPreFilingSummaryOpen(false)
+                  }
+                  className="border border-line bg-white px-4 py-2.5 text-sm font-medium text-muted transition-colors hover:bg-shell"
+                >
+                  Close
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleSubmitReturn}
+                  disabled={submitting}
+                  className="inline-flex items-center gap-2 bg-navy px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-navy-hover disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <CheckCircle2 className="h-4 w-4" />
+                  {submitting
+                    ? "Filing..."
+                    : "Confirm & File GSTR-3B"}
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </PageContainer>
   );
