@@ -88,7 +88,7 @@ const FilingClarifications = () => {
 
   return (
     <PageContainer>
-      <main className="min-h-[calc(100vh-150px)] bg-[#f7f6f3] text-[#2f3437] font-sans">
+      <main className="min-h-[calc(100vh-150px)] min-w-0 overflow-x-hidden bg-[#f7f6f3] text-[#2f3437] font-sans">
         <Breadcrumbs
           items={[
             { label: "Services" },
@@ -97,7 +97,7 @@ const FilingClarifications = () => {
           ]}
         />
 
-        <div className="mx-auto max-w-[1180px] px-5 pb-14 pt-8 sm:px-8">
+        <div className="mx-auto w-full max-w-[1180px] min-w-0 px-4 pb-12 pt-5 sm:px-6 sm:pb-14 sm:pt-7 lg:px-8 lg:pt-8">
           <header className="border-b border-[#eaeaea] pb-7">
             <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
               <div>
@@ -105,11 +105,11 @@ const FilingClarifications = () => {
                   GST Registration Services
                 </p>
 
-                <h1 className="font-serif text-[2.1rem] leading-[1.1] tracking-[-0.02em] text-balance text-[#161b1e] sm:text-[2.4rem]">
+                <h1 className="font-serif text-[1.75rem] leading-[1.12] sm:text-[2.1rem] tracking-[-0.02em] text-balance text-[#161b1e] sm:text-[2.4rem]">
                   Application for Filing Clarifications (Form GST REG-04)
                 </h1>
 
-                <p className="mt-4 max-w-[62ch] text-sm leading-6 text-[#6f7375]">
+                <p className="mt-3 max-w-[62ch] break-words text-sm leading-6 sm:mt-4 text-[#6f7375]">
                   Submit your response and supplementary documents against queries or show cause notices (GST REG-03) issued by the jurisdictional tax officer.
                 </p>
               </div>
@@ -123,8 +123,8 @@ const FilingClarifications = () => {
             </div>
           </header>
 
-          <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-8">
-            <div className="lg:col-span-7 bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-[#eaeaea]">
+          <section className="grid min-w-0 grid-cols-1 gap-5 pt-6 sm:gap-6 sm:pt-7 lg:grid-cols-12 lg:gap-8 lg:pt-8">
+            <div className="lg:col-span-7 min-w-0 bg-white p-4 sm:p-6 lg:p-8 rounded-xl sm:rounded-2xl shadow-sm border border-[#eaeaea]">
               <div className="border-b border-[#eaeaea] pb-4 mb-6">
                 <p className="text-xs font-bold text-[#787774] uppercase tracking-wider">Notice Response Form</p>
                 <h2 className="text-lg font-bold text-[#293238]">Clarification & Supporting Documents</h2>
@@ -132,7 +132,7 @@ const FilingClarifications = () => {
 
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div>
-                  <label htmlFor="arn" className="mb-2 block text-sm font-bold text-[#394247]">
+                  <label htmlFor="arn" className="mb-2 block break-words text-sm font-bold text-[#394247]">
                     Application Reference Number (ARN / TRN) <span className="text-[#9f2f2d]">*</span>
                   </label>
                   <input
@@ -145,7 +145,7 @@ const FilingClarifications = () => {
                 </div>
 
                 <div>
-                  <label htmlFor="noticeRef" className="mb-2 block text-sm font-bold text-[#394247]">
+                  <label htmlFor="noticeRef" className="mb-2 block break-words text-sm font-bold text-[#394247]">
                     Notice Reference Number (GST REG-03) <span className="text-[#9f2f2d]">*</span>
                   </label>
                   <input
@@ -158,7 +158,7 @@ const FilingClarifications = () => {
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm font-bold text-[#394247]">Query Category</label>
+                  <label className="mb-2 block break-words text-sm font-bold text-[#394247]">Query Category</label>
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
@@ -172,7 +172,7 @@ const FilingClarifications = () => {
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm font-bold text-[#394247]">
+                  <label className="mb-2 block break-words text-sm font-bold text-[#394247]">
                     Clarification Explanation Text <span className="text-[#9f2f2d]">*</span>
                   </label>
                   <textarea
@@ -185,10 +185,10 @@ const FilingClarifications = () => {
                 </div>
 
                 <div>
-                  <label className="mb-2 block text-sm font-bold text-[#394247]">Attach Supporting Document (PDF / Image)</label>
-                  <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200">
+                  <label className="mb-2 block break-words text-sm font-bold text-[#394247]">Attach Supporting Document (PDF / Image)</label>
+                  <div className="flex min-w-0 flex-col items-stretch gap-3 p-3 bg-slate-50 sm:flex-row sm:items-center rounded-xl border border-slate-200">
                     <Upload className="w-5 h-5 text-blue-600 shrink-0" />
-                    <span className="text-xs font-mono text-slate-700 font-semibold truncate flex-1">{fileName}</span>
+                    <span className="text-xs font-mono text-slate-700 font-semibold min-w-0 flex-1 break-words sm:truncate">{fileName}</span>
                     <button
                       type="button"
                       onClick={() => setFileName(`Clarification_Doc_${Math.floor(100+Math.random()*900)}.pdf`)}
@@ -205,11 +205,11 @@ const FilingClarifications = () => {
                   </p>
                 )}
 
-                <div className="pt-3 flex justify-end">
+                <div className="pt-3 flex justify-stretch sm:justify-end">
                   <button
                     type="submit"
                     disabled={isSubmitting}
-                    className="inline-flex items-center gap-2 rounded-xl bg-[#071b30] hover:bg-[#153457] px-6 py-3.5 text-sm font-bold text-white transition-all cursor-pointer shadow-sm"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-xl sm:w-auto bg-[#071b30] hover:bg-[#153457] px-6 py-3.5 text-sm font-bold text-white transition-all cursor-pointer shadow-sm"
                   >
                     {isSubmitting ? (
                       <span>Submitting REG-04...</span>
@@ -225,10 +225,10 @@ const FilingClarifications = () => {
             </div>
 
             {/* RECEIPT / RESULT ACKNOWLEDGEMENT */}
-            <div className="lg:col-span-5">
+            <div className="lg:col-span-5 min-w-0">
               {submittedReceipt ? (
-                <div className="bg-white p-6 rounded-2xl shadow-md border border-[#eaeaea] space-y-5">
-                  <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                <div className="bg-white min-w-0 p-4 sm:p-6 rounded-xl sm:rounded-2xl shadow-md border border-[#eaeaea] space-y-5">
+                  <div className="flex flex-col items-start gap-2 border-b sm:flex-row sm:items-center sm:justify-between border-slate-100 pb-3">
                     <div className="flex items-center gap-2">
                       <ShieldCheck className="w-5 h-5 text-emerald-600" />
                       <h3 className="text-base font-bold text-[#071b30]">REG-04 Response Submitted</h3>
@@ -241,7 +241,7 @@ const FilingClarifications = () => {
                   <div className="space-y-3 text-xs">
                     <div>
                       <span className="text-slate-400 font-medium block">Clarification ARN</span>
-                      <span className="font-mono font-black text-lg text-[#071b30]">{submittedReceipt.clarificationArn}</span>
+                      <span className="break-words font-mono font-black text-base sm:text-lg text-[#071b30]">{submittedReceipt.clarificationArn}</span>
                     </div>
                     <div>
                       <span className="text-slate-400 font-medium block">Application Ref (ARN / TRN)</span>
@@ -267,7 +267,7 @@ const FilingClarifications = () => {
                   </button>
                 </div>
               ) : (
-                <div className="bg-slate-50 p-8 rounded-2xl border border-dashed border-slate-300 text-center text-slate-500">
+                <div className="bg-slate-50 p-5 sm:p-8 rounded-xl sm:rounded-2xl border border-dashed border-slate-300 text-center text-slate-500">
                   <FileText className="w-12 h-12 text-slate-400 mx-auto mb-3" />
                   <h4 className="font-bold text-slate-700 text-sm">Form GST REG-04 Ready</h4>
                   <p className="text-xs text-slate-500 mt-1">Fill out the notice clarification form to submit supplementary explanations to tax officers.</p>

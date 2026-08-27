@@ -84,8 +84,6 @@ const Registration = () => {
   const [mobile, setMobile] = useState("");
 
   const [errors, setErrors] = useState({});
-
-  // Mock OTP Modal State
   const [isOtpModalOpen, setIsOtpModalOpen] = useState(false);
   const [otpDigits, setOtpDigits] = useState(['', '', '', '']);
   const [isVerifying, setIsVerifying] = useState(false);
@@ -133,8 +131,6 @@ const Registration = () => {
     if (!validate()) {
       return;
     }
-
-    // Open Mock OTP Modal
     setOtpDigits(['', '', '', '']);
     setOtpError('');
     setIsOtpModalOpen(true);
@@ -189,15 +185,11 @@ const Registration = () => {
         dateOfRegistration: new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }),
         status: "APPROVED_ACTIVE"
       };
-
-      // Save to localStorage as active mock data
       localStorage.setItem('gst_registered_mock_taxpayer', JSON.stringify(newTaxpayerData));
 
       if (showToast) {
         showToast(`Registration Complete! Temporary Reference Number (TRN): ${generatedTrn}`, 'success', 'New GST Taxpayer Registered');
       }
-
-      // Redirect to Track Application Status page with TRN
       navigate(`/registration/track-status?arn=${generatedTrn}`);
     }, 800);
   };
@@ -219,7 +211,7 @@ const Registration = () => {
 
   return (
     <PageContainer>
-      <main className="min-h-[calc(100vh-150px)] bg-[#f7f6f3] text-[#2f3437] font-sans">
+      <main className="min-h-[calc(100vh-150px)] min-w-0 overflow-x-hidden bg-[#f7f6f3] text-[#2f3437] font-sans">
         <Breadcrumbs
           items={[
             {
@@ -228,19 +220,19 @@ const Registration = () => {
           ]}
         />
 
-        <div className="mx-auto max-w-[1180px] px-5 pb-14 pt-8 sm:px-8">
-          <header className="border-b border-[#eaeaea] pb-7">
-            <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+        <div className="mx-auto w-full max-w-[1180px] min-w-0 px-4 pb-12 pt-5 sm:px-6 sm:pb-14 sm:pt-7 lg:px-8 lg:pt-8">
+          <header className="min-w-0 border-b border-[#eaeaea] pb-6 sm:pb-7">
+            <div className="flex min-w-0 flex-col gap-4 sm:gap-6 md:flex-row md:items-end md:justify-between">
               <div>
                 <p className="mb-3 text-xs font-semibold uppercase tracking-[0.1em] text-[#1f6c9f]">
                   GST registration
                 </p>
 
-                <h1 className="font-serif text-[2.1rem] leading-[1.1] tracking-[-0.02em] text-balance text-[#161b1e] sm:text-[2.4rem]">
+                <h1 className="break-words font-serif text-[1.8rem] leading-[1.1] tracking-[-0.02em] text-[#161b1e] sm:text-[2.1rem] md:text-[2.4rem]">
                   New registration
                 </h1>
 
-                <p className="mt-4 max-w-[62ch] text-sm leading-6 text-[#6f7375]">
+                <p className="mt-3 max-w-[62ch] break-words text-sm leading-6 text-[#6f7375] sm:mt-4">
                   Provide the required business and contact details
                   to begin GST registration. A synthetic OTP verification will be required
                   to finalize registration and generate your TRN.
@@ -255,10 +247,8 @@ const Registration = () => {
               </Link>
             </div>
           </header>
-
-          {/* Synthetic Environment Banner */}
-          <div className="mt-6 bg-amber-500/10 border border-amber-500/30 text-amber-900 px-4 py-2 rounded-xl text-xs font-bold flex items-center justify-between shadow-2xs">
-            <div className="flex items-center gap-2">
+<div className="mt-5 flex min-w-0 flex-col items-start gap-2 rounded-xl border border-amber-500/30 bg-amber-500/10 px-3 py-3 text-xs font-bold text-amber-900 shadow-2xs sm:mt-6 sm:flex-row sm:items-center sm:justify-between sm:px-4 sm:py-2">
+            <div className="flex min-w-0 items-start gap-2">
               <span className="bg-amber-500 text-slate-900 font-extrabold px-2 py-0.5 rounded text-[10px] uppercase tracking-wider">
                 SYNTHETIC REGISTRATION
               </span>
@@ -268,7 +258,7 @@ const Registration = () => {
           </div>
 
           <section className="border-b border-[#eaeaea] py-6">
-            <div className="flex max-w-xl items-start">
+            <div className="flex w-full max-w-xl min-w-0 items-start overflow-x-auto pb-1">
               {steps.map((step, index) => {
                 const active = index === 0;
                 return (
@@ -284,7 +274,7 @@ const Registration = () => {
                         {step.number}
                       </div>
 
-                      <div className="min-w-[150px]">
+                      <div className="min-w-0 w-[140px] sm:w-auto sm:min-w-[150px]">
                         <p className={`text-sm font-semibold ${active ? "text-[#161b1e]" : "text-[#787774]"}`}>
                           {step.title}
                         </p>
@@ -295,7 +285,7 @@ const Registration = () => {
                     </div>
 
                     {index !== steps.length - 1 && (
-                      <div className="mx-4 mt-4 h-px flex-1 bg-[#dededc]" />
+                      <div className="mx-2 mt-4 h-px min-w-5 flex-1 bg-[#dededc] sm:mx-4" />
                     )}
                   </React.Fragment>
                 );
@@ -304,7 +294,7 @@ const Registration = () => {
           </section>
 
           <form onSubmit={handleSubmit} noValidate className="pt-8">
-            <div className="mb-7 flex items-end justify-between gap-4 border-b border-[#eaeaea] pb-4">
+            <div className="mb-6 flex flex-col items-start justify-between gap-3 border-b border-[#eaeaea] pb-4 sm:mb-7 sm:flex-row sm:items-end sm:gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#787774]">
                   Account setup
@@ -318,7 +308,7 @@ const Registration = () => {
               </p>
             </div>
 
-            <section className="border-b border-[#eaeaea] pb-7">
+            <section className="min-w-0 border-b border-[#eaeaea] pb-6 sm:pb-7">
               <p className="mb-4 text-sm font-semibold text-[#293238]">
                 Registration method
               </p>
@@ -386,7 +376,7 @@ const Registration = () => {
                 </h3>
               </div>
 
-              <div className="grid gap-x-8 gap-y-6 md:grid-cols-2">
+              <div className="grid min-w-0 gap-x-6 gap-y-5 sm:gap-x-8 sm:gap-y-6 md:grid-cols-2">
                 <div>
                   <label htmlFor="entityType" className="mb-2 block text-sm font-medium text-[#394247]">
                     I am a <span className="ml-1 text-[#9f2f2d]">*</span>
@@ -399,7 +389,7 @@ const Registration = () => {
                       setEntityType(event.target.value);
                       setErrors((current) => ({ ...current, entityType: "" }));
                     }}
-                    className="h-12 w-full border border-[#d9d9d7] bg-white px-3 text-sm text-[#394247] outline-none transition-colors focus:border-[#1f6c9f]"
+                    className="h-12 min-w-0 w-full border border-[#d9d9d7] bg-white px-3 text-sm text-[#394247] outline-none transition-colors focus:border-[#1f6c9f]"
                   >
                     {entityTypes.map((type) => (
                       <option key={type} value={type}>
@@ -421,7 +411,7 @@ const Registration = () => {
                       setState(event.target.value);
                       setErrors((current) => ({ ...current, state: "" }));
                     }}
-                    className="h-12 w-full border border-[#d9d9d7] bg-white px-3 text-sm text-[#394247] outline-none transition-colors focus:border-[#1f6c9f]"
+                    className="h-12 min-w-0 w-full border border-[#d9d9d7] bg-white px-3 text-sm text-[#394247] outline-none transition-colors focus:border-[#1f6c9f]"
                   >
                     {states.map((item) => (
                       <option key={item} value={item}>
@@ -443,7 +433,7 @@ const Registration = () => {
                       setDistrict(event.target.value);
                       setErrors((current) => ({ ...current, district: "" }));
                     }}
-                    className="h-12 w-full border border-[#d9d9d7] bg-white px-3 text-sm text-[#394247] outline-none transition-colors focus:border-[#1f6c9f]"
+                    className="h-12 min-w-0 w-full border border-[#d9d9d7] bg-white px-3 text-sm text-[#394247] outline-none transition-colors focus:border-[#1f6c9f]"
                   >
                     {districts.map((item) => (
                       <option key={item} value={item}>
@@ -466,7 +456,7 @@ const Registration = () => {
                       setErrors((current) => ({ ...current, legalName: "" }));
                     }}
                     placeholder="e.g. Ramesh Hardware Store"
-                    className="h-12 w-full border border-[#d9d9d7] bg-white px-3 text-sm text-[#293238] outline-none focus:border-[#1f6c9f]"
+                    className="h-12 min-w-0 w-full border border-[#d9d9d7] bg-white px-3 text-sm text-[#293238] outline-none focus:border-[#1f6c9f]"
                   />
                   {errors.legalName && <p className="mt-1.5 text-xs text-[#9f2f2d]">{errors.legalName}</p>}
                 </div>
@@ -485,7 +475,7 @@ const Registration = () => {
                     }}
                     maxLength={10}
                     placeholder="ABCDE1234F"
-                    className="h-12 w-full border border-[#d9d9d7] bg-white px-3 text-sm font-mono uppercase text-[#293238] outline-none focus:border-[#1f6c9f]"
+                    className="h-12 min-w-0 w-full border border-[#d9d9d7] bg-white px-3 text-sm font-mono uppercase text-[#293238] outline-none focus:border-[#1f6c9f]"
                   />
                   {errors.pan && <p className="mt-1.5 text-xs text-[#9f2f2d]">{errors.pan}</p>}
                 </div>
@@ -503,7 +493,7 @@ const Registration = () => {
                 </h3>
               </div>
 
-              <div className="grid gap-x-8 gap-y-6 md:grid-cols-2">
+              <div className="grid min-w-0 gap-x-6 gap-y-5 sm:gap-x-8 sm:gap-y-6 md:grid-cols-2">
                 <div>
                   <label htmlFor="email" className="mb-2 block text-sm font-medium text-[#394247]">
                     Email address <span className="ml-1 text-[#9f2f2d]">*</span>
@@ -518,7 +508,7 @@ const Registration = () => {
                       setErrors((current) => ({ ...current, email: "" }));
                     }}
                     placeholder="applicant@domain.com"
-                    className="h-12 w-full border border-[#d9d9d7] bg-white px-3 text-sm text-[#293238] outline-none focus:border-[#1f6c9f]"
+                    className="h-12 min-w-0 w-full border border-[#d9d9d7] bg-white px-3 text-sm text-[#293238] outline-none focus:border-[#1f6c9f]"
                   />
                   {errors.email && <p className="mt-1.5 text-xs text-[#9f2f2d]">{errors.email}</p>}
                 </div>
@@ -528,7 +518,7 @@ const Registration = () => {
                     Mobile number <span className="ml-1 text-[#9f2f2d]">*</span>
                   </label>
 
-                  <div className="flex">
+                  <div className="flex min-w-0">
                     <span className="flex h-12 items-center border border-r-0 border-[#d9d9d7] bg-[#f7f6f3] px-3 text-sm text-[#5f6467]">
                       +91
                     </span>
@@ -543,8 +533,7 @@ const Registration = () => {
                       }}
                       maxLength={10}
                       placeholder="9876543210"
-                      // value={9404949988}
-                    className="h-12 w-full border border-[#d9d9d7] bg-white px-3 text-sm font-mono text-[#293238] outline-none focus:border-[#1f6c9f]"
+                    className="h-12 min-w-0 w-full border border-[#d9d9d7] bg-white px-3 text-sm font-mono text-[#293238] outline-none focus:border-[#1f6c9f]"
                     />
                   </div>
                   {errors.mobile && <p className="mt-1.5 text-xs text-[#9f2f2d]">{errors.mobile}</p>}
@@ -552,45 +541,43 @@ const Registration = () => {
               </div>
             </section>
 
-            <div className="flex flex-col gap-4 pt-8 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex min-w-0 flex-col gap-4 pt-6 sm:flex-row sm:items-center sm:justify-between sm:pt-8">
               <p className="max-w-xl text-xs leading-5 text-[#787774]">
                 By proceeding, you confirm that the information provided is accurate and that you are authorised to submit this registration.
               </p>
 
               <button
                 type="submit"
-                className="inline-flex min-w-[170px] items-center justify-center rounded-[5px] bg-[#071b30] hover:bg-[#153457] px-6 py-3.5 text-sm font-bold text-white transition-all cursor-pointer shadow-sm active:scale-[0.98]"
+                className="inline-flex min-h-12 w-full items-center justify-center rounded-[5px] bg-[#071b30] px-5 py-3.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#153457] cursor-pointer active:scale-[0.98] sm:w-auto sm:min-w-[170px] sm:px-6"
               >
                 <span>Proceed to Mock OTP</span>
               </button>
             </div>
           </form>
-
-          {/* MOCK OTP VERIFICATION MODAL */}
-          {isOtpModalOpen && (
-            <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
-              <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 border border-slate-200 text-center">
+{isOtpModalOpen && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-900/60 p-3 sm:p-4 backdrop-blur-xs">
+              <div className="my-auto w-full max-w-md min-w-0 rounded-xl border border-slate-200 bg-white p-4 text-center shadow-2xl sm:rounded-2xl sm:p-6">
                 <div className="h-14 w-14 bg-amber/20 border-2 border-amber/40 rounded-2xl flex items-center justify-center text-amber mx-auto mb-4">
                   <KeyRound className="w-7 h-7 text-[#071b30]" />
                 </div>
 
-                <h3 className="text-lg font-extrabold text-[#071b30]">New Registration OTP Verification</h3>
-                <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                <h3 className="break-words text-base font-extrabold text-[#071b30] sm:text-lg">New Registration OTP Verification</h3>
+                <p className="break-words text-xs leading-relaxed text-slate-500 mt-1">
                   Synthetic OTP dispatched to registered mobile <span className="font-bold text-slate-800">+91 {mobile}</span> and email <span className="font-bold text-slate-800">{email}</span>.
                 </p>
 
-                <div className="mt-3">
+                <div className="mt-3 min-w-0">
                   <button
                     type="button"
                     onClick={handleAutoFillOtp}
-                    className="bg-amber-100 hover:bg-amber-200 text-amber-900 text-[11px] font-extrabold px-3 py-1.5 rounded-lg border border-amber-300 transition-all cursor-pointer inline-flex items-center gap-1"
+                    className="inline-flex min-h-10 max-w-full items-center justify-center gap-1 rounded-lg border border-amber-300 bg-amber-100 px-3 py-2 text-center text-[11px] font-extrabold leading-4 text-amber-900 transition-all hover:bg-amber-200 cursor-pointer"
                   >
                     <span>⚡ Auto-Fill Hackathon Mock OTP (1234)</span>
                   </button>
                 </div>
 
-                <form onSubmit={handleConfirmRegistration} className="mt-6 space-y-4">
-                  <div className="flex justify-center gap-3">
+                <form onSubmit={handleConfirmRegistration} className="mt-5 space-y-4 sm:mt-6">
+                  <div className="flex justify-center gap-2 sm:gap-3">
                     {[0, 1, 2, 3].map((idx) => (
                       <input
                         key={idx}
@@ -599,7 +586,7 @@ const Registration = () => {
                         maxLength={1}
                         value={otpDigits[idx]}
                         onChange={(e) => handleOtpChange(idx, e.target.value)}
-                        className="w-12 h-12 text-center text-xl font-black border-2 border-slate-300 rounded-xl focus:border-[#071b30] focus:outline-none bg-slate-50"
+                        className="h-11 w-11 shrink-0 rounded-lg border-2 border-slate-300 bg-slate-50 text-center text-lg font-black focus:border-[#071b30] focus:outline-none sm:h-12 sm:w-12 sm:rounded-xl sm:text-xl"
                       />
                     ))}
                   </div>
@@ -610,18 +597,18 @@ const Registration = () => {
                     </p>
                   )}
 
-                  <div className="pt-2 flex items-center justify-center gap-3">
+                  <div className="flex flex-col gap-2 pt-2 sm:flex-row sm:items-center sm:justify-center sm:gap-3">
                     <button
                       type="button"
                       onClick={() => setIsOtpModalOpen(false)}
-                      className="px-4 py-2 rounded-xl text-slate-600 hover:bg-slate-100 text-xs font-bold"
+                      className="min-h-10 w-full rounded-xl px-4 py-2 text-xs font-bold text-slate-600 hover:bg-slate-100 sm:w-auto"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
                       disabled={isVerifying}
-                      className="bg-[#071b30] hover:bg-[#153457] text-white text-xs font-bold px-6 py-2.5 rounded-xl transition-all cursor-pointer shadow-sm flex items-center gap-2"
+                      className="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-xl bg-[#071b30] px-5 py-2.5 text-xs font-bold text-white shadow-sm transition-all hover:bg-[#153457] cursor-pointer sm:w-auto sm:px-6"
                     >
                       {isVerifying ? (
                         <span>Registering...</span>

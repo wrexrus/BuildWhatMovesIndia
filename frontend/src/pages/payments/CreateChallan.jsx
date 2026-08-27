@@ -85,13 +85,13 @@ const CreateChallan = () => {
           ]}
         />
 
-        <div className="mx-auto max-w-[1200px] px-5 pb-16 pt-8 sm:px-8">
+        <div className="mx-auto max-w-[1200px] px-5 pb-16 pt-8 sm:px-4 sm:px-4 sm:px-6 lg:px-8">
           <header className="border-b border-[#eaeaea] pb-7">
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#1f6c9f]">
               Payments & Electronic Cash Ledger
             </p>
 
-            <h1 className="text-2xl font-serif tracking-[-0.02em] text-[#20282d] sm:text-[2.1rem]">
+            <h1 className="text-lg sm:text-xl sm:text-2xl font-serif tracking-[-0.02em] text-[#20282d] sm:text-[2.1rem]">
               Create Payment Challan (Form GST PMT-06)
             </h1>
 
@@ -111,8 +111,8 @@ const CreateChallan = () => {
             <span className="font-mono text-[11px] font-extrabold text-amber-800 hidden sm:inline">[MOCK DATA ACTIVE]</span>
           </div>
 
-          <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-6">
-            <div className="lg:col-span-7 bg-white p-6 rounded-2xl shadow-sm border border-[#eaeaea]">
+          <section className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-3 sm:gap-4 sm:gap-5 lg:gap-6 lg:gap-8 pt-6">
+            <div className="lg:col-span-7 bg-white p-6 rounded-xl sm:rounded-2xl shadow-sm border border-[#eaeaea]">
               <div className="border-b border-[#eaeaea] pb-4 mb-6">
                 <span className="text-xs font-bold text-[#787774] uppercase tracking-wider">Challan Setup</span>
                 <h2 className="text-lg font-bold text-[#293238]">Taxpayer & Liability Details</h2>
@@ -210,7 +210,7 @@ const CreateChallan = () => {
                 <div className="pt-4 flex justify-end">
                   <button
                     type="submit"
-                    className="inline-flex items-center gap-2 rounded-xl bg-[#071b30] hover:bg-[#153457] px-6 py-3 text-sm font-bold text-white transition-all cursor-pointer shadow-sm"
+                    className="inline-flex items-center gap-2 rounded-xl bg-[#071b30] hover:bg-[#153457] px-4 sm:px-6 py-3 text-sm font-bold text-white transition-all cursor-pointer shadow-sm"
                   >
                     <span>Generate Challan (₹{totalPayable.toLocaleString()})</span>
                     <ArrowRight className="w-4 h-4" />
@@ -222,7 +222,7 @@ const CreateChallan = () => {
             {/* GENERATED MOCK CHALLAN RECEIPT */}
             <div className="lg:col-span-5">
               {generatedChallan ? (
-                <div className="bg-white p-6 rounded-2xl shadow-md border border-[#eaeaea] space-y-5">
+                <div className="bg-white p-6 rounded-xl sm:rounded-2xl shadow-md border border-[#eaeaea] space-y-5">
                   <div className="flex items-center justify-between border-b border-slate-100 pb-3">
                     <div className="flex items-center gap-2">
                       <CreditCard className="w-5 h-5 text-emerald-600" />
@@ -264,7 +264,7 @@ const CreateChallan = () => {
                   </button>
                 </div>
               ) : (
-                <div className="bg-slate-50 p-8 rounded-2xl border border-dashed border-slate-300 text-center text-slate-500">
+                <div className="bg-slate-50 p-8 rounded-xl sm:rounded-2xl border border-dashed border-slate-300 text-center text-slate-500">
                   <FileText className="w-12 h-12 text-slate-400 mx-auto mb-3" />
                   <h4 className="font-bold text-slate-700 text-sm">No Challan Generated Yet</h4>
                   <p className="text-xs text-slate-500 mt-1">Enter GSTIN and tax breakdown to generate a mock PMT-06 payment challan.</p>

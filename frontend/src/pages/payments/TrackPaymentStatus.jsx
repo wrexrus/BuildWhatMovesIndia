@@ -42,7 +42,7 @@ const TrackPaymentStatus = () => {
 
   return (
     <PageContainer>
-      <main className="min-h-[calc(100vh-150px)] bg-[#f7f6f3] text-[#2f3437]">
+      <main className="min-h-[calc(100vh-150px)] min-w-0 overflow-x-hidden bg-[#f7f6f3] text-[#2f3437]">
         <Breadcrumbs
           items={[
             { label: "Services" },
@@ -51,29 +51,29 @@ const TrackPaymentStatus = () => {
           ]}
         />
 
-        <div className="mx-auto max-w-[1400px] px-5 pb-16 pt-8 sm:px-8 lg:px-10">
-          <header className="border-b border-[#eaeaea] pb-7">
+        <div className="mx-auto w-full max-w-[1400px] min-w-0 px-4 pb-12 pt-5 sm:px-6 sm:pb-16 sm:pt-7 lg:px-10 lg:pt-8">
+          <header className="min-w-0 border-b border-[#eaeaea] pb-6 sm:pb-7">
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#1f6c9f]">
               Payments
             </p>
 
-            <h1 className="text-2xl font-semibold tracking-[-0.02em] text-balance text-[#20282d] sm:text-[1.75rem]">
+            <h1 className="break-words text-xl font-semibold tracking-[-0.02em] text-[#20282d] sm:text-2xl md:text-[1.75rem]">
               Track Payment Status
             </h1>
 
-            <p className="mt-4 max-w-[65ch] text-sm leading-6 text-[#6f7375]">
+            <p className="mt-3 max-w-[65ch] break-words text-sm leading-6 text-[#6f7375] sm:mt-4">
               Check the status of a payment using the taxpayer
               identifier and the CPIN generated for the challan.
             </p>
           </header>
 
-          <section className="pt-8">
+          <section className="min-w-0 pt-6 sm:pt-8">
             <form onSubmit={handleSubmit} noValidate>
-              <div className="grid gap-7 md:grid-cols-2">
+              <div className="grid min-w-0 gap-5 sm:gap-6 md:grid-cols-2 md:gap-7">
                 <div>
                   <label
                     htmlFor="gstin"
-                    className="mb-2 block text-sm font-medium text-[#394247]"
+                    className="mb-2 block break-words text-sm font-medium text-[#394247]"
                   >
                     GSTIN / Other ID
                     <span className="ml-1 text-[#9f2f2d]">*</span>
@@ -94,7 +94,7 @@ const TrackPaymentStatus = () => {
                     }}
                     placeholder="Enter GSTIN / Other ID"
                     className="
-                      h-12
+                      h-12 min-w-0
                       w-full
                       border
                       border-[#d9d9d7]
@@ -126,7 +126,7 @@ const TrackPaymentStatus = () => {
                 <div>
                   <label
                     htmlFor="cpin"
-                    className="mb-2 block text-sm font-medium text-[#394247]"
+                    className="mb-2 block break-words text-sm font-medium text-[#394247]"
                   >
                     CPIN
                     <span className="ml-1 text-[#9f2f2d]">*</span>
@@ -145,7 +145,7 @@ const TrackPaymentStatus = () => {
                     }}
                     placeholder="Enter CPIN"
                     className="
-                      h-12
+                      h-12 min-w-0
                       w-full
                       border
                       border-[#d9d9d7]
@@ -171,18 +171,18 @@ const TrackPaymentStatus = () => {
                 </div>
               </div>
 
-              <div className="mt-8 flex justify-end border-t border-[#eaeaea] pt-6">
+              <div className="mt-6 flex flex-col border-t border-[#eaeaea] pt-5 sm:mt-8 sm:flex-row sm:justify-end sm:pt-6">
                 <button
                   type="submit"
                   className="
-                    rounded-[5px]
+                    w-full rounded-[5px]
                     bg-[#22282d]
                     px-7
                     py-3
                     text-sm
                     font-medium
                     text-white
-                    transition-colors
+                    transition-colors sm:w-auto
                     hover:bg-[#333a40]
                   "
                 >
@@ -192,32 +192,32 @@ const TrackPaymentStatus = () => {
             </form>
           </section>
 
-          <section className="mt-10 border-t border-[#eaeaea] pt-8">
-            <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
+          <section className="mt-8 min-w-0 border-t border-[#eaeaea] pt-6 sm:mt-10 sm:pt-8">
+            <div className="grid min-w-0 gap-5 sm:gap-6 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#787774]">
                   Payment record
                 </p>
 
-                <h2 className="mt-1 text-lg font-semibold text-[#293238]">
+                <h2 className="mt-1 break-words text-lg font-semibold text-[#293238]">
                   {searched
                     ? "Payment details available"
                     : "Payment details"}
                 </h2>
 
-                <p className="mt-2 max-w-[60ch] text-sm leading-6 text-[#6f7375]">
+                <p className="mt-2 max-w-[60ch] break-words text-sm leading-6 text-[#6f7375]">
                   {searched
                     ? "Use the available actions below to view the challan or payment receipt."
                     : "Search for a payment to enable the relevant document actions."}
                 </p>
               </div>
 
-              <div className="flex flex-wrap gap-3">
+              <div className="grid grid-cols-1 gap-2.5 sm:flex sm:flex-wrap sm:gap-3">
                 <button
                   type="button"
                   disabled={!searched}
                   className="
-                    rounded-[5px]
+                    w-full rounded-[5px]
                     border
                     border-[#cfd2d3]
                     bg-white
@@ -227,7 +227,7 @@ const TrackPaymentStatus = () => {
                     font-medium
                     text-[#444b4f]
                     disabled:cursor-not-allowed
-                    disabled:text-[#a7aaac]
+                    disabled:text-[#a7aaac] sm:w-auto
                   "
                 >
                   View challan
@@ -237,7 +237,7 @@ const TrackPaymentStatus = () => {
                   type="button"
                   disabled={!searched}
                   className="
-                    rounded-[5px]
+                    w-full rounded-[5px]
                     border
                     border-[#cfd2d3]
                     bg-white
@@ -247,7 +247,7 @@ const TrackPaymentStatus = () => {
                     font-medium
                     text-[#444b4f]
                     disabled:cursor-not-allowed
-                    disabled:text-[#a7aaac]
+                    disabled:text-[#a7aaac] sm:w-auto
                   "
                 >
                   View receipt
@@ -256,8 +256,8 @@ const TrackPaymentStatus = () => {
             </div>
           </section>
 
-          <section className="mt-10 border-t border-[#eaeaea] pt-8">
-            <div className="max-w-4xl space-y-5 text-sm leading-6 text-[#5e6467]">
+          <section className="mt-8 min-w-0 border-t border-[#eaeaea] pt-6 sm:mt-10 sm:pt-8">
+            <div className="max-w-4xl min-w-0 space-y-4 break-words text-sm leading-6 text-[#5e6467] sm:space-y-5">
               <p>
                 <strong className="font-semibold text-[#293238]">
                   Bank deduction not reflected:

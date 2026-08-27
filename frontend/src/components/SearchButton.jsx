@@ -10,10 +10,7 @@ const SearchButton = ({
     <button
       type="submit"
       disabled={disabled || loading}
-      className="
-        inline-flex h-11 items-center justify-center gap-2
-        rounded-md bg-navy
-        px-7
+      className="inline-flex h-11 w-full min-w-0 items-center justify-center gap-2 rounded-md bg-navy px-5
         text-sm font-bold uppercase tracking-wide text-white
         shadow-sm
         transition-all
@@ -24,18 +21,18 @@ const SearchButton = ({
         active:translate-y-[1px]
 
         disabled:cursor-not-allowed
-        disabled:opacity-50
+        disabled:opacity-50 sm:w-auto sm:px-7
       "
     >
       {loading ? (
         <>
-          <Loader2 size={17} className="animate-spin" />
-          Searching...
+          <Loader2 size={17} className="shrink-0 animate-spin" />
+          <span className="truncate">Searching...</span>
         </>
       ) : (
         <>
-          <Search size={17} />
-          {children}
+          <Search size={17} className="shrink-0" />
+          <span className="truncate">{children}</span>
         </>
       )}
     </button>

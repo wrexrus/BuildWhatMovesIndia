@@ -19,7 +19,6 @@ const TrackApplicationStatus = () => {
   const isARN = searchType === "arn";
 
   useEffect(() => {
-    // Check if there is a newly registered mock taxpayer stored in localStorage
     const storedMock = localStorage.getItem('gst_registered_mock_taxpayer');
     if (initialArn || storedMock) {
       handlePerformLookup(initialArn || "TRN2026998877");
@@ -33,8 +32,6 @@ const TrackApplicationStatus = () => {
     try {
       if (storedMockStr) storedMock = JSON.parse(storedMockStr);
     } catch (e) {}
-
-    // Active Mock Application Result
     const mockData = {
       referenceNumber: term || "TRN2026998877",
       formType: term.startsWith("TRN") ? "GST REG-01 (New Registration Application)" : "GSTR-3B Return Statement",
@@ -75,7 +72,7 @@ const TrackApplicationStatus = () => {
 
   return (
     <PageContainer>
-      <main className="min-h-[calc(100vh-150px)] bg-[#f7f6f3] text-[#2f3437] font-sans">
+      <main className="min-h-[calc(100vh-150px)] min-w-0 overflow-x-hidden bg-[#f7f6f3] text-[#2f3437] font-sans">
         <Breadcrumbs
           items={[
             {
@@ -87,19 +84,19 @@ const TrackApplicationStatus = () => {
           ]}
         />
 
-        <div className="mx-auto max-w-[1180px] px-5 pb-14 pt-8 sm:px-8">
-          <header className="border-b border-[#eaeaea] pb-7">
-            <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+        <div className="mx-auto w-full max-w-[1180px] min-w-0 px-4 pb-12 pt-5 sm:px-6 sm:pb-14 sm:pt-7 lg:px-8">
+          <header className="min-w-0 border-b border-[#eaeaea] pb-6 sm:pb-7">
+            <div className="flex min-w-0 flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <p className="mb-3 text-xs font-semibold uppercase tracking-[0.1em] text-[#1f6c9f]">
                   Registration & Service Tracking
                 </p>
 
-                <h1 className="font-serif text-[2.1rem] leading-[1.1] tracking-[-0.02em] text-balance text-[#161b1e] sm:text-[2.4rem]">
+                <h1 className="break-words font-serif text-[1.8rem] leading-[1.1] tracking-[-0.02em] text-[#161b1e] sm:text-[2.1rem] md:text-[2.4rem]">
                   Track application status
                 </h1>
 
-                <p className="mt-4 max-w-[62ch] text-sm leading-6 text-[#6f7375]">
+                <p className="mt-3 max-w-[62ch] break-words text-sm leading-6 text-[#6f7375] sm:mt-4">
                   Check the live progress of your GST registration, amendment, or return application using your ARN or TRN reference number.
                 </p>
               </div>
@@ -113,8 +110,8 @@ const TrackApplicationStatus = () => {
             </div>
           </header>
 
-          <section className="max-w-3xl pt-8">
-            <form onSubmit={handleSubmit} noValidate className="bg-white p-6 rounded-2xl shadow-sm border border-[#eaeaea] mb-8">
+          <section className="w-full max-w-3xl min-w-0 pt-6 sm:pt-8">
+            <form onSubmit={handleSubmit} noValidate className="min-w-0 rounded-xl border border-[#eaeaea] bg-white p-4 shadow-sm mb-6 sm:rounded-2xl sm:p-6 sm:mb-8">
               <fieldset>
                 <legend className="mb-4 text-sm font-bold text-[#293238]">
                   Select Application Reference Type
@@ -179,7 +176,7 @@ const TrackApplicationStatus = () => {
                   <span className="ml-1 text-[#9f2f2d]">*</span>
                 </label>
 
-                <div className="flex gap-2">
+                <div className="flex flex-col gap-2 sm:flex-row">
                   <input
                     id="referenceNumber"
                     value={referenceNumber}
@@ -188,11 +185,11 @@ const TrackApplicationStatus = () => {
                       setErrors({});
                     }}
                     placeholder={isARN ? "e.g. TRN2026998877 or AA270626112233M" : "e.g. SRN2026443322"}
-                    className="flex-1 h-12 border border-[#d9d9d7] rounded-xl bg-white px-4 text-sm font-mono uppercase tracking-wider text-[#293238] outline-none focus:border-[#1f6c9f]"
+                    className="min-w-0 flex-1 h-12 border border-[#d9d9d7] rounded-xl bg-white px-4 text-sm font-mono uppercase tracking-wider text-[#293238] outline-none focus:border-[#1f6c9f]"
                   />
                   <button
                     type="submit"
-                    className="inline-flex items-center gap-2 rounded-xl bg-[#071b30] hover:bg-[#153457] px-6 py-3 text-sm font-bold text-white transition-colors shadow-sm cursor-pointer"
+                    className="inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl bg-[#071b30] hover:bg-[#153457] px-5 py-3 sm:w-auto sm:px-6 text-sm font-bold text-white transition-colors shadow-sm cursor-pointer"
                   >
                     <Search className="w-4 h-4" />
                     <span>Search</span>
@@ -204,23 +201,21 @@ const TrackApplicationStatus = () => {
                 )}
               </div>
             </form>
-
-            {/* LIVE APPLICATION PROGRESS TIMELINE RESULT */}
-            {activeResult && (
-              <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-md border border-[#eaeaea] space-y-6">
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-4 gap-4">
+{activeResult && (
+              <div className="min-w-0 bg-white p-4 sm:p-6 md:p-8 rounded-xl sm:rounded-2xl shadow-md border border-[#eaeaea] space-y-6">
+                <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-b border-slate-100 pb-4 gap-4">
                   <div>
                     <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Application Summary</span>
-                    <h3 className="text-lg font-bold text-[#071b30] mt-0.5">{activeResult.formType}</h3>
+                    <h3 className="break-words text-base font-bold text-[#071b30] mt-0.5 sm:text-lg">{activeResult.formType}</h3>
                     <p className="text-xs font-mono text-slate-600 mt-1">Ref: {activeResult.referenceNumber}</p>
                   </div>
-                  <span className="inline-flex items-center gap-1.5 bg-emerald-100 text-emerald-900 border border-emerald-300 font-extrabold text-xs px-3.5 py-1.5 rounded-full self-start sm:self-auto">
+                  <span className="inline-flex max-w-full items-center gap-1.5 bg-emerald-100 text-emerald-900 border border-emerald-300 font-extrabold text-[10px] px-2.5 py-1.5 rounded-full sm:text-xs sm:px-3.5 self-start sm:self-auto">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                     <span>{activeResult.currentStatus}</span>
                   </span>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs bg-slate-50 p-4 rounded-xl border border-slate-200">
+                <div className="grid min-w-0 grid-cols-1 gap-3 text-xs bg-slate-50 p-3 rounded-xl sm:grid-cols-2 sm:gap-4 sm:p-4 border border-slate-200">
                   <div>
                     <span className="text-slate-400 font-medium block">Applicant Name</span>
                     <span className="font-bold text-slate-800 text-sm">{activeResult.applicantName}</span>
@@ -238,18 +233,16 @@ const TrackApplicationStatus = () => {
                     <span className="font-medium text-slate-700">{activeResult.jurisdiction}</span>
                   </div>
                 </div>
-
-                {/* Status Timeline */}
-                <div>
+<div>
                   <h4 className="text-sm font-bold text-[#071b30] mb-4">Application Processing Lifecycle</h4>
                   <div className="space-y-4 relative before:absolute before:inset-0 before:left-3.5 before:w-0.5 before:bg-emerald-200">
                     {activeResult.timeline.map((step, idx) => (
-                      <div key={idx} className="relative flex items-start gap-4 pl-8">
+                      <div key={idx} className="relative flex min-w-0 items-start gap-3 pl-8 sm:gap-4">
                         <div className="absolute left-0 top-0.5 h-7 w-7 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xs shadow-sm z-10">
                           ✓
                         </div>
-                        <div className="flex-1 min-w-0 bg-white p-3.5 rounded-xl border border-slate-200 shadow-2xs">
-                          <div className="flex items-center justify-between">
+                        <div className="min-w-0 flex-1 bg-white p-3 rounded-xl sm:p-3.5 border border-slate-200 shadow-2xs">
+                          <div className="flex flex-col items-start gap-1 sm:flex-row sm:items-center sm:justify-between">
                             <span className="font-bold text-slate-800 text-xs">{step.title}</span>
                             <span className="text-[10px] font-mono text-slate-400">{step.date}</span>
                           </div>

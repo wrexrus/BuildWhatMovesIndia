@@ -42,7 +42,7 @@ const HomeStateGSK = () => {
 
   return (
     <PageContainer>
-      <main className="min-h-[calc(100vh-150px)] bg-[#f7f6f3] text-[#2f3437]">
+      <main className="min-h-[calc(100vh-150px)] min-w-0 overflow-x-hidden bg-[#f7f6f3] text-[#2f3437]">
         <Breadcrumbs
           items={[
             {
@@ -55,7 +55,7 @@ const HomeStateGSK = () => {
           ]}
         />
 
-        <div className="mx-auto max-w-[1180px] px-5 pb-14 pt-8 sm:px-8">
+        <div className="mx-auto w-full max-w-[1180px] min-w-0 px-4 pb-12 pt-5 sm:px-6 sm:pb-14 sm:pt-7 lg:px-8 lg:pt-8">
           <style>{`
             @keyframes pageRise {
               from { opacity: 0; transform: translateY(10px); }
@@ -72,19 +72,19 @@ const HomeStateGSK = () => {
               Registration service
             </p>
 
-            <h1 className="max-w-4xl font-serif text-[2.1rem] leading-[1.1] tracking-[-0.02em] text-balance text-[#161b1e] sm:text-[2.4rem]">
+            <h1 className="max-w-4xl font-serif text-[1.75rem] leading-[1.12] sm:text-[2.1rem] tracking-[-0.02em] text-balance text-[#161b1e] sm:text-[2.4rem]">
               Home State GSK selection
             </h1>
 
-            <p className="mt-4 max-w-[70ch] text-sm leading-6 text-[#6f7375]">
+            <p className="mt-3 max-w-[70ch] break-words text-sm leading-6 sm:mt-4 text-[#6f7375]">
               Select or validate the home state details associated
               with a promoter or director for the relevant Centre of
               Business (COB).
             </p>
           </header>
 
-          <section className="max-w-3xl pt-8">
-            <div className="mb-8 flex items-end justify-between border-b border-[#eaeaea] pb-4">
+          <section className="w-full max-w-3xl min-w-0 pt-6 sm:pt-8">
+            <div className="mb-6 flex flex-col items-start gap-2 border-b border-[#eaeaea] pb-4 sm:mb-8 sm:flex-row sm:items-end sm:justify-between border-b border-[#eaeaea] pb-4">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.08em] text-[#787774]">
                   Verification
@@ -173,7 +173,7 @@ const HomeStateGSK = () => {
                   image.
                 </p>
 
-                <div className="grid gap-4 sm:grid-cols-[1fr_240px]">
+                <div className="grid min-w-0 gap-3 sm:gap-4 sm:grid-cols-[minmax(0,1fr)_240px]">
                   <input
                     id="captcha"
                     value={captcha}
@@ -240,8 +240,8 @@ const HomeStateGSK = () => {
                 </p>
               </div>
 
-              <div className="mt-8 flex items-center justify-between border-t border-[#eaeaea] pt-6">
-                <p className="max-w-md text-xs leading-5 text-[#787774]">
+              <div className="mt-7 flex flex-col items-stretch gap-4 border-t sm:mt-8 sm:flex-row sm:items-center sm:justify-between border-[#eaeaea] pt-6">
+                <p className="max-w-md break-words text-xs leading-5 text-[#787774]">
                   Use the TRN or GSTIN associated with the relevant
                   registration.
                 </p>

@@ -34,14 +34,14 @@ const NewsAndHelp = () => {
   );
 
   return (
-    <section className="bg-paper">
-      <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-8 px-6 py-12 lg:grid-cols-[1.2fr_1fr]">
+    <section className="w-full overflow-x-hidden bg-paper">
+      <div className="mx-auto grid w-full max-w-[1440px] grid-cols-1 gap-7 px-4 py-10 sm:gap-8 sm:px-6 sm:py-12 lg:grid-cols-[1.2fr_1fr]">
         <div>
-          <div className="mb-4 flex items-end justify-between">
-            <h2 className="text-2xl font-bold tracking-tight text-ink sm:text-[1.65rem]">Latest updates</h2>
+          <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+            <h2 className="text-xl font-bold tracking-tight text-ink sm:text-[1.65rem]">Latest updates</h2>
             <a
               href="#"
-              className="group inline-flex items-center gap-1 text-[0.87rem] font-medium text-navy focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2"
+              className="group inline-flex min-h-10 items-center gap-1 text-[0.82rem] font-medium text-navy focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2"
             >
               View all
               <ArrowUpRight size={14} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -55,7 +55,7 @@ const NewsAndHelp = () => {
                 role="tab"
                 aria-selected={activeCategory === cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`rounded-full px-3 py-1.5 text-[0.8rem] font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2 ${
+                className={`min-h-9 rounded-full px-3 py-1.5 text-[0.78rem] font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2 ${
                   activeCategory === cat
                     ? "bg-navy text-white"
                     : "border border-line bg-white text-muted hover:border-navy/25 hover:text-ink"
@@ -76,11 +76,11 @@ const NewsAndHelp = () => {
                 <a
                   key={item.title}
                   href="#"
-                  className="group rounded-lg border border-line bg-white p-4 transition-colors hover:border-navy/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2"
+                  className="group min-w-0 rounded-lg border border-line bg-white p-3.5 sm:p-4 transition-colors hover:border-navy/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2"
                 >
-                  <div className="flex items-start justify-between gap-4">
-                    <p className="font-semibold leading-snug text-ink group-hover:text-navy">{item.title}</p>
-                    <span className="shrink-0 rounded-full bg-navy/5 px-2.5 py-1 text-[0.72rem] font-medium text-navy">
+                  <div className="flex min-w-0 flex-col items-start gap-2 sm:flex-row sm:justify-between sm:gap-4">
+                    <p className="min-w-0 break-words font-semibold leading-snug text-ink group-hover:text-navy">{item.title}</p>
+                    <span className="max-w-full shrink-0 rounded-full bg-navy/5 px-2.5 py-1 text-[0.72rem] font-medium text-navy">
                       {item.tag}
                     </span>
                   </div>
@@ -101,7 +101,7 @@ const NewsAndHelp = () => {
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Search help topics"
-              className="w-full rounded-lg border border-line bg-white py-2.5 pl-9 pr-3 text-[0.87rem] text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2"
+              className="w-full min-h-11 rounded-lg border border-line bg-white py-2.5 pl-9 pr-3 text-[0.87rem] text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2"
             />
           </label>
 
@@ -115,16 +115,16 @@ const NewsAndHelp = () => {
                 <button
                   key={topic}
                   type="button"
-                  className="flex items-start gap-2.5 rounded-lg border border-line bg-white p-3.5 text-left transition-colors hover:border-navy/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2"
+                  className="flex min-w-0 min-h-12 items-start gap-2.5 rounded-lg border border-line bg-white p-3.5 text-left transition-colors hover:border-navy/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2"
                 >
                   <MessageCircleQuestion size={16} className="mt-0.5 shrink-0 text-navy" />
-                  <span className="text-[0.87rem] leading-snug text-ink">{topic}</span>
+                  <span className="break-words text-[0.84rem] leading-snug text-ink sm:text-[0.87rem]">{topic}</span>
                 </button>
               ))
             )}
           </div>
 
-          <div className="mt-4 flex flex-col gap-3 rounded-lg bg-navy-hover p-4 text-white sm:flex-row sm:items-center sm:justify-between">
+          <div className="mt-4 flex flex-col gap-3 rounded-lg bg-navy-hover p-3.5 sm:p-4 text-white sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-2.5">
               <Phone size={16} />
               <div>
@@ -134,7 +134,7 @@ const NewsAndHelp = () => {
             </div>
             <a
               href="#"
-              className="inline-flex items-center gap-1 self-start rounded bg-white/10 px-3 py-1.5 text-[0.83rem] font-medium transition-colors hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2 sm:self-auto"
+              className="inline-flex min-h-10 items-center gap-1 self-start rounded bg-white/10 px-3 py-1.5 text-[0.83rem] font-medium transition-colors hover:bg-white/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2 sm:self-auto"
             >
               Grievance redressal <ArrowUpRight size={13} />
             </a>

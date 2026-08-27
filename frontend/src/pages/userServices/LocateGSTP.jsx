@@ -58,7 +58,7 @@ const LocateGSTP = () => {
 
   return (
     <PageContainer>
-      <main className="min-h-[calc(100vh-150px)] bg-[#f7f6f3] text-[#2f3437]">
+      <main className="min-h-[calc(100vh-150px)] min-w-0 overflow-x-hidden bg-[#f7f6f3] text-[#2f3437]">
         <Breadcrumbs
           items={[
             { label: "Services" },
@@ -67,30 +67,29 @@ const LocateGSTP = () => {
           ]}
         />
 
-        <div className="mx-auto max-w-[1400px] px-5 pb-16 pt-8 sm:px-8 lg:px-10">
-          <header className="border-b border-[#eaeaea] pb-7">
+        <div className="mx-auto w-full max-w-[1400px] min-w-0 px-4 pb-12 pt-5 sm:px-6 sm:pb-16 sm:pt-7 lg:px-8 lg:pt-8">
+          <header className="min-w-0 border-b border-[#eaeaea] pb-6 sm:pb-7">
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#1f6c9f]">
               User service
             </p>
 
-            <h1 className="text-2xl font-semibold tracking-[-0.02em] text-balance text-[#20282d] sm:text-[1.75rem]">
+            <h1 className="break-words text-xl font-semibold tracking-[-0.02em] text-[#20282d] sm:text-2xl md:text-[1.75rem]">
               Locate GST Practitioner
             </h1>
 
-            <p className="mt-4 max-w-[65ch] text-sm leading-6 text-[#6f7375]">
+            <p className="mt-3 max-w-[65ch] break-words text-sm leading-6 text-[#6f7375] sm:mt-4">
               Find a GST Practitioner using an enrolment or GSTP ID,
               or search by name and location.
             </p>
           </header>
 
           <section className="pt-8">
-            <div className="grid gap-3 border-b border-[#eaeaea] pb-6 md:grid-cols-2">
+            <div className="grid gap-3 border-b border-[#eaeaea] pb-5 sm:pb-6 md:grid-cols-2">
               <button
                 type="button"
                 onClick={() => handleModeChange("id")}
                 className={`
-                  flex items-start gap-3
-                  border px-4 py-4
+                  flex min-w-0 items-start gap-3 border px-4 py-4
                   text-left
                   transition-colors
                   ${
@@ -126,8 +125,7 @@ const LocateGSTP = () => {
                 type="button"
                 onClick={() => handleModeChange("area")}
                 className={`
-                  flex items-start gap-3
-                  border px-4 py-4
+                  flex min-w-0 items-start gap-3 border px-4 py-4
                   text-left
                   transition-colors
                   ${
@@ -171,7 +169,7 @@ const LocateGSTP = () => {
                     <span className="ml-1 text-[#9f2f2d]">*</span>
                   </label>
 
-                  <div className="flex gap-3">
+                  <div className="flex flex-col gap-3 sm:flex-row">
                     <input
                       id="gstpId"
                       value={gstpId}
@@ -180,7 +178,7 @@ const LocateGSTP = () => {
                       }
                       placeholder="Enter Enrolment Number / GSTP ID"
                       className="
-                        h-12 flex-1
+                        h-12 min-w-0 flex-1
                         border border-[#d9d9d7]
                         bg-white px-3
                         text-sm
@@ -194,7 +192,7 @@ const LocateGSTP = () => {
                     <button
                       type="submit"
                       className="
-                        h-12 rounded-[5px]
+                        h-12 w-full rounded-[5px] sm:w-auto
                         bg-[#22282d]
                         px-7
                         text-sm font-medium
@@ -207,7 +205,7 @@ const LocateGSTP = () => {
                   </div>
                 </div>
               ) : (
-                <div className="grid gap-x-6 gap-y-6 md:grid-cols-2 lg:grid-cols-4">
+                <div className="grid gap-x-5 gap-y-5 sm:gap-x-6 sm:gap-y-6 md:grid-cols-2 lg:grid-cols-4">
                   <div>
                     <label
                       htmlFor="gstp-name"
@@ -329,7 +327,7 @@ const LocateGSTP = () => {
                     />
                   </div>
 
-                  <div className="lg:col-span-4 flex justify-end border-t border-[#eaeaea] pt-6">
+                  <div className="lg:col-span-4 flex flex-col items-stretch justify-end gap-3 border-t border-[#eaeaea] pt-5 sm:flex-row sm:items-center sm:justify-end border-t border-[#eaeaea] pt-6">
                     <button
                       type="submit"
                       className="

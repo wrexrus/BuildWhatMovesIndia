@@ -42,7 +42,6 @@ const SearchPAN = () => {
         setResult(null);
 
         try {
-            // Mock synthetic GSTIN derived from PAN for demonstration
             const derivedGstin = `27${pan}1Z5`;
             const data = await searchTaxpayerByGSTIN(derivedGstin);
             setResult(data);
@@ -70,7 +69,7 @@ const SearchPAN = () => {
             >
                 <form
                     onSubmit={handleSubmit}
-                    className="max-w-3xl"
+                    className="w-full max-w-3xl min-w-0"
                     noValidate
                 >
                     <FormField
@@ -90,12 +89,12 @@ const SearchPAN = () => {
                 </form>
 
                 {result && (
-                    <div className="mt-8 max-w-3xl bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-                        <h3 className="text-lg font-bold text-gray-800 mb-2">Registered Business for PAN: {pan}</h3>
+                    <div className="mt-6 w-full max-w-3xl min-w-0 overflow-hidden rounded-lg bg-white p-4 sm:mt-8 sm:p-6 shadow-sm border border-gray-200">
+                        <h3 className="break-words text-lg font-bold text-gray-800 mb-2">Registered Business for PAN: {pan}</h3>
                         <div className="p-4 bg-gray-50 rounded border border-gray-100 text-sm">
                             <p><strong>Trade Name:</strong> {result.tradeName || 'Nagpur Hardware Store'}</p>
                             <p><strong>Associated GSTIN:</strong> <span className="font-mono">{result.gstin}</span></p>
-                            <p><strong>Status:</strong> <span className="text-green-700 font-semibold">{result.gstinStatus}</span></p>
+                            <p><strong>Status:</strong> <span className="break-words text-green-700 font-semibold">{result.gstinStatus}</span></p>
                         </div>
                     </div>
                 )}

@@ -26,14 +26,18 @@ export const ToastProvider = ({ children }) => {
   return (
     <ToastContext.Provider value={{ showToast, removeToast }}>
       {children}
-      {/* Toast Notification Container */}
-      <div className="fixed top-5 right-5 z-[9999] flex flex-col gap-2.5 max-w-md w-[90vw] pointer-events-none font-sans">
+
+      <div className="pointer-events-none fixed inset-x-3 top-3 z-[9999] flex max-h-[calc(100dvh-1.5rem)] flex-col items-stretch gap-2 overflow-y-auto font-sans sm:left-auto sm:right-4 sm:top-4 sm:w-[min(28rem,calc(100vw-2rem))] sm:items-end">
         {toasts.map((toast) => (
-          <div key={toast.id} className="pointer-events-auto transition-all transform duration-300 animate-in fade-in slide-in-from-top-4">
+          <div
+            key={toast.id}
+            className="pointer-events-auto w-full min-w-0 transition-opacity duration-200 animate-in fade-in slide-in-from-top-2"
+          >
             <Alert
               type={toast.type}
               title={toast.title}
               onClose={() => removeToast(toast.id)}
+              className="w-full"
             >
               {toast.message}
             </Alert>

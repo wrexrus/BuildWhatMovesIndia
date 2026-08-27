@@ -5,7 +5,7 @@ const LanguageContext = createContext();
 
 export const LanguageProvider = ({ children }) => {
   const [language, setLanguageState] = useState(() => {
-    return localStorage.getItem('app_language') || 'HI'; // Default Hindi (हिंदी)
+    return localStorage.getItem('app_language') || 'HI';
   });
 
   const setLanguage = (newLang) => {
@@ -13,7 +13,6 @@ export const LanguageProvider = ({ children }) => {
     localStorage.setItem('app_language', newLang);
   };
 
-  // Translation helper function
   const t = (key) => {
     const langDict = SITE_TRANSLATIONS[language] || SITE_TRANSLATIONS.EN;
     return langDict[key] || SITE_TRANSLATIONS.EN[key] || key;

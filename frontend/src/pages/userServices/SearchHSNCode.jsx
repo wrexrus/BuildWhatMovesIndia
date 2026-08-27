@@ -38,7 +38,7 @@ const SearchHSNCode = () => {
 
   return (
     <PageContainer>
-      <main className="min-h-[calc(100vh-150px)] bg-[#f7f6f3] text-[#2f3437]">
+      <main className="min-h-[calc(100vh-150px)] min-w-0 overflow-x-hidden bg-[#f7f6f3] text-[#2f3437]">
         <Breadcrumbs
           items={[
             { label: "Services" },
@@ -47,23 +47,23 @@ const SearchHSNCode = () => {
           ]}
         />
 
-        <div className="mx-auto max-w-[1400px] px-5 pb-16 pt-8 sm:px-8 lg:px-10">
-          <header className="max-w-4xl border-b border-[#eaeaea] pb-7">
+        <div className="mx-auto w-full max-w-[1400px] min-w-0 px-4 pb-12 pt-5 sm:px-6 sm:pb-16 sm:pt-7 lg:px-8 lg:pt-8">
+          <header className="w-full max-w-4xl min-w-0 border-b border-[#eaeaea] pb-6 sm:pb-7">
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#1f6c9f]">
               User service
             </p>
 
-            <h1 className="text-2xl font-semibold tracking-[-0.02em] text-balance text-[#20282d] sm:text-[1.75rem]">
+            <h1 className="break-words text-xl font-semibold tracking-[-0.02em] text-[#20282d] sm:text-2xl md:text-[1.75rem]">
               Search HSN Code
             </h1>
 
-            <p className="mt-4 max-w-[65ch] text-sm leading-6 text-[#6f7375]">
+            <p className="mt-3 max-w-[65ch] break-words text-sm leading-6 text-[#6f7375] sm:mt-4">
               Find an HSN classification using a chapter/code or a
               description of the goods or service.
             </p>
           </header>
 
-          <section className="max-w-4xl pt-8">
+          <section className="w-full max-w-4xl min-w-0 pt-6 sm:pt-8">
             <form onSubmit={handleSubmit} noValidate>
               <fieldset>
                 <legend className="text-sm font-semibold text-[#293238]">
@@ -71,11 +71,10 @@ const SearchHSNCode = () => {
                   <span className="ml-1 text-[#9f2f2d]">*</span>
                 </legend>
 
-                <div className="mt-4 flex flex-wrap gap-3">
+                <div className="mt-4 flex flex-col gap-2.5 sm:flex-row sm:flex-wrap sm:gap-3">
                   <label
                     className={`
-                      flex cursor-pointer items-center gap-3
-                      border px-4 py-3
+                      flex w-full cursor-pointer items-center gap-3 border px-4 py-3 sm:w-auto
                       text-sm
                       transition-colors
                       ${
@@ -100,8 +99,7 @@ const SearchHSNCode = () => {
 
                   <label
                     className={`
-                      flex cursor-pointer items-center gap-3
-                      border px-4 py-3
+                      flex w-full cursor-pointer items-center gap-3 border px-4 py-3 sm:w-auto
                       text-sm
                       transition-colors
                       ${
@@ -173,8 +171,7 @@ const SearchHSNCode = () => {
                   <button
                     type="submit"
                     className="
-                      h-12
-                      rounded-[5px]
+                      h-12 w-full rounded-[5px] sm:w-auto
                       bg-[#22282d]
                       px-7
                       text-sm
@@ -197,7 +194,7 @@ const SearchHSNCode = () => {
               </div>
             </form>
 
-            <div className="mt-10 border-t border-[#eaeaea] pt-7">
+            <div className="mt-8 border-t border-[#eaeaea] pt-6 sm:mt-10 sm:pt-7">
               <a
                 href="#"
                 className="

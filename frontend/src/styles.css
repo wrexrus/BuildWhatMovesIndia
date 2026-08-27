@@ -26,6 +26,7 @@
     opacity: 0;
     transform: translateY(-4px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -42,6 +43,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -49,6 +51,31 @@ body {
   min-width: 320px;
   min-height: 100vh;
   background: #eef2f6;
+  overflow-x: hidden;
+}
+
+#root {
+  min-width: 0;
+  width: 100%;
+  overflow-x: clip;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+}
+
+img,
+video {
+  height: auto;
 }
 
 button,
@@ -56,6 +83,11 @@ input,
 select,
 textarea {
   font: inherit;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
 }
 
 button:focus-visible,
@@ -105,9 +137,52 @@ select:focus-visible {
   animation: page-enter 220ms ease-out both;
 }
 
+.break-anywhere,
+.break-words {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+@media (max-width: 639px) {
+  html {
+    font-size: 15px;
+  }
+
+  body {
+    min-width: 320px;
+  }
+
+  input,
+  select,
+  textarea {
+    max-width: 100%;
+  }
+
+  button,
+  a {
+    touch-action: manipulation;
+  }
+
+  .prototype-notice {
+    padding-left: 0.875rem;
+    padding-right: 0.875rem;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1023px) {
+  .prototype-notice {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .animate-page-progress,
   .animate-page-enter {
     animation: none;
+  }
+
+  html {
+    scroll-behavior: auto;
   }
 }

@@ -65,17 +65,7 @@ const HelpItem = ({
   return (
     <a
       href="#"
-      className="
-        group
-        grid
-        grid-cols-[32px_1fr_20px]
-        gap-4
-        border-b
-        border-[#eaeaea]
-        py-6
-        transition-colors
-        hover:bg-[#fbfbfa]
-      "
+      className="group grid min-w-0 grid-cols-[24px_minmax(0,1fr)_16px] gap-2.5 border-b border-[#eaeaea] py-5 transition-colors hover:bg-[#fbfbfa] sm:grid-cols-[32px_minmax(0,1fr)_20px] sm:gap-4 sm:py-6"
     >
       <span className="font-mono text-xs text-[#9a9b99]">
         {String(index).padStart(2, "0")}
@@ -83,7 +73,7 @@ const HelpItem = ({
 
       <div>
         <div className="flex flex-wrap items-center gap-3">
-          <h3 className="text-base font-semibold text-[#293238] transition-colors group-hover:text-[#1f6c9f]">
+          <h3 className="break-words text-sm font-semibold leading-5 text-[#293238] transition-colors group-hover:text-[#1f6c9f] sm:text-base">
             {title}
           </h3>
 
@@ -94,7 +84,7 @@ const HelpItem = ({
           )}
         </div>
 
-        <p className="mt-2 max-w-[60ch] text-sm leading-6 text-[#6f7375]">
+        <p className="mt-2 max-w-[60ch] break-words text-xs leading-5 text-[#6f7375] sm:text-sm sm:leading-6">
           {description}
         </p>
       </div>
@@ -121,7 +111,7 @@ const HelpTaxPayerFacilities = () => {
           ]}
         />
 
-        <div className="mx-auto max-w-[1400px] px-5 pb-16 pt-8 sm:px-8 lg:px-10">
+        <div className="mx-auto w-full max-w-[1400px] min-w-0 px-4 pb-12 pt-5 sm:px-8 sm:pb-16 sm:pt-8 lg:px-10">
           <style>{`
             @keyframes pageRise {
               from { opacity: 0; transform: translateY(10px); }
@@ -133,25 +123,25 @@ const HelpTaxPayerFacilities = () => {
             }
           `}</style>
 
-          {/* Intro */}
-          <header className="page-rise max-w-4xl border-b border-[#eaeaea] pb-10">
+          
+          <header className="page-rise max-w-4xl min-w-0 border-b border-[#eaeaea] pb-7 sm:pb-10">
             <p className="mb-4 text-xs font-semibold uppercase tracking-[0.1em] text-[#1f6c9f]">
               Support & facilities
             </p>
 
-            <h1 className="font-serif text-[2.6rem] leading-[1.05] tracking-[-0.03em] text-[#161b1e] sm:text-[3.2rem]">
+            <h1 className="break-words font-serif text-[2rem] leading-[1.05] tracking-[-0.03em] text-[#161b1e] sm:text-[3.2rem]">
               Help and taxpayer facilities
             </h1>
 
-            <p className="mt-5 max-w-[62ch] text-base leading-7 text-[#6f7375]">
+            <p className="mt-4 max-w-[62ch] break-words text-sm leading-6 text-[#6f7375] sm:mt-5 sm:text-base sm:leading-7">
               Find guidance, support services, grievance facilities
               and other resources available through the GST Portal.
             </p>
           </header>
 
-          {/* Taxpayer services */}
-          <section className="border-b border-[#eaeaea] py-10">
-            <div className="grid gap-8 lg:grid-cols-[220px_1fr]">
+          
+          <section className="border-b border-[#eaeaea] py-7 sm:py-10">
+            <div className="grid min-w-0 gap-6 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-8">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.1em] text-[#787774]">
                   Facilities
@@ -162,7 +152,7 @@ const HelpTaxPayerFacilities = () => {
                 </h2>
               </div>
 
-              <div className="grid border-t border-[#eaeaea] md:grid-cols-3 md:divide-x md:divide-[#eaeaea] md:border-t-0">
+              <div className="grid min-w-0 border-t border-[#eaeaea] md:grid-cols-3 md:divide-x md:divide-[#eaeaea] md:border-t-0">
                 {taxpayerServices.map((service, index) => (
                   <a
                     key={service.title}
@@ -204,11 +194,11 @@ const HelpTaxPayerFacilities = () => {
                       </span>
                     </div>
 
-                    <h3 className="mt-8 text-base font-semibold leading-6 text-[#293238] transition-colors group-hover:text-[#1f6c9f]">
+                    <h3 className="mt-5 break-words text-sm font-semibold leading-6 text-[#293238] transition-colors group-hover:text-[#1f6c9f] sm:mt-8 sm:text-base">
                       {service.title}
                     </h3>
 
-                    <p className="mt-3 text-sm leading-6 text-[#6f7375]">
+                    <p className="mt-2 break-words text-xs leading-5 text-[#6f7375] sm:mt-3 sm:text-sm sm:leading-6">
                       {service.description}
                     </p>
                   </a>
@@ -217,9 +207,9 @@ const HelpTaxPayerFacilities = () => {
             </div>
           </section>
 
-          {/* Help */}
-          <section className="py-10">
-            <div className="grid gap-8 lg:grid-cols-[220px_1fr]">
+          
+          <section className="py-7 sm:py-10">
+            <div className="grid min-w-0 gap-6 lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-8">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.1em] text-[#787774]">
                   Support
@@ -229,7 +219,7 @@ const HelpTaxPayerFacilities = () => {
                   Help & support
                 </h2>
 
-                <p className="mt-3 max-w-xs text-sm leading-6 text-[#6f7375]">
+                <p className="mt-3 max-w-xs break-words text-sm leading-6 text-[#6f7375]">
                   Guidance, troubleshooting information and official
                   support resources.
                 </p>
@@ -247,7 +237,7 @@ const HelpTaxPayerFacilities = () => {
             </div>
           </section>
 
-          {/* Return */}
+          
           <section className="border-t border-[#eaeaea] pt-8">
             <Link
               to="/"

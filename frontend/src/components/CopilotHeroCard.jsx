@@ -59,7 +59,7 @@ const CopilotHeroCard = () => {
   };
 
   return (
-    <section className="relative z-10 mx-auto -mt-8 mb-10 max-w-7xl px-4 font-sans sm:px-6 lg:px-8">
+    <section className="relative z-10 mx-auto -mt-5 mb-8 max-w-7xl px-3 font-sans sm:-mt-8 sm:mb-10 sm:px-6 lg:px-8">
       <div
         className="
           overflow-hidden
@@ -70,8 +70,8 @@ const CopilotHeroCard = () => {
         "
       >
         <div className="grid lg:grid-cols-[1.04fr_0.96fr]">
-          {/* Left: Context + suggested work */}
-          <div className="p-7 sm:p-9 lg:p-10">
+          {}
+          <div className="p-5 sm:p-9 lg:p-10">
             <div className="flex items-center gap-2">
               <span className="relative flex h-5 w-5 items-center justify-center">
                 <span className="absolute h-2 w-2 rounded-full bg-navy" />
@@ -83,11 +83,11 @@ const CopilotHeroCard = () => {
               </span>
             </div>
 
-            <h2 className="mt-5 max-w-xl font-serif text-[2rem] leading-[1.1] tracking-[-0.025em] text-ink sm:text-[2.35rem]">
+            <h2 className="mt-5 max-w-xl font-serif text-[1.75rem] leading-[1.12] tracking-[-0.025em] text-ink sm:text-[2.35rem]">
               {t("copilotTitle")}
             </h2>
 
-            <p className="mt-4 max-w-xl text-[15px] leading-7 text-muted">
+            <p className="mt-3 max-w-xl text-[14px] leading-6 text-muted sm:mt-4 sm:text-[15px] sm:leading-7">
               {isLoggedIn && user ? (
                 <>
                   {t("copilotWelcome")},{" "}
@@ -105,13 +105,13 @@ const CopilotHeroCard = () => {
             </p>
 
             {isLoggedIn && (
-              <div className="mt-6 inline-flex items-center gap-2 text-xs text-green">
+              <div className="mt-5 inline-flex min-h-9 items-center gap-2 text-xs text-green sm:mt-6">
                 <CheckCircle2 className="h-4 w-4" />
                 <span>Account context available</span>
               </div>
             )}
 
-            <div className="mt-9">
+            <div className="mt-7 sm:mt-9">
               <div className="flex items-center justify-between">
                 <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-muted">
                   Suggested
@@ -133,8 +133,8 @@ const CopilotHeroCard = () => {
                     className="
                       group
                       flex w-full items-center justify-between
-                      gap-5
-                      py-3.5
+                      gap-3
+                      py-3.5 sm:gap-5
                       text-left
                     "
                   >
@@ -157,11 +157,11 @@ const CopilotHeroCard = () => {
             </div>
           </div>
 
-          {/* Right: Command surface */}
-          <div className="bg-shell/55 p-6 sm:p-8 lg:p-10">
+          {}
+          <div className="bg-shell/55 p-5 sm:p-8 lg:p-10">
             <div className="flex h-full flex-col justify-center">
               <div>
-                <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-navy/65">
+                <p className="text-[10px] font-semibold uppercase sm:text-[11px] tracking-[0.1em] text-navy/65">
                   Ask about your GST work
                 </p>
 
@@ -178,7 +178,7 @@ const CopilotHeroCard = () => {
 
               <form
                 onSubmit={handleFormSubmit}
-                className="mt-5"
+                className="mt-4 sm:mt-5"
               >
                 <div
                   className="
@@ -204,14 +204,14 @@ const CopilotHeroCard = () => {
                     )}
                     className="
                       block
-                      min-h-[150px]
-                      w-full
+                      min-h-[130px]
+                      w-full sm:min-h-[170px]
                       resize-none
                       border-0
                       bg-transparent
                       px-4
-                      py-4
-                      text-sm
+                      py-3.5
+                      text-sm sm:py-4
                       leading-6
                       text-ink
                       placeholder:text-muted/60
@@ -220,8 +220,8 @@ const CopilotHeroCard = () => {
                     "
                   />
 
-                  <div className="flex items-center justify-between border-t border-line/80 px-3 py-2.5">
-                    <span className="text-[10px] text-muted">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-t border-line/80 px-3 py-2.5">
+                    <span className="text-[9px] leading-4 text-muted sm:text-[10px]">
                       Press the button to open Copilot
                     </span>
 
@@ -234,9 +234,9 @@ const CopilotHeroCard = () => {
                         gap-2
                         rounded-[9px]
                         bg-navy
-                        px-4
+                        px-3.5
                         py-2.5
-                        text-xs
+                        text-xs sm:px-4
                         font-semibold
                         text-white
                         transition-all
@@ -262,7 +262,7 @@ const CopilotHeroCard = () => {
                   }
                   className="
                     mt-3
-                    inline-flex
+                    inline-flex min-h-9
                     items-center
                     gap-1.5
                     text-xs

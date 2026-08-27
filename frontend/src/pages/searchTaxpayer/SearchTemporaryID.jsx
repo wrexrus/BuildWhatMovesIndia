@@ -114,7 +114,7 @@ const SearchTemporaryID = () => {
             >
                 <form
                     onSubmit={handleSubmit}
-                    className="max-w-3xl"
+                    className="w-full max-w-3xl min-w-0"
                     noValidate
                 >
                     <FormField
@@ -206,19 +206,19 @@ const SearchTemporaryID = () => {
                 </form>
 
                 {result && (
-                    <div className="mt-8 max-w-3xl bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                        <div className="flex justify-between items-start mb-4 border-b border-slate-100 pb-3">
+                    <div className="mt-6 w-full max-w-3xl min-w-0 overflow-hidden rounded-xl bg-white p-4 sm:mt-8 sm:rounded-2xl sm:p-6 shadow-sm border border-slate-200">
+                        <div className="flex min-w-0 flex-col gap-3 border-b border-slate-100 pb-3">
                             <div>
-                                <h3 className="text-lg font-bold text-[#071b30]">{result.applicantName}</h3>
-                                <p className="text-xs text-slate-500 font-mono">TRN: {result.temporaryId}</p>
+                                <h3 className="break-words text-lg font-bold text-[#071b30]">{result.applicantName}</h3>
+                                <p className="break-words text-xs text-slate-500 font-mono">TRN: {result.temporaryId}</p>
                             </div>
-                            <span className="px-3 py-1 text-xs font-bold rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1">
+                            <span className="inline-flex max-w-full w-fit items-center px-3 py-1 text-xs font-bold rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1">
                                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
                                 <span>{result.status}</span>
                             </span>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-700">
+                        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 text-xs text-slate-700">
                             <div>
                                 <span className="font-medium text-slate-400 block">Trade Name</span>
                                 <span className="font-semibold text-slate-800">{result.tradeName}</span>

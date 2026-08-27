@@ -9,7 +9,6 @@ import {
   LogOut,
   ShieldCheck,
   Globe,
-  Contrast
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -177,38 +176,47 @@ const taxpayerSearchLinks = [
 const navLinks = [
   {
     label: "Home",
+    labelKey: "navHome",
     href: "/",
   },
   {
     label: "GSTR-3B Simplified",
+    labelKey: "navGstr3b",
     to: "/gstr3b-simplified",
   },
   {
     label: "Services",
+    labelKey: "navServices",
     mega: true,
   },
   {
     label: "GST Law",
+    labelKey: "navGstLaw",
     to: "/gst-law",
   },
   {
     label: "Downloads",
+    labelKey: "navDownloads",
     mega: true,
   },
   {
     label: "Search Taxpayer",
+    labelKey: "navSearchGstin",
     taxpayerSearch: true,
   },
   {
     label: "Help and Taxpayer Facilities",
+    labelKey: "navHelpFacilities",
     to: "/help-taxpayer-facilities",
   },
   {
     label: "e-Invoice",
+    labelKey: "navEinvoice",
     href: "/e-invoice",
   },
   {
     label: "News and Updates",
+    labelKey: "navNews",
     href: "/news-and-updates",
   },
 ];
@@ -228,22 +236,23 @@ function MegaPanel({ menu, onSelect }) {
   return (
     <div
       className="
-        static z-50
-        flex w-full
-        origin-top
-        animate-[megaPanelIn_160ms_ease-out]
-        overflow-hidden
-        rounded-b-lg
-        border border-line
-        bg-white
-        text-ink
-        shadow-xl
+    static z-50
+    flex flex-col w-full
+    origin-top
+    animate-[megaPanelIn_160ms_ease-out]
+    overflow-hidden
+    rounded-b-lg
+    border border-line
+    bg-white
+    text-ink
+    shadow-xl
 
-        lg:absolute
-        lg:left-0
-        lg:top-11
-        lg:w-[min(760px,90vw)]
-      "
+    lg:absolute
+    lg:left-0
+    lg:top-11
+    lg:w-[min(760px,90vw)]
+    lg:flex-row
+  "
     >
 
       <div
@@ -425,11 +434,14 @@ const Navbar = () => {
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [activeLink, setActiveLink] = useState("Home");
   const [fontStep, setFontStep] = useState(1);
-  const [highContrast, setHighContrast] = useState(false);
 
   const navRef = useRef(null);
   const closeTimeoutRef = useRef(null);
   const openTimeoutRef = useRef(null);
+
+  const isTouchDevice = () =>
+    typeof window !== "undefined" &&
+    window.matchMedia("(hover: none)").matches;
 
   const isTaxpayerRoute =
     location.pathname.startsWith("/search-taxpayer/");
@@ -486,13 +498,6 @@ const Navbar = () => {
     document.documentElement.style.fontSize =
       `${FONT_STEPS[fontStep] * 100}%`;
   }, [fontStep]);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle(
-      "high-contrast",
-      highContrast
-    );
-  }, [highContrast]);
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -558,9 +563,9 @@ const Navbar = () => {
 
 
       <div className="bg-navy">
-        <div className="mx-auto max-w-360 px-6">
+        <div className="mx-auto max-w-360 px-4 sm:px-6">
 
-          <div className="flex h-9 items-center justify-between border-b border-white/10 text-[0.8rem]">
+          <div className="flex h-9 items-center justify-between gap-3 border-b border-white/10 text-[0.75rem] sm:text-[0.8rem]">
             <a
               href="#main"
               className="
@@ -577,7 +582,7 @@ const Navbar = () => {
               Skip to main content
             </a>
 
-            <div className="flex items-center gap-3">
+            <div className="hidden items-center gap-3 sm:flex">
               <div className="flex items-center gap-1.5 bg-white/10 hover:bg-white/20 border border-white/25 rounded px-2 py-0.5 text-xs text-white transition-colors">
                 <Globe className="w-3.5 h-3.5 text-amber shrink-0" />
                 <select
@@ -593,34 +598,6 @@ const Navbar = () => {
                   ))}
                 </select>
               </div>
-
-              <button
-                type="button"
-                aria-pressed={highContrast}
-                aria-label="Toggle high contrast"
-                onClick={() =>
-                  setHighContrast((value) => !value)
-                }
-                className={`
-                  grid h-6 w-6
-                  place-items-center
-                  rounded-full
-                  border
-                  text-xs
-                  transition-colors
-
-                  focus-visible:outline-2
-                  focus-visible:outline-amber
-                  focus-visible:outline-offset-2
-
-                  ${highContrast
-                    ? "border-amber bg-amber text-navy"
-                    : "border-white/40 text-white/80 hover:border-white hover:text-white"
-                  }
-                `}
-              >
-                <Contrast size={13} strokeWidth={2.25} />
-              </button>
 
               <div
                 className="flex items-center gap-1"
@@ -641,11 +618,10 @@ const Navbar = () => {
                     text-white/80
                     transition-colors
                     hover:text-white
-
+                    cursor-pointer
                     focus-visible:outline-2
                     focus-visible:outline-amber
                     focus-visible:outline-offset-2
-
                     disabled:cursor-not-allowed
                     disabled:opacity-30
                   "
@@ -679,11 +655,10 @@ const Navbar = () => {
                     text-white/80
                     transition-colors
                     hover:text-white
-
+                    cursor-pointer
                     focus-visible:outline-2
                     focus-visible:outline-amber
                     focus-visible:outline-offset-2
-
                     disabled:cursor-not-allowed
                     disabled:opacity-30
                   "
@@ -695,40 +670,34 @@ const Navbar = () => {
           </div>
 
 
-          <div className="flex min-h-19.5 items-center justify-between gap-6">
-            <div className="flex items-center gap-4">
-              <img
-                src={logo}
-                alt="GST Portal Logo"
-                className="
-                  h-20
-                  w-20
-                  shrink-0
-                  object-contain
-                "
-              />
+          <div className="flex min-h-19.5 items-center justify-between gap-3 py-3 sm:gap-6 sm:py-0">
+            <div className="flex min-w-0 items-center gap-2.5 sm:gap-4">
+              <Link to="/">
+                <img
+                  src={logo}
+                  alt="GST Portal Logo"
+                  className="h-12 w-12 shrink-0 object-contain sm:h-20 sm:w-20"
+                />
+              </Link>
 
               <div>
-                <h1 className="font-serif text-[1.65rem] leading-[1.1] tracking-[-0.02em] text-white">
+                <h1 className="font-serif text-[1.15rem] leading-[1.1] tracking-[-0.02em] text-white sm:text-[1.65rem]">
                   Goods and Services Tax
                 </h1>
 
-                <p className="mt-1 text-[0.78rem] font-medium uppercase tracking-[0.08em] text-white/55">
+                <p className="mt-1 hidden text-[0.68rem] font-medium uppercase tracking-[0.08em] text-white/55 sm:block sm:text-[0.78rem]">
                   Government of India, States and Union Territories
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-2.5">
+            <div className="flex shrink-0 items-center gap-1.5 sm:gap-2.5">
               {!isLoggedIn ? (
                 <>
                   <button
                     type="button"
                     onClick={() => navigate('/register')}
-                    className="
-                      rounded border border-white/40 px-4 py-2 text-[0.9rem] font-medium transition-all
-                      hover:bg-white/10 active:scale-[0.98] cursor-pointer
-                    "
+                    className="hidden rounded border border-white/40 px-4 py-2 text-[0.9rem] font-medium transition-all hover:bg-white/10 active:scale-[0.98] cursor-pointer sm:block"
                   >
                     {t('navRegister')}
                   </button>
@@ -736,10 +705,7 @@ const Navbar = () => {
                   <button
                     type="button"
                     onClick={() => navigate('/login')}
-                    className="
-                      rounded bg-white px-5 py-2 text-[0.9rem] font-semibold text-navy transition-all
-                      hover:bg-white/90 active:scale-[0.98] cursor-pointer
-                    "
+                    className="hidden rounded bg-white px-5 py-2 text-[0.9rem] font-semibold text-navy transition-all hover:bg-white/90 active:scale-[0.98] cursor-pointer sm:block"
                   >
                     {t('navLogin')}
                   </button>
@@ -766,7 +732,7 @@ const Navbar = () => {
                       <div className="text-[10px] text-slate-400 mb-2.5">
                         Last Logged In: {user?.lastLogin || 'Today'}
                       </div>
-                      
+
                       <button
                         type="button"
                         onClick={() => {
@@ -837,8 +803,27 @@ const Navbar = () => {
           lg:block
         `}
       >
-        <div className="relative mx-auto max-w-360 px-6">
-          <div className="flex flex-col lg:flex-row lg:items-stretch">
+        <div className="relative mx-auto max-w-360 px-0 sm:px-6">
+          <div className="flex max-h-[calc(100vh-8rem)] flex-col overflow-y-auto overscroll-contain lg:max-h-none lg:flex-row lg:items-stretch lg:overflow-visible">
+            {!isLoggedIn && (
+              <div className="flex gap-2 border-b border-white/10 p-3 lg:hidden">
+                <button
+                  type="button"
+                  onClick={() => navigate('/register')}
+                  className="min-h-10 flex-1 rounded border border-white/35 px-3 py-2 text-sm font-medium text-white transition-colors hover:bg-white/10"
+                >
+                  {t('navRegister')}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => navigate('/login')}
+                  className="min-h-10 flex-1 rounded bg-white px-3 py-2 text-sm font-semibold text-navy transition-colors hover:bg-white/90"
+                >
+                  {t('navLogin')}
+                </button>
+              </div>
+            )}
+
             {navLinks.map((link) => {
               const isOpen = openMenu === link.label;
 
@@ -853,10 +838,8 @@ const Navbar = () => {
                   <div
                     key={link.label}
                     className="relative lg:shrink-0"
-                    onMouseEnter={() =>
-                      handleMouseEnter(link.label)
-                    }
-                    onMouseLeave={handleMouseLeave}
+                    onMouseEnter={() => !isTouchDevice() && handleMouseEnter(link.label)}
+                    onMouseLeave={() => !isTouchDevice() && handleMouseLeave()}
                   >
                     <button
                       type="button"
@@ -870,9 +853,10 @@ const Navbar = () => {
                         items-center
                         justify-between
                         gap-2
-                        whitespace-nowrap
+                        whitespace-normal
                         px-4
                         text-left
+                        lg:whitespace-nowrap
                         text-[0.87rem]
                         font-medium
                         transition-colors
@@ -892,7 +876,7 @@ const Navbar = () => {
                       <span className="flex items-center gap-2">
                         <Search size={14} />
 
-                        {link.label}
+                        {t(link.labelKey)}
                       </span>
 
                       <ChevronDown
@@ -909,6 +893,7 @@ const Navbar = () => {
                       <div
                         className="
                           static z-50
+                          w-full
                           min-w-full
                           origin-top
                           animate-[megaPanelIn_160ms_ease-out]
@@ -988,10 +973,8 @@ const Navbar = () => {
                   <div
                     key={link.label}
                     className="relative lg:shrink-0"
-                    onMouseEnter={() =>
-                      handleMouseEnter(link.label)
-                    }
-                    onMouseLeave={handleMouseLeave}
+                    onMouseEnter={() => !isTouchDevice() && handleMouseEnter(link.label)}
+                    onMouseLeave={() => !isTouchDevice() && handleMouseLeave()}
                   >
                     <button
                       type="button"
@@ -1005,9 +988,10 @@ const Navbar = () => {
                         items-center
                         justify-between
                         gap-2
-                        whitespace-nowrap
+                        whitespace-normal
                         px-4
                         text-left
+                        lg:whitespace-nowrap
                         text-[0.87rem]
                         font-medium
                         transition-colors
@@ -1025,7 +1009,7 @@ const Navbar = () => {
                         lg:justify-start
                       `}
                     >
-                      {link.label}
+                      {t(link.labelKey)}
 
                       <ChevronDown
                         size={14}
@@ -1062,9 +1046,10 @@ const Navbar = () => {
                     className={`
     flex h-11
     items-center
-    whitespace-nowrap
+    whitespace-normal
     px-4
     text-[0.87rem]
+    lg:whitespace-nowrap
     font-medium
     transition-colors
     duration-150
@@ -1078,7 +1063,7 @@ const Navbar = () => {
     focus-visible:outline-amber
   `}
                   >
-                    {link.label}
+                    {t(link.labelKey)}
                   </Link>
                 </div>
               );

@@ -142,13 +142,13 @@ const PaymentGrievance = () => {
           ]}
         />
 
-        <div className="mx-auto max-w-[1400px] px-5 pb-16 pt-8 sm:px-8 lg:px-10">
+        <div className="mx-auto max-w-[1400px] px-5 pb-16 pt-8 sm:px-4 sm:px-4 sm:px-6 lg:px-8 lg:px-4 sm:px-4 sm:px-6 lg:px-10">
           <header className="border-b border-[#eaeaea] pb-7">
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.08em] text-[#1f6c9f]">
               Payments / Grievance
             </p>
 
-            <h1 className="max-w-4xl text-2xl font-semibold tracking-[-0.02em] text-balance text-[#20282d] sm:text-[1.75rem]">
+            <h1 className="max-w-4xl text-lg sm:text-xl sm:text-2xl font-semibold tracking-[-0.02em] text-balance text-[#20282d] sm:text-[1.75rem]">
               Grievance against Payment
             </h1>
 
@@ -163,7 +163,7 @@ const PaymentGrievance = () => {
           </header>
 
           <div className="border-b border-[#eaeaea] pt-7">
-            <div className="flex gap-8">
+            <div className="flex gap-5 sm:gap-3 sm:gap-4 sm:gap-5 lg:gap-6 lg:gap-8">
               <button
                 type="button"
                 onClick={() => setActiveTab("submit")}
@@ -217,7 +217,7 @@ const PaymentGrievance = () => {
                   Grievance lookup
                 </p>
 
-                <h2 className="mt-1 text-xl font-semibold tracking-[-0.01em] text-[#293238]">
+                <h2 className="mt-1 text-lg sm:text-xl font-semibold tracking-[-0.01em] text-[#293238]">
                   Check grievance status
                 </h2>
               </div>
@@ -283,7 +283,7 @@ const PaymentGrievance = () => {
                     Grievance details
                   </p>
 
-                  <h2 className="mt-1 text-xl font-semibold tracking-[-0.01em] text-[#293238]">
+                  <h2 className="mt-1 text-lg sm:text-xl font-semibold tracking-[-0.01em] text-[#293238]">
                     Payment issue
                   </h2>
                 </div>
@@ -431,7 +431,7 @@ const PaymentGrievance = () => {
                     Taxpayer details
                   </p>
 
-                  <h2 className="mt-1 text-xl font-semibold tracking-[-0.01em] text-[#293238]">
+                  <h2 className="mt-1 text-lg sm:text-xl font-semibold tracking-[-0.01em] text-[#293238]">
                     Person reporting the grievance
                   </h2>
                 </div>
@@ -752,7 +752,7 @@ const PaymentGrievance = () => {
                     Supporting document
                   </p>
 
-                  <h2 className="mt-1 text-xl font-semibold tracking-[-0.01em] text-[#293238]">
+                  <h2 className="mt-1 text-lg sm:text-xl font-semibold tracking-[-0.01em] text-[#293238]">
                     Add supporting documentation
                   </h2>
                 </div>
@@ -791,7 +791,7 @@ const PaymentGrievance = () => {
                     Payment reference
                   </p>
 
-                  <h2 className="mt-1 text-xl font-semibold tracking-[-0.01em] text-[#293238]">
+                  <h2 className="mt-1 text-lg sm:text-xl font-semibold tracking-[-0.01em] text-[#293238]">
                     Payment reference
                   </h2>
                 </div>
@@ -845,7 +845,7 @@ const PaymentGrievance = () => {
               </section>
 
               <section className="mt-9 border-t border-[#eaeaea] pt-7">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-end">
+                <div className="flex flex-col gap-3 sm:gap-4 sm:flex-row sm:items-center sm:justify-end">
                   <button
                     type="button"
                     onClick={() => window.location.reload()}
@@ -854,7 +854,7 @@ const PaymentGrievance = () => {
                       border
                       border-[#cfd2d3]
                       bg-white
-                      px-6
+                      px-4 sm:px-6
                       py-3
                       text-sm
                       font-medium
@@ -875,7 +875,7 @@ const PaymentGrievance = () => {
                     className="
                       rounded-[5px]
                       bg-[#22282d]
-                      px-6
+                      px-4 sm:px-6
                       py-3
                       text-sm
                       font-medium
@@ -891,7 +891,7 @@ const PaymentGrievance = () => {
                     className="
                       rounded-[5px]
                       bg-[#22282d]
-                      px-6
+                      px-4 sm:px-6
                       py-3
                       text-sm
                       font-medium

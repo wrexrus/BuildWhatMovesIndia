@@ -12,21 +12,11 @@ const PageTransition = () => {
 
   return (
     <div
-      className="
-        pointer-events-none
-        fixed
-        inset-x-0
-        top-0
-        z-[60]
-        h-[3px]
-        overflow-hidden
-      "
+      className="pointer-events-none fixed inset-x-0 top-0 z-[60] h-[3px] overflow-hidden"
       aria-hidden="true"
     >
       <div
-        className="
-          h-full
-          w-[35%]
+        className="h-full w-[35%] min-w-[80px]
           rounded-r-full
           bg-gradient-to-r
           from-navy

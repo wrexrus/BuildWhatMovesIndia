@@ -3,8 +3,7 @@ import React from "react";
 const PageContainer = ({ children, className = "" }) => {
   return (
     <div
-      className={`
-        animate-page-enter
+      className={`min-w-0 animate-page-enter
         ${className}
       `}
     >

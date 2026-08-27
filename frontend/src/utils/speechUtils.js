@@ -1,16 +1,8 @@
-/**
- * High-Quality Multi-Language Audio Narration Helper
- * Uses Server-Side High-Definition MP3 Audio Streaming for 100% Native Pronunciation
- * Supports Hindi (HI), Marathi (MR), Tamil (TA), Punjabi (PA), Gujarati (GU), English (EN)
- */
-
 let activeAudioInstance = null;
 
 export function speakTextInLanguage(text, language = 'HI', onEnd = () => {}, onError = () => {}) {
-  // 1. Stop any currently playing audio
   stopSpeech();
 
-  // 2. Clean & sanitize text for TTS
   const cleanText = text
     .replace(/[🌐🔴🟡🟢💰📅📊⚡•*#_`]/g, ' ')
     .replace(/https?:\/\/\S+/g, '')
@@ -24,7 +16,6 @@ export function speakTextInLanguage(text, language = 'HI', onEnd = () => {}, onE
 
   const langKey = (language || 'HI').toUpperCase();
 
-  // Priority 1: High-Definition Server-Side MP3 Audio Stream
   try {
     const audioUrl = `http://localhost:5000/api/explain-voice/audio?text=${encodeURIComponent(cleanText)}&lang=${encodeURIComponent(langKey)}`;
     const audio = new Audio(audioUrl);
@@ -54,9 +45,6 @@ export function speakTextInLanguage(text, language = 'HI', onEnd = () => {}, onE
   }
 }
 
-/**
- * Fallback Web Speech Synthesis if network audio stream is offline
- */
 function fallbackWebSpeech(cleanText, langKey, onEnd, onError) {
   if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
     onError();
