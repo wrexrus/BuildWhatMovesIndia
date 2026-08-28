@@ -1,9 +1,6 @@
 const { generateGeminiContent, hasGeminiKey } = require('./geminiService');
 const { getLanguageName } = require('../constants/languages');
 
-/**
- * Multilingual Offline GST Knowledge Base (English, Hindi, Marathi, Tamil, Punjabi)
- */
 const KNOWLEDGE_BASE_MULTILINGUAL = {
   GSTR2B: {
     EN: "GSTR-2B is an auto-generated monthly statement on the GST portal showing tax credits uploaded by your suppliers.\n\nKey rules:\n• Claim ITC only for bills appearing in GSTR-2B\n• Statement locks on the 14th of every month.",
@@ -61,10 +58,7 @@ function isGreeting(query) {
 function isGstDomainQuery(query) {
   const q = query.toLowerCase();
 
-  // Note: generic words like "how", "what", "help" were deliberately removed from this list.
-  // They matched almost every sentence and defeated the guardrail entirely.
   const gstKeywords = [
-    // Core GST/return terms
     "gst", "gstr", "gstr-1", "gstr-2a", "gstr-2b", "gstr-3b", "gstr-9", "gstr1", "gstr2b", "gstr3b",
     "itc", "input tax credit", "invoice", "bill", "supplier", "buyer", "e-invoice", "einvoice",
     "hsn", "sac", "cgst", "sgst", "igst", "cess", "rcm", "reverse charge",
@@ -78,16 +72,12 @@ function isGstDomainQuery(query) {
     "registration", "new gstin", "cancel gstin", "cancelled gstin", "suspend gstin",
     "tds", "tcs", "income tax", "advance tax", "itr", "form 16", "tax slab", "tax rate",
     "net tax payable", "safety score", "pending action", "what to do next", "action items",
-    // demo persona / business context terms already used in this app
     "ramesh", "hardware", "asian paints", "ultratech", "jaquar", "jaipur", "polycab",
     "gst copilot", "gst assistant", "small business", "shopkeeper", "dukan"
   ];
   return gstKeywords.some(keyword => q.includes(keyword));
 }
 
-/**
- * Process GST Chatbot Query with Mode Switcher (Shopkeeper Mode vs CA Technical Mode)
- */
 async function processGstChatbotQuery(userQuery, language = 'EN', activeContext = null, explanationMode = 'SHOPKEEPER') {
   if (!userQuery || userQuery.trim().length === 0) {
     return {
@@ -101,8 +91,6 @@ async function processGstChatbotQuery(userQuery, language = 'EN', activeContext 
   const mode = (explanationMode || 'SHOPKEEPER').toUpperCase();
   const qLower = query.toLowerCase();
 
-  // 1. Friendly Greeting Handler (separate from domain check, so greetings don't get rejected
-  //    and don't need to be treated as "GST keywords" either)
   if (isGreeting(query)) {
     const greetingMsg = {
       EN: "Namaste! I'm your GST & Tax Assistant. Ask me about GSTR filing, invoice mismatches, tax credit (ITC), due dates, e-way bills, or how much tax you need to pay.",
@@ -122,7 +110,6 @@ async function processGstChatbotQuery(userQuery, language = 'EN', activeContext 
     };
   }
 
-  // 2. Domain Guardrail Check — calmly redirect with concrete example questions instead of a flat refusal
   if (!isGstDomainQuery(query)) {
     const outOfDomainMsg = {
       EN: "I'm focused on GST & taxation, so I can't help with that one. Here's what I can do instead — try asking:\n• \"Why is my Asian Paints invoice showing red?\"\n• \"How much tax do I need to pay this month?\"\n• \"What's the due date for GSTR-3B?\"\n• \"Can I claim ITC on a cancelled GSTIN?\"",
@@ -139,7 +126,6 @@ async function processGstChatbotQuery(userQuery, language = 'EN', activeContext 
     };
   }
 
-  // 2. Priority 1: Instant Dynamic Invoice / Active State Match (100% Grounded & Invoice Specific)
   let matchedKey = null;
 
   if (qLower.includes("ap/2026/045") || qLower.includes("asian paints") || qLower.includes("unfiled")) {
@@ -181,7 +167,6 @@ async function processGstChatbotQuery(userQuery, language = 'EN', activeContext 
     };
   }
 
-  // 3. Priority 2: Google Gemini AI (For Out of Syllabus / General Custom Queries)
   if (hasGeminiKey()) {
     try {
       const langInstruction = getLanguageName(langKey);
@@ -203,7 +188,6 @@ ACCURACY RULE:
 If the question depends on a rate, threshold, or notification that may have changed recently, give your best current understanding but add a short note advising the user to confirm the latest figure on the GST portal (gst.gov.in) or with a CA, since tax rules are updated periodically.
 If the user asks specifically about "the latest 2026 rules", "recent changes", "new notifications", or anything you cannot verify is current, do NOT invent specifics — say plainly that you can't confirm the newest notifications and point them to gst.gov.in Notifications/Circulars or their CA, then still help with any part of the question based on established, stable rules.`;
 
-      // RAG & Domain Knowledge Prompt Augmentation
       const augmentedPrompt = `[DOMAIN CONTEXT & GST COMPLIANCE FRAMEWORK]
 • Legal Framework: CGST Act 2017 & CGST Rules 2017
 • Essential Compliance Guidelines:
@@ -237,12 +221,8 @@ If the user asks specifically about "the latest 2026 rules", "recent changes", "
     }
   }
 
-  // 4. Topic-Aware Multilingual Domain Knowledge Engine (Rich Offline Fallback)
   let defaultAns = "";
 
-  // "What changed recently / 2026 rules / latest updates" — be honest instead of reciting an unrelated tip.
-  // Static knowledge bases and models can go stale, so this deliberately does NOT claim to know
-  // the latest notifications/budget changes.
   if (
     qLower.includes("2026") || qLower.includes("latest") || qLower.includes("new rule") ||
     qLower.includes("new regulation") || qLower.includes("recent change") || qLower.includes("updated rule") ||

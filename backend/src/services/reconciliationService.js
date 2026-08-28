@@ -11,9 +11,6 @@ function loadGstr2b() {
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }
 
-/**
- * Core Rule Engine for GSTR-1 vs GSTR-2B Mismatch Detection
- */
 function reconcileInvoices(customInvoices = null, targetGstin = null) {
   let taxpayerInvoices = customInvoices || loadInvoices();
   const gstr2b = loadGstr2b();
@@ -84,7 +81,7 @@ function reconcileInvoices(customInvoices = null, targetGstin = null) {
       status: "MATCHED",
       errorCode: null,
       errorTitle: null,
-      severity: "LOW", // LOW, MEDIUM, HIGH, CRITICAL
+      severity: "LOW",
       itcEligible: true,
       allowedItcAmount: inv.totalTax,
       actionRequired: "NONE"
