@@ -1,8 +1,5 @@
 const { generateGeminiContent, hasGeminiKey } = require('./geminiService');
 
-/**
- * Deterministic fallback templates for small business taxpayers across languages
- */
 const TEMPLATE_EXPLANATIONS = {
   ERR_SUPPLIER_UNFILED: {
     EN: {
@@ -124,10 +121,7 @@ const TEMPLATE_EXPLANATIONS = {
   }
 };
 
-/**
- * Fast Synchronous Grounded Explainer Engine (0ms, 0 Network API Calls)
- * Used during dashboard invoice reconciliation to avoid hitting Gemini API rate limits
- */
+
 function getGroundedExplanation(mismatchItem, language = 'EN') {
   const code = mismatchItem.errorCode;
   const langUpper = (language || 'EN').toUpperCase();
@@ -148,9 +142,6 @@ function getGroundedExplanation(mismatchItem, language = 'EN') {
   };
 }
 
-/**
- * Multi-Language AI Plain Language Explainer
- */
 async function generateExplanation(mismatchItem, language = 'EN') {
   const code = mismatchItem.errorCode;
   const langUpper = (language || 'EN').toUpperCase();
@@ -191,7 +182,6 @@ Respond ONLY in valid JSON format:
     }
   }
 
-  // Priority 2: Grounded Rule Explainer Engine (Offline Safe)
   return getGroundedExplanation(mismatchItem, language);
 }
 
