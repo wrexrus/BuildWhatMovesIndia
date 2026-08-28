@@ -94,17 +94,17 @@ export async function submitGstr3bReturn() {
   });
 }
 
-export async function sendChatbotQuery(query, language = 'EN', userContext = null, explanationMode = 'SHOPKEEPER') {
+export async function sendChatbotQuery(query, language = 'EN', userContext = null, explanationMode = 'SHOPKEEPER', isQuickAction = false) {
   return fetchApi('/chat/guide', {
     method: 'POST',
-    body: JSON.stringify({ query, language, activeContext: userContext, explanationMode }),
+    body: JSON.stringify({ query, language, activeContext: userContext, explanationMode, isQuickAction }),
   });
 }
 
-export async function sendCopilotQuery(query, language = 'HI', pageContext = 'HOME', userGstin = null, explanationMode = 'SHOPKEEPER') {
+export async function sendCopilotQuery(query, language = 'HI', pageContext = 'HOME', userGstin = null, explanationMode = 'SHOPKEEPER', isQuickAction = false) {
   return fetchApi('/chat/copilot', {
     method: 'POST',
-    body: JSON.stringify({ query, language, pageContext, userGstin, explanationMode }),
+    body: JSON.stringify({ query, language, pageContext, userGstin, explanationMode, isQuickAction }),
   });
 }
 

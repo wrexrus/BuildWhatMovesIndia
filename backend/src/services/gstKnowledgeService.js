@@ -46,9 +46,14 @@ const KNOWLEDGE_BASE_MULTILINGUAL = {
     MR: "सप्लायरचा GST नंबर रद्द झाला आहे.\n\nकारवाईचे टप्पे:\n• हे बिल त्वरित काढून टाका.\n• रद्द GSTIN वर क्रेडिट घेता येत नाही."
   },
   WHAT_TO_DO_NEXT: {
-    EN: "Here is your 3-step action roadmap for July 2026 GSTR-3B filing:\n\n• Step 1: Review Asian Paints bill #AP/2026/045. Supplier has not uploaded GSTR-1. Click 'Defer ITC' to safely save ₹4,500 credit for next month.\n• Step 2: Verify eligible tax credit of ₹18,200 from matched GSTR-2B invoices.\n• Step 3: Pay net cash tax liability of ₹24,300 before 20th August to avoid late fees.",
-    HI: "जुलाई 2026 GSTR-3B फाइलिंग के लिए आपका 3-चरणीय रोडमैप:\n\n• चरण 1: एशियन पेंट्स बिल #AP/2026/045 की समीक्षा करें। आपूर्तिकर्ता ने GSTR-1 अपलोड नहीं किया है। ₹4,500 क्रेडिट को अगले महीने के लिए सुरक्षित रूप से टालने हेतु 'Defer ITC' पर क्लिक करें।\n• चरण 2: GSTR-2B से ₹18,200 के पात्र टैक्स क्रेडिट की पुष्टि करें।\n• चरण 3: पेनल्टी से बचने के लिए 20 अगस्त से पहले ₹24,300 शुद्ध टैक्स का भुगतान करें।",
-    MR: "जुलै २०२६ GSTR-3B फाइलिंगसाठी तुमचा ३-टप्प्यांचा रोडमॅप:\n\n• टप्पा १: Asian Paints बिल #AP/2026/045 तपासा. सप्लायरने GSTR-1 भरलेले नाही. ₹४,५०० क्रेडिट सुरक्षितपणे पुढील महिन्यासाठी पुढे ढकलण्यासाठी 'Defer ITC' वर क्लिक करा.\n• टप्पा २: GSTR-2B मधील ₹१८,२०० पात्र टॅक्स क्रेडिटची खात्री करा.\n• टप्पा ३: दंड टाळण्यासाठी २० ऑगस्टपूर्वी ₹२४,३०० निव्वळ टॅक्स भरा."
+    EN: "Here is Ramesh Kumar's pending action roadmap for July 2026 GSTR-3B filing:\n\n• Step 1 (Asian Paints #AP/2026/045): Supplier GSTR-1 unfiled. Defer ₹4,500 ITC to next month to avoid tax notice.\n• Step 2 (Jaipur Handicrafts #JQ/2026/089): Tax rate mismatch. Claim ₹12,000 now, hold ₹6,000 for credit note.\n• Step 3 (UltraTech #UT/2026/112): Late upload past 11th cutoff. ₹9,800 credit safely deferred to next month.\n• Step 4: Pay net cash tax liability of ₹24,300 before 20th August due date.",
+    HI: "रमेश कुमार की जुलाई 2026 GSTR-3B फाइलिंग के लिए पेंडिंग एक्शन रोडमैप:\n\n• चरण 1 (Asian Paints #AP/2026/045): सप्लायर का GSTR-1 अनफाइल्ड। नोटिस से बचने के लिए ₹4,500 ITC अगले महीने के लिए टालें।\n• चरण 2 (Jaipur Handicrafts #JQ/2026/089): टैक्स रेट में अंतर। अभी ₹12,000 क्लेम करें, ₹6,000 क्रेडिट नोट के लिए रखें।\n• चरण 3 (UltraTech #UT/2026/112): 11 तारीख के बाद का अपलोड। ₹9,800 क्रेडिट अगले महीने खुद खुलेगा।\n• चरण 4: पेनल्टी से बचने के लिए 20 अगस्त से पहले ₹24,300 नकद टैक्स भरें।",
+    MR: "रमेश कुमार यांच्या जुलै २०२६ GSTR-3B फाइलिंगसाठी प्रलंबित कृती आराखडा:\n\n• टप्पा १ (Asian Paints #AP/2026/045): सप्लायरने GSTR-1 भरलेले नाही. नोटीस टाळण्यासाठी ₹४,५०० क्रेडिट पुढील महिन्यात पुढे ढकला.\n• टप्पा २ (Jaipur Handicrafts #JQ/2026/089): टॅक्स दर फरक. आत्ता ₹१२,००० दावा करा.\n• टप्पा ३ (UltraTech #UT/2026/112): कटऑफनंतर अपलोड. ₹९,८०० क्रेडिट पुढील महिन्यात आपोआप येईल.\n• टप्पा ४: २० ऑगस्टपूर्वी ₹२४,३०० निव्वळ टॅक्स भरा."
+  },
+  FILING_ISSUES: {
+    EN: "Here is the summary of Ramesh Kumar's 3 Inward Filing Mismatches:\n\n• Issue 1 (Asian Paints #AP/2026/045): Supplier GSTR-1 unfiled. Defer ₹4,500 ITC to next month.\n• Issue 2 (Jaipur Handicrafts #JQ/2026/089): Tax rate mismatch. Claim ₹12,000 now, hold ₹6,000 for credit note.\n• Issue 3 (UltraTech #UT/2026/112): Late upload past 11th cutoff. ₹9,800 credit safely deferred.",
+    HI: "रमेश कुमार की 3 इनवर्ड फाइलिंग गड़बड़ियों का सारांश:\n\n• समस्या 1 (Asian Paints #AP/2026/045): सप्लायर ने GSTR-1 अपलोड नहीं किया। ₹4,500 ITC अगले महीने के लिए टालें।\n• समस्या 2 (Jaipur Handicrafts #JQ/2026/089): टैक्स रेट में अंतर। अभी ₹12,000 क्लेम करें, ₹6,000 क्रेडिट नोट के लिए रखें।\n• समस्या 3 (UltraTech #UT/2026/112): 11 तारीख के कटऑफ के बाद अपलोड। ₹9,800 क्रेडिट अगले महीने खुद खुलेगा।",
+    MR: "रमेश कुमार यांच्या ३ इनवर्ड फाइलिंग फरकांचा सारांश:\n\n• समस्या १ (Asian Paints #AP/2026/045): सप्लायरने GSTR-1 भरलेले नाही. ₹४,५०० क्रेडिट पुढील महिन्यात टाळा.\n• समस्या २ (Jaipur Handicrafts #JQ/2026/089): टॅक्स दर फरक. आत्ता ₹१२,००० दावा करा.\n• समस्या ३ (UltraTech #UT/2026/112): कटऑफनंतर अपलोड. ₹९,८०० क्रेडिट पुढील महिन्यात आपोआप येईल."
   }
 };
 
@@ -69,7 +74,7 @@ function isGstDomainQuery(query) {
 /**
  * Process GST Chatbot Query with Mode Switcher (Shopkeeper Mode vs CA Technical Mode)
  */
-async function processGstChatbotQuery(userQuery, language = 'EN', activeContext = null, explanationMode = 'SHOPKEEPER') {
+async function processGstChatbotQuery(userQuery, language = 'EN', activeContext = null, explanationMode = 'SHOPKEEPER', isQuickAction = false) {
   if (!userQuery || userQuery.trim().length === 0) {
     return {
       status: "INVALID_QUERY",
@@ -98,31 +103,15 @@ async function processGstChatbotQuery(userQuery, language = 'EN', activeContext 
     };
   }
 
-  // 2. Priority 1: Instant Dynamic Invoice / Active State Match (100% Grounded & Invoice Specific)
-  let matchedKey = null;
+  // 2. ONLY the "What should I do Next" button uses the grounded fallback response of Ramesh Kumar dataset
+  const isWhatNextButton = qLower.includes("what should i do next") ||
+                           qLower.includes("what to do next") ||
+                           qLower.includes("pending actions") ||
+                           qLower.includes("aage kya karein") ||
+                           qLower.includes("what next");
 
-  if (qLower.includes("ap/2026/045") || qLower.includes("asian paints") || qLower.includes("unfiled")) {
-    matchedKey = "ASIAN_PAINTS";
-  } else if (qLower.includes("jq/2026/089") || qLower.includes("jaipur") || qLower.includes("jaquar") || qLower.includes("rate mismatch") || qLower.includes("6,000") || qLower.includes("6000")) {
-    matchedKey = "JAIPUR_HANDICRAFTS";
-  } else if (qLower.includes("ut/2026/112") || qLower.includes("ultratech") || qLower.includes("late filing") || qLower.includes("cutoff")) {
-    matchedKey = "ULTRATECH";
-  } else if (qLower.includes("poly/2026/178") || qLower.includes("polycab") || qLower.includes("duplicate")) {
-    matchedKey = "POLYCAB";
-  } else if (qLower.includes("lhw/2026/144") || qLower.includes("wholesaler") || qLower.includes("cancelled")) {
-    matchedKey = "LHW";
-  } else if (qLower.includes("next") || qLower.includes("what to do") || qLower.includes("aage") || qLower.includes("pudhe") || qLower.includes("pending action") || qLower.includes("step")) {
-    matchedKey = "WHAT_TO_DO_NEXT";
-  } else if (qLower.includes("due date") || qLower.includes("last date") || qLower.includes("tareekh") || qLower.includes("3b")) {
-    matchedKey = "GSTR3B_DUE_DATE";
-  } else if (qLower.includes("pay") || qLower.includes("kitna") || qLower.includes("kiti") || qLower.includes("net cash")) {
-    matchedKey = "TAX_PAYABLE";
-  } else if (qLower.includes("2b") || qLower.includes("gstr-2b")) {
-    matchedKey = "GSTR2B";
-  }
-
-  if (matchedKey && KNOWLEDGE_BASE_MULTILINGUAL[matchedKey]) {
-    const langData = KNOWLEDGE_BASE_MULTILINGUAL[matchedKey];
+  if (isWhatNextButton) {
+    const langData = KNOWLEDGE_BASE_MULTILINGUAL.WHAT_TO_DO_NEXT;
     let answerText = langData[langKey] || langData['HI'] || langData['EN'];
 
     if (mode === 'CA_TECHNICAL') {
@@ -136,46 +125,41 @@ async function processGstChatbotQuery(userQuery, language = 'EN', activeContext 
       language: langKey,
       explanationMode: mode,
       isAiGenerated: false,
-      source: "Grounded Active Invoice Knowledge Engine"
+      source: "Grounded Ramesh User Dataset Engine"
     };
   }
 
-  // 3. Priority 2: Google Gemini AI (For Out of Syllabus / General Custom Queries)
+  // 3. Priority 2: Google Gemini AI Engine for ALL other queries (Copilot Tasks, Quick Actions, Typed Queries)
   if (hasGeminiKey()) {
     try {
       const langInstruction = getLanguageName(langKey);
-      let modeInstruction = "Explain in simple, friendly, practical terms for a shopkeeper. Avoid confusing legal jargon.";
+      let modeInstruction = "Provide simple, practical CA advice for a small business shopowner in India.";
 
       if (mode === 'CA_TECHNICAL') {
-        modeInstruction = "Provide exact Chartered Accountant (CA) technical analysis. Cite relevant GST Act Sections (e.g., Section 16(2)(aa), Section 37, Rule 36(4)) and formal legal compliance terms.";
+        modeInstruction = "Provide formal Chartered Accountant (CA) technical analysis with CGST Act section citations.";
       }
 
-      const systemInstruction = `You are a friendly Indian Chartered Accountant (CA) helping a small business shopowner file GSTR-3B safely.
+      const systemInstruction = `You are an expert Indian Chartered Accountant (CA) helping a shopkeeper with Indian GST compliance (CGST Act 2017).
 
 STRICT LANGUAGE RULE:
-You MUST respond EXCLUSIVELY in ${langInstruction}. Use proper native scripts for Hindi, Marathi, Tamil, Punjabi, or English as requested.
+You MUST respond EXCLUSIVELY in ${langInstruction}.
 
 EXPLANATION MODE:
 ${modeInstruction}`;
 
-      // RAG & Domain Knowledge Prompt Augmentation
-      const augmentedPrompt = `[DOMAIN CONTEXT & GST COMPLIANCE FRAMEWORK]
-• Legal Framework: CGST Act 2017 & CGST Rules 2017
-• Essential Compliance Guidelines:
-  - Section 16(2)(aa): Input Tax Credit (ITC) requires supplier communication in Form GSTR-2B.
-  - Section 37 & Form GSTR-1: Outward sales filing deadline by 11th of every month.
-  - Form GSTR-3B: Monthly summary tax payment due by 20th of every month.
-  - Section 50: Interest charges at 18% p.a. on wrong ITC utilization or late cash payment.
-  - Form PMT-06: Electronic Cash Ledger payment challan.
-  - E-Way Bill Threshold: Mandatory for goods movement valued > ₹50,000.
+      // Streamlined RAG Prompt with Ramesh Kumar Context
+      const augmentedPrompt = `[TAXPAYER PROFILE & CONTEXT]
+• Taxpayer: Ramesh Kumar (Nagpur Hardware & Sanitary Store)
+• Active Return: July 2026 GSTR-3B Return
+• Status: 14 Matched Invoices, 3 Pending Mismatches (Asian Paints unfiled ₹4,500, Jaipur Handicrafts ₹6,000 tax rate mismatch, UltraTech late upload ₹9,800). Net tax payable: ₹24,300.
 
 [USER QUERY]
 "${query}"
 
-[REQUIRED RESPONSE STRUCTURE & FORMATTING]
-1. Answer directly and comprehensively in ${langInstruction}.
-2. Use clean bullet points (• ) for step-by-step procedures.
-3. Include practical advice on how the shopkeeper can avoid penalties or tax credit loss.`;
+[INSTRUCTIONS]
+1. Answer the query accurately and directly in ${langInstruction}.
+2. Provide clear, actionable bullet points (• ).
+3. Keep the response concise, practical, and under 150 words.`;
 
       const textOutput = await generateGeminiContent(augmentedPrompt, systemInstruction);
       return {
@@ -188,7 +172,7 @@ ${modeInstruction}`;
         source: "Google Gemini AI Engine"
       };
     } catch (err) {
-      console.warn("Gemini API chatbot call failed, using default fallback:", err.message);
+      console.warn("Gemini API chatbot call failed, using default topic fallback:", err.message);
     }
   }
 

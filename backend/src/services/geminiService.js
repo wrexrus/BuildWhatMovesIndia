@@ -16,11 +16,11 @@ async function generateGeminiContent(promptText, systemInstruction = "") {
     throw new Error("GEMINI_API_KEY is not set in environment.");
   }
 
-  // Official Google Gemini model identifiers with fallback chain
   const models = [
-    'gemini-3.6-flash',
     'gemini-3.5-flash',
-    'gemini-3.5-flash-lite'
+    'gemini-3.5-flash-lite',
+    'gemini-3.1-flash-lite',
+    'gemini-3.6-flash'
   ];
 
   let lastError = null;
@@ -40,7 +40,7 @@ async function generateGeminiContent(promptText, systemInstruction = "") {
         ],
         generationConfig: {
           temperature: 0.2,
-          maxOutputTokens: 600
+          maxOutputTokens: 250
         }
       };
 

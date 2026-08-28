@@ -6,7 +6,7 @@ const { processCopilotRequest } = require('../services/gstCopilotService');
 
 async function handleChatbotGuide(req, res) {
   try {
-    const { query, question, language, includeActiveState, explanationMode } = req.body || {};
+    const { query, question, language, includeActiveState, explanationMode, isQuickAction } = req.body || {};
     const userQuery = query || question;
 
     let activeContext = null;
@@ -19,7 +19,8 @@ async function handleChatbotGuide(req, res) {
       userQuery,
       language || 'EN',
       activeContext,
-      explanationMode || 'SHOPKEEPER'
+      explanationMode || 'SHOPKEEPER',
+      isQuickAction || false
     );
 
     return res.status(200).json({
@@ -38,13 +39,14 @@ async function handleChatbotGuide(req, res) {
 
 async function handleCopilotGuide(req, res) {
   try {
-    const { query, language, pageContext, userGstin, explanationMode } = req.body || {};
+    const { query, language, pageContext, userGstin, explanationMode, isQuickAction } = req.body || {};
     const result = await processCopilotRequest({
       query,
       language,
       pageContext,
       userGstin,
-      explanationMode
+      explanationMode,
+      isQuickAction: isQuickAction || false
     });
 
     return res.status(200).json({

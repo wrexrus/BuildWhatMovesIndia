@@ -34,7 +34,7 @@ function detectSpokenLanguage(query) {
  * Unified GST Copilot Engine ("Understand. Fix. File.")
  * Combines page context, active invoice state, intent detection, and structured diagnostic payloads.
  */
-async function processCopilotRequest({ query, language = 'HI', pageContext = 'HOME', userGstin = null, explanationMode = 'SHOPKEEPER' }) {
+async function processCopilotRequest({ query, language = 'HI', pageContext = 'HOME', userGstin = null, explanationMode = 'SHOPKEEPER', isQuickAction = false }) {
   let langKey = (language || 'HI').toUpperCase();
   if (langKey === 'AUTO' || !language) {
     langKey = detectSpokenLanguage(query);
@@ -69,7 +69,7 @@ async function processCopilotRequest({ query, language = 'HI', pageContext = 'HO
   }));
 
   // 4. Generate AI or Knowledge Base explanation
-  const aiResult = await processGstChatbotQuery(query, langKey, reconData, mode);
+  const aiResult = await processGstChatbotQuery(query, langKey, reconData, mode, isQuickAction);
 
   return {
     success: true,

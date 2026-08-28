@@ -371,9 +371,11 @@ const ChatbotWidget = () => {
 
 
   const handleSendQuery = async (
-    queryText
+    queryText,
+    isChipClick = false
   ) => {
     const textToSend = queryText || query;
+    const isQuickActionCall = Boolean(queryText || isChipClick);
 
     if (!textToSend.trim()) {
       return;
@@ -417,7 +419,8 @@ const ChatbotWidget = () => {
         chatLanguage,
         location.pathname,
         user ? user.gstin : null,
-        explanationMode
+        explanationMode,
+        isQuickActionCall
       );
 
       const botText =
