@@ -1,5 +1,5 @@
 {
-  "name": "gstr3b-simplified-backend",
+  "name": "gst-simplified-backend",
   "version": "1.0.0",
   "description": "Backend engine for GSTR-3B Mismatch Detection & AI Plain Language Explainer for small taxpayers",
   "main": "server.js",
