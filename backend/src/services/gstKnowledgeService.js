@@ -1,9 +1,6 @@
 const { generateGeminiContent, hasGeminiKey } = require('./geminiService');
 const { getLanguageName } = require('../constants/languages');
 
-/**
- * Multilingual Offline GST Knowledge Base (English, Hindi, Marathi, Tamil, Punjabi)
- */
 const KNOWLEDGE_BASE_MULTILINGUAL = {
   GSTR2B: {
     EN: "GSTR-2B is an auto-generated monthly statement on the GST portal showing tax credits uploaded by your suppliers.\n\nKey rules:\n• Claim ITC only for bills appearing in GSTR-2B\n• Statement locks on the 14th of every month.",
@@ -57,16 +54,31 @@ const KNOWLEDGE_BASE_MULTILINGUAL = {
   }
 };
 
+function isGreeting(query) {
+  const q = query.toLowerCase().trim();
+  const greetings = ["hi", "hello", "hey", "namaste", "namaskar", "vanakkam", "sat sri akal", "hola"];
+  return greetings.some(g => q === g || q.startsWith(g + " ") || q.startsWith(g + "!") || q.startsWith(g + ","));
+}
+
 function isGstDomainQuery(query) {
   const q = query.toLowerCase();
+
   const gstKeywords = [
-    "gst", "tax", "gstr", "2b", "3b", "1", "itc", "invoice", "bill", "supplier",
-    "hsn", "cgst", "sgst", "igst", "penalty", "notice", "filing", "portal", "credit",
-    "pan", "gstin", "ramesh", "hardware", "asian paints", "ultratech", "jaquar", "polycab",
-    "late fee", "interest", "reconciliation", "claim", "defer", "turnover", "ca", "return",
-    "date", "due", "last date", "tareekh", "red", "lal", "pay", "kitna", "kiti", "bharaycha",
-    "score", "100%", "safety", "next", "what to do", "pending", "action", "aage", "pudhe", "step",
-    "hi", "hello", "hey", "namaste", "help", "guide", "info", "explain", "how", "what", "why"
+    "gst", "gstr", "gstr-1", "gstr-2a", "gstr-2b", "gstr-3b", "gstr-9", "gstr1", "gstr2b", "gstr3b",
+    "itc", "input tax credit", "invoice", "bill", "supplier", "buyer", "e-invoice", "einvoice",
+    "hsn", "sac", "cgst", "sgst", "igst", "cess", "rcm", "reverse charge",
+    "penalty", "notice", "filing", "file return", "portal", "credit", "credit note", "debit note",
+    "pan", "gstin", "tan", "composition scheme", "qrmp", "nil return",
+    "e-way bill", "eway", "e way bill", "transport", "vehicle number",
+    "late fee", "interest", "reconciliation", "mismatch", "claim", "defer", "turnover",
+    "chartered accountant", " ca ", "return", "annual return", "audit", "gst audit",
+    "due date", "last date", "tareekh", "deadline",
+    "challan", "pmt-06", "payment", "cash ledger", "credit ledger", "refund",
+    "registration", "new gstin", "cancel gstin", "cancelled gstin", "suspend gstin",
+    "tds", "tcs", "income tax", "advance tax", "itr", "form 16", "tax slab", "tax rate",
+    "net tax payable", "safety score", "pending action", "what to do next", "action items",
+    "ramesh", "hardware", "asian paints", "ultratech", "jaquar", "jaipur", "polycab",
+    "gst copilot", "gst assistant", "small business", "shopkeeper", "dukan"
   ];
   return gstKeywords.some(keyword => q.includes(keyword));
 }
@@ -87,19 +99,38 @@ async function processGstChatbotQuery(userQuery, language = 'EN', activeContext 
   const mode = (explanationMode || 'SHOPKEEPER').toUpperCase();
   const qLower = query.toLowerCase();
 
-  // 1. Domain Guardrail Check
+  if (isGreeting(query)) {
+    const greetingMsg = {
+      EN: "Namaste! I'm your GST & Tax Assistant. Ask me about GSTR filing, invoice mismatches, tax credit (ITC), due dates, e-way bills, or how much tax you need to pay.",
+      HI: "नमस्ते! मैं आपका GST और टैक्स सहायक हूँ। मुझसे GST फाइलिंग, बिल मिसमैच, टैक्स क्रेडिट (ITC), अंतिम तिथि, ई-वे बिल या टैक्स भुगतान के बारे में पूछें।",
+      MR: "नमस्कार! मी तुमचा GST आणि टॅक्स सहाय्यक आहे. मला GST फायलिंग, बिल जुळत नसणे, टॅक्स क्रेडिट (ITC), शेवटची तारीख, ई-वे बिल किंवा किती टॅक्स भरायचा याबद्दल विचारा.",
+      TA: "வணக்கம்! நான் உங்கள் GST மற்றும் வரி உதவியாளர். GST தாக்கல், பில் பொருந்தாமை, வரி வரவு (ITC), கடைசி தேதி, ஈ-வே பில் அல்லது எவ்வளவு வரி செலுத்த வேண்டும் என்பதைப் பற்றி என்னிடம் கேளுங்கள்.",
+      PA: "ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ! ਮੈਂ ਤੁਹਾਡਾ GST ਅਤੇ ਟੈਕਸ ਸਹਾਇਕ ਹਾਂ। ਮੈਨੂੰ GST ਫਾਈਲਿੰਗ, ਬਿੱਲ ਮਿਸਮੈਚ, ਟੈਕਸ ਕ੍ਰੈਡਿਟ (ITC), ਆਖਰੀ ਮਿਤੀ, ਈ-ਵੇ ਬਿੱਲ ਜਾਂ ਕਿੰਨਾ ਟੈਕਸ ਭਰਨਾ ਹੈ ਬਾਰੇ ਪੁੱਛੋ।"
+    };
+    return {
+      status: "SUCCESS",
+      isGstRelated: true,
+      answer: greetingMsg[langKey] || greetingMsg.EN,
+      language: langKey,
+      explanationMode: mode,
+      isAiGenerated: false,
+      source: "Greeting Handler"
+    };
+  }
+
   if (!isGstDomainQuery(query)) {
-    let outOfDomainMsg = "I am your GST & Tax Assistant. I can only help with GST filing, invoice mismatches, tax credit rules, and portal navigation. Please ask a GST or tax-related question!";
-    if (langKey === 'HI') {
-      outOfDomainMsg = "मैं आपका GST और टैक्स सहायक हूँ। मैं केवल GST रिटर्न, बिल में अंतर, टैक्स क्रेडिट और पोर्टल संबंधी प्रश्नों में मदद कर सकता हूँ। कृपया GST से संबंधित प्रश्न पूछें!";
-    } else if (langKey === 'MR') {
-      outOfDomainMsg = "मी तुमचा GST सहाय्यक आहे. मी फक्त GST रिटर्न, बिल फरक आणि पोर्टल मार्गदर्शनात मदत करू शकतो. कृपया GST संबंधित प्रश्न विचारा!";
-    }
+    const outOfDomainMsg = {
+      EN: "I'm focused on GST & taxation, so I can't help with that one. Here's what I can do instead — try asking:\n• \"Why is my Asian Paints invoice showing red?\"\n• \"How much tax do I need to pay this month?\"\n• \"What's the due date for GSTR-3B?\"\n• \"Can I claim ITC on a cancelled GSTIN?\"",
+      HI: "मैं सिर्फ GST और टैक्स से जुड़े सवालों में मदद कर सकता हूँ, इसलिए यह सवाल मेरे दायरे से बाहर है। आप ये पूछ सकते हैं:\n• \"Asian Paints वाला बिल लाल क्यों दिख रहा है?\"\n• \"इस महीने कितना टैक्स भरना है?\"\n• \"GSTR-3B की अंतिम तारीख क्या है?\"\n• \"क्या मैं कैंसल हुए GSTIN पर ITC ले सकता हूँ?\"",
+      MR: "मी फक्त GST आणि टॅक्सशी संबंधित प्रश्नांमध्ये मदत करू शकतो, त्यामुळे हा प्रश्न माझ्या कक्षेबाहेर आहे. तुम्ही असे विचारू शकता:\n• \"Asian Paints चे बिल लाल का दिसतंय?\"\n• \"या महिन्यात किती टॅक्स भरायचा आहे?\"\n• \"GSTR-3B ची शेवटची तारीख काय आहे?\"\n• \"रद्द झालेल्या GSTIN वर ITC घेता येईल का?\"",
+      TA: "நான் GST மற்றும் வரி தொடர்பான கேள்விகளுக்கு மட்டுமே உதவ முடியும், எனவே இது எனது வரம்புக்கு வெளியே உள்ளது. இவற்றைக் கேட்டு பாருங்கள்:\n• \"Asian Paints பில் ஏன் சிவப்பு நிறத்தில் காட்டுகிறது?\"\n• \"இந்த மாதம் எவ்வளவு வரி செலுத்த வேண்டும்?\"\n• \"GSTR-3B கடைசி தேதி என்ன?\"\n• \"ரத்து செய்யப்பட்ட GSTIN-இல் ITC கோர முடியுமா?\"",
+      PA: "ਮੈਂ ਸਿਰਫ਼ GST ਅਤੇ ਟੈਕਸ ਨਾਲ ਸਬੰਧਤ ਸਵਾਲਾਂ ਵਿੱਚ ਮਦਦ ਕਰ ਸਕਦਾ ਹਾਂ, ਇਸ ਲਈ ਇਹ ਸਵਾਲ ਮੇਰੇ ਦਾਇਰੇ ਤੋਂ ਬਾਹਰ ਹੈ। ਤੁਸੀਂ ਇਹ ਪੁੱਛ ਸਕਦੇ ਹੋ:\n• \"Asian Paints ਵਾਲਾ ਬਿੱਲ ਲਾਲ ਕਿਉਂ ਦਿਖ ਰਿਹਾ ਹੈ?\"\n• \"ਇਸ ਮਹੀਨੇ ਕਿੰਨਾ ਟੈਕਸ ਭਰਨਾ ਹੈ?\"\n• \"GSTR-3B ਦੀ ਆਖਰੀ ਮਿਤੀ ਕੀ ਹੈ?\"\n• \"ਕੀ ਮੈਂ ਰੱਦ ਹੋਏ GSTIN 'ਤੇ ITC ਲੈ ਸਕਦਾ ਹਾਂ?\""
+    };
 
     return {
       status: "OUT_OF_DOMAIN",
       isGstRelated: false,
-      answer: outOfDomainMsg
+      answer: outOfDomainMsg[langKey] || outOfDomainMsg.EN
     };
   }
 
@@ -151,7 +182,7 @@ ${modeInstruction}`;
       const augmentedPrompt = `[TAXPAYER PROFILE & CONTEXT]
 • Taxpayer: Ramesh Kumar (Nagpur Hardware & Sanitary Store)
 • Active Return: July 2026 GSTR-3B Return
-• Status: 14 Matched Invoices, 3 Pending Mismatches (Asian Paints unfiled ₹4,500, Jaipur Handicrafts ₹6,000 tax rate mismatch, UltraTech late upload ₹9,800). Net tax payable: ₹24,300.
+• Status: 14 Matched Invoices, 3 Pending Mismatches (Asian Paints unfiled ₹4,500, Jaipur Handicrafts ₹6,000 tax rate mismatch, UltraTech late upload ₹9,800). Net tax payable: ₹24,300.`;
 
 [USER QUERY]
 "${query}"
@@ -176,10 +207,30 @@ ${modeInstruction}`;
     }
   }
 
-  // 4. Topic-Aware Multilingual Domain Knowledge Engine (Rich Offline Fallback)
   let defaultAns = "";
 
-  if (qLower.includes("register") || qLower.includes("registration") || qLower.includes("pan") || qLower.includes("new gstin")) {
+  if (
+    qLower.includes("2026") || qLower.includes("latest") || qLower.includes("new rule") ||
+    qLower.includes("new regulation") || qLower.includes("recent change") || qLower.includes("updated rule") ||
+    qLower.includes("budget") || qLower.includes("notification") || qLower.includes("amendment") ||
+    qLower.includes("naya niyam") || qLower.includes("badlav")
+  ) {
+    defaultAns = langKey === 'HI'
+      ? "• मेरे पास हर नई सरकारी अधिसूचना या बजट बदलाव की लाइव जानकारी नहीं है, इसलिए मैं '2026 के नियम' जैसे सवालों पर पुरानी जानकारी नहीं दूंगा।\n• ताज़ा और सटीक नियमों के लिए gst.gov.in -> Notifications/Circulars सेक्शन देखें, या अपने CA से पुष्टि करें।\n• आप मुझसे मौजूदा प्रक्रियाएं जैसे GSTR फाइलिंग, ITC नियम, ड्यू डेट पूछ सकते हैं — वो मैं समझा सकता हूँ।"
+      : "• I don't have live access to the newest government notifications or Budget changes, so I won't guess at 'latest 2026 rules' — that risks giving you outdated info.\n• For the most current, official update, check gst.gov.in -> Notifications/Circulars, or confirm with your CA.\n• I can reliably help with established processes — GSTR filing steps, ITC eligibility rules, due dates, HSN/rate basics — just ask about any of those.";
+  } else if (qLower.includes("what is gst") || qLower === "gst" || qLower.includes("gst kya hai") || qLower.includes("gst mhanje")) {
+    defaultAns = langKey === 'HI'
+      ? "• GST (वस्तु एवं सेवा कर) भारत में वस्तुओं और सेवाओं की बिक्री पर लगने वाला एक अप्रत्यक्ष कर है, जिसने VAT, Service Tax, Excise जैसे कई पुराने करों की जगह ली है।\n• इसके तीन मुख्य भाग हैं: CGST (केंद्र सरकार), SGST (राज्य सरकार), और IGST (अंतर-राज्य लेनदेन पर)।\n• व्यवसायों को हर महीने या तिमाही में रिटर्न (जैसे GSTR-1, GSTR-3B) फाइल करना होता है।"
+      : "• GST (Goods and Services Tax) is an indirect tax on the supply of goods and services in India — it replaced older taxes like VAT, Service Tax, and Excise Duty.\n• It has three components: CGST (collected by the Central Government), SGST (by the State Government), and IGST (on inter-state transactions).\n• Registered businesses file periodic returns (GSTR-1, GSTR-3B, etc.) monthly or quarterly depending on their scheme.";
+  } else if (qLower.includes("cgst") || qLower.includes("sgst") || qLower.includes("igst") || qLower.includes("difference between")) {
+    defaultAns = langKey === 'HI'
+      ? "• CGST और SGST एक ही राज्य के भीतर हुई बिक्री (intra-state) पर लगते हैं — टैक्स केंद्र और राज्य सरकार में बराबर बंटता है (जैसे 18% टैक्स = 9% CGST + 9% SGST)।\n• IGST अंतर-राज्य (inter-state) बिक्री पर लगता है और पूरी राशि केंद्र सरकार को जाती है, जो बाद में राज्यों में बांटी जाती है।"
+      : "• CGST + SGST apply together on intra-state sales (within the same state) — the tax is split equally between the Centre and State (e.g., 18% = 9% CGST + 9% SGST).\n• IGST applies on inter-state sales (between two states) and goes entirely to the Centre first, then gets apportioned to states.";
+  } else if (qLower.includes("composition scheme") || qLower.includes("composition dealer")) {
+    defaultAns = langKey === 'HI'
+      ? "• कंपोजीशन स्कीम छोटे व्यवसायों (टर्नओवर ₹1.5 करोड़ तक, कुछ राज्यों में ₹75 लाख) के लिए है, जिसमें कम दर पर टैक्स (1%-6%) चुकाया जाता है।\n• इसमें ITC क्लेम नहीं कर सकते और तिमाही रिटर्न (CMP-08) फाइल करना होता है।"
+      : "• The Composition Scheme is for small businesses (turnover up to ₹1.5 Crore, ₹75 Lakh in some states) who pay tax at a lower flat rate (1%-6%) instead of standard GST rates.\n• Under this scheme, you cannot claim ITC, and you file a simpler quarterly return (Form CMP-08).";
+  } else if (qLower.includes("register") || qLower.includes("registration") || qLower.includes("pan") || qLower.includes("new gstin")) {
     defaultAns = langKey === 'HI'
       ? "• नया GST नंबर लेने के लिए PAN कार्ड, आधार, और व्यवसाय स्थान का पता (Rent agreement/Electricity bill) चाहिए।\n• gst.gov.in पर जाएं -> Services -> Registration -> New Registration चुनें।\n• OTP सत्यापन के बाद TRN नंबर मिलेगा। 7 दिनों में GSTIN जारी हो जाता है।"
       : "• For new GST Registration, keep PAN card, Aadhaar card, and Business Address Proof ready.\n• Visit gst.gov.in -> Services -> Registration -> New Registration.\n• Complete Aadhaar OTP authentication to get TRN. Your GSTIN is approved within 3-7 working days.";

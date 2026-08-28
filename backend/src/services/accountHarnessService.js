@@ -1,9 +1,5 @@
 const { reconcileInvoices } = require('./reconciliationService');
 
-/**
- * Account Context Harness Engine
- * Evaluates real-time taxpayer account state and generates dynamic, context-aware quick action chips
- */
 function getAccountHarnessContext(userGstin = null, language = 'HI') {
   const langKey = (language || 'HI').toUpperCase();
   const reconData = reconcileInvoices() || {};
@@ -26,7 +22,6 @@ function getAccountHarnessContext(userGstin = null, language = 'HI') {
     blockedItcSaved
   };
 
-  // Generate dynamic pending To-Do items based on live account state
   const pendingToDos = [
     {
       id: "TODO-001",
@@ -48,7 +43,6 @@ function getAccountHarnessContext(userGstin = null, language = 'HI') {
     }
   ];
 
-  // Generate dynamic language-aware Quick Action Chips from live account harness
   let dynamicQuickActions = [];
 
   if (langKey === 'HI') {
@@ -118,7 +112,6 @@ function getAccountHarnessContext(userGstin = null, language = 'HI') {
       }
     ];
   } else {
-    // English
     dynamicQuickActions = [
       {
         label: `🔴 Why is Asian Paints bill (#AP/2026/045) unfiled?`,

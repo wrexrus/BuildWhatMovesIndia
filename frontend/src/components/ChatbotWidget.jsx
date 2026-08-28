@@ -691,21 +691,6 @@ const ChatbotWidget = () => {
           </span>
 
           <span>GST Copilot</span>
-
-          <span
-            className="
-              absolute
-              -right-1
-              -top-1
-              h-2.5
-              w-2.5
-              rounded-full
-              border-2
-              border-white
-              bg-amber
-            "
-            aria-hidden="true"
-          />
         </button>
       )}
 

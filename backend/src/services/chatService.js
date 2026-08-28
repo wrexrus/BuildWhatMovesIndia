@@ -4,9 +4,7 @@ const openai = process.env.OPENAI_API_KEY
   ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
   : null;
 
-/**
- * Context-Aware Citizen Tax Assistant Engine
- */
+
 async function answerCitizenQuery(userQuery, reconciliationData, language = 'EN') {
   if (!userQuery) {
     return {
@@ -21,7 +19,6 @@ async function answerCitizenQuery(userQuery, reconciliationData, language = 'EN'
 
   const queryLower = userQuery.toLowerCase();
 
-  // Deterministic local fallbacks for common Ramesh questions
   if (queryLower.includes("asian paints") || queryLower.includes("unfiled")) {
     return {
       answer: language === 'HI'
