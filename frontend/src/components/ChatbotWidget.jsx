@@ -94,6 +94,13 @@ const ChatbotWidget = () => {
     });
   };
 
+  useEffect(() => {
+    if (!isOpen) {
+      stopSpeech();
+      setSpeakingIndex(null);
+    }
+  }, [isOpen]);
+
   const labels =
     UI_LABELS[chatLanguage] ||
     UI_LABELS.EN;
@@ -125,6 +132,8 @@ const ChatbotWidget = () => {
   const handleChatLanguageChange = (
     nextLanguage
   ) => {
+    stopSpeech();
+    setSpeakingIndex(null);
     setChatLanguage(nextLanguage);
 
     setMessages((previous) => {
@@ -1118,32 +1127,20 @@ const ChatbotWidget = () => {
                               onClick={() =>
                                 handleSpeak(message.text, index)
                               }
-                              className="
-                                inline-flex
-                                items-center
-                                gap-1.5
-                                rounded-[7px]
-                                border
-                                border-slate-200/80
-                                bg-slate-50
-                                px-2.5
-                                py-1
-                                text-[10px]
-                                font-semibold
-                                text-slate-700
-                                transition-colors
-                                hover:bg-slate-100
-                                hover:text-navy
-                              "
+                              className={`inline-flex items-center gap-1.5 rounded-[7px] border px-2.5 py-1 text-[10px] font-semibold transition-all cursor-pointer ${
+                                speakingIndex === index
+                                  ? "border-red-300 bg-red-50 text-red-700 hover:bg-red-100"
+                                  : "border-slate-200/80 bg-slate-50 text-slate-700 hover:bg-slate-100 hover:text-navy"
+                              }`}
                             >
                               {speakingIndex === index ? (
                                 <>
-                                  <VolumeX className="h-3 w-3 text-amber-700" />
-                                  <span>{labels.stopAudio}</span>
+                                  <VolumeX className="h-3.5 w-3.5 text-red-600 animate-pulse" />
+                                  <span className="font-bold text-red-700">Stop Audio</span>
                                 </>
                               ) : (
                                 <>
-                                  <Volume2 className="h-3 w-3 text-navy" />
+                                  <Volume2 className="h-3.5 w-3.5 text-navy" />
                                   <span>Listen Explanation</span>
                                 </>
                               )}

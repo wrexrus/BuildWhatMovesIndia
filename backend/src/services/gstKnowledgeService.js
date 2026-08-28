@@ -155,13 +155,28 @@ STRICT LANGUAGE RULE:
 You MUST respond EXCLUSIVELY in ${langInstruction}. Use proper native scripts for Hindi, Marathi, Tamil, Punjabi, or English as requested.
 
 EXPLANATION MODE:
-${modeInstruction}
+${modeInstruction}`;
 
-STRICT FORMATTING RULE:
-1. Use clean bullet points (• ) for procedures or steps.
-2. Keep output clear, actionable, and readable.`;
+      // RAG & Domain Knowledge Prompt Augmentation
+      const augmentedPrompt = `[DOMAIN CONTEXT & GST COMPLIANCE FRAMEWORK]
+• Legal Framework: CGST Act 2017 & CGST Rules 2017
+• Essential Compliance Guidelines:
+  - Section 16(2)(aa): Input Tax Credit (ITC) requires supplier communication in Form GSTR-2B.
+  - Section 37 & Form GSTR-1: Outward sales filing deadline by 11th of every month.
+  - Form GSTR-3B: Monthly summary tax payment due by 20th of every month.
+  - Section 50: Interest charges at 18% p.a. on wrong ITC utilization or late cash payment.
+  - Form PMT-06: Electronic Cash Ledger payment challan.
+  - E-Way Bill Threshold: Mandatory for goods movement valued > ₹50,000.
 
-      const textOutput = await generateGeminiContent(query, systemInstruction);
+[USER QUERY]
+"${query}"
+
+[REQUIRED RESPONSE STRUCTURE & FORMATTING]
+1. Answer directly and comprehensively in ${langInstruction}.
+2. Use clean bullet points (• ) for step-by-step procedures.
+3. Include practical advice on how the shopkeeper can avoid penalties or tax credit loss.`;
+
+      const textOutput = await generateGeminiContent(augmentedPrompt, systemInstruction);
       return {
         status: "SUCCESS",
         isGstRelated: true,
@@ -176,16 +191,33 @@ STRICT FORMATTING RULE:
     }
   }
 
-  // 4. Default Multilingual Fallback
-  let defaultAns = "To file your GST return safely without penalties, always match your purchase bills against GSTR-2B.";
-  if (langKey === 'HI') {
-    defaultAns = "GST रिटर्न सुरक्षित फाइल करने के लिए हमेशा अपने खरीद बिलों का GSTR-2B से मिलान करें।";
-  } else if (langKey === 'MR') {
-    defaultAns = "GST रिटर्न सुरक्षित भरण्यासाठी नेहमी GSTR-2B मधील बिले तपासा.";
+  // 4. Topic-Aware Multilingual Domain Knowledge Engine (Rich Offline Fallback)
+  let defaultAns = "";
+
+  if (qLower.includes("register") || qLower.includes("registration") || qLower.includes("pan") || qLower.includes("new gstin")) {
+    defaultAns = langKey === 'HI'
+      ? "• नया GST नंबर लेने के लिए PAN कार्ड, आधार, और व्यवसाय स्थान का पता (Rent agreement/Electricity bill) चाहिए।\n• gst.gov.in पर जाएं -> Services -> Registration -> New Registration चुनें।\n• OTP सत्यापन के बाद TRN नंबर मिलेगा। 7 दिनों में GSTIN जारी हो जाता है।"
+      : "• For new GST Registration, keep PAN card, Aadhaar card, and Business Address Proof ready.\n• Visit gst.gov.in -> Services -> Registration -> New Registration.\n• Complete Aadhaar OTP authentication to get TRN. Your GSTIN is approved within 3-7 working days.";
+  } else if (qLower.includes("eway") || qLower.includes("e-way") || qLower.includes("transport") || qLower.includes("vehicle")) {
+    defaultAns = langKey === 'HI'
+      ? "• ₹50,000 से अधिक के माल परिवहन (Inter-state & Intra-state) के लिए E-Way Bill अनिवार्य है।\n• E-Way Bill पोर्टल (ewaybillgst.gov.in) पर पार्ट-A (बिल विवरण) और पार्ट-B (वाहन संख्या) भरें।"
+      : "• E-Way Bill is mandatory for movement of goods valued above ₹50,000.\n• Generate via ewaybillgst.gov.in by filling Part-A (Invoice & Tax Details) and Part-B (Vehicle Number).";
+  } else if (qLower.includes("challan") || qLower.includes("payment") || qLower.includes("cash") || qLower.includes("bank")) {
+    defaultAns = langKey === 'HI'
+      ? "• GST टैक्स भुगतान के लिए GST पोर्टल पर Challan (Form PMT-06) बनाएं।\n• Net Bank, UPI, NEFT या Over-the-Counter कैश/चेक से भुगतान करें।\n• भुगतान के बाद राशि तुरंत Cash Ledger में जमा हो जाती है।"
+      : "• Create GST Payment Challan (Form PMT-06) under Services -> Payments -> Create Challan on gst.gov.in.\n• Pay via Net Banking, UPI, NEFT, or OTC cash.\n• Funds reflect instantly in your Electronic Cash Ledger.";
+  } else if (qLower.includes("hsn") || qLower.includes("rate") || qLower.includes("tax slab") || qLower.includes("percent")) {
+    defaultAns = langKey === 'HI'
+      ? "• HSN कोड उत्पाद का 4 से 8 अंकों का वर्गीकरण कोड है।\n• 5 करोड़ से अधिक टर्नओवर पर 6-डिजिट HSN बिल पर लिखना अनिवार्य है।\n• दरें मुख्य रूप से 0%, 5%, 12%, 18%, और 28% स्लैब में विभाजित हैं।"
+      : "• HSN code is a 4 to 8 digit product classification code.\n• Businesses with turnover > ₹5 Crores must issue 6-digit HSN codes on invoices.\n• Standard GST rates are 0%, 5%, 12%, 18%, and 28%.";
+  } else {
+    defaultAns = langKey === 'HI'
+      ? "• GST रिटर्न सुरक्षित फाइल करने के लिए हमेशा अपने खरीद बिलों का GSTR-2B से मिलान करें।\n• बिना GSTR-2B में दिखे खरीद बिलों पर टैक्स क्रेडिट न लें ताकि नोटिस और पेनल्टी से बचाव हो।"
+      : "• To file your GST return safely without penalties, always match your purchase bills against GSTR-2B.\n• Claim ITC only for invoices reflected in GSTR-2B to avoid Section 16(2)(aa) penalty notices.";
   }
 
   if (mode === 'CA_TECHNICAL') {
-    defaultAns += " (Compliance reference: Section 16(2)(aa) of CGST Act).";
+    defaultAns += "\n\n• Legal Compliance Reference: Section 16(2)(aa) & Rule 36(4) of CGST Act, 2017.";
   }
 
   return {
@@ -195,7 +227,7 @@ STRICT FORMATTING RULE:
     language: langKey,
     explanationMode: mode,
     isAiGenerated: false,
-    source: "Default Multilingual Rule"
+    source: "Domain Grounded Knowledge Engine"
   };
 }
 

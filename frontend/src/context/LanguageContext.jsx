@@ -5,7 +5,7 @@ const LanguageContext = createContext();
 
 export const LanguageProvider = ({ children }) => {
   const [language, setLanguageState] = useState(() => {
-    return localStorage.getItem('app_language') || 'HI';
+    return localStorage.getItem('app_language') || 'EN';
   });
 
   const setLanguage = (newLang) => {
