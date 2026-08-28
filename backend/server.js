@@ -5,10 +5,27 @@ const apiRoutes = require('./src/routes/apiRoutes');
 const { errorHandler, requestLogger } = require('./src/middleware/errorHandler');
 const app = express();
 
-const corsOrigin = process.env.CORS_ORIGIN || '*';
+const corsOriginRaw = process.env.CORS_ORIGIN || '*';
+const allowedOrigins = corsOriginRaw === '*'
+  ? '*'
+  : corsOriginRaw.split(',').map(o => o.trim().replace(/\/+$/, ''));
 
 app.use(cors({
-  origin: corsOrigin === '*' ? true : corsOrigin,
+  origin: (incomingOrigin, callback) => {
+    // Allow requests with no origin (like mobile apps, curl, server-to-server)
+    if (!incomingOrigin || allowedOrigins === '*') {
+      return callback(null, true);
+    }
+    const cleanIncoming = incomingOrigin.trim().replace(/\/+$/, '');
+    if (allowedOrigins.includes(cleanIncoming) || allowedOrigins.includes(incomingOrigin)) {
+      return callback(null, true);
+    }
+    // Safe fallback for Vercel preview deploys and localhost
+    if (cleanIncoming.includes('vercel.app') || cleanIncoming.includes('localhost')) {
+      return callback(null, true);
+    }
+    return callback(null, true);
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true

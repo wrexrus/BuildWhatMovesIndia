@@ -33,6 +33,7 @@ import {
   Upload,
   Users,
   Volume2,
+  VolumeX,
   X,
 } from "lucide-react";
 
@@ -215,6 +216,8 @@ const Gstr3bSimplified = () => {
     useState(DEMO_PERSONAS[0]);
 
   const [isPreFilingSummaryOpen, setIsPreFilingSummaryOpen] =
+    useState(false);
+  const [isReceiptModalOpen, setIsReceiptModalOpen] =
     useState(false);
   const [isUploadDropzoneOpen, setIsUploadDropzoneOpen] =
     useState(false);
@@ -852,18 +855,7 @@ const Gstr3bSimplified = () => {
   };
 
   const handleOpenReceipt = () => {
-    const arn =
-      submissionResult?.arn ||
-      "AA270726889900V";
-
-    const receiptUrl =
-      `/api/gstr3b/receipt/${arn}/html`;
-
-    window.open(
-      receiptUrl,
-      "_blank",
-      "width=800,height=900,scrollbars=yes"
-    );
+    setIsReceiptModalOpen(true);
   };
 
   const handleVoicePlayback = async () => {
@@ -1211,16 +1203,23 @@ const Gstr3bSimplified = () => {
             <button
               type="button"
               onClick={handleVoicePlayback}
-              className={`inline-flex items-center gap-2 border px-3.5 py-2.5 text-xs font-semibold transition-colors ${
+              className={`inline-flex items-center gap-2 border px-3.5 py-2.5 text-xs font-semibold transition-all cursor-pointer ${
                 isPlayingAudio
-                  ? "border-navy bg-navy text-white"
+                  ? "border-red-300 bg-red-50 text-red-700 hover:bg-red-100"
                   : "border-line bg-white text-ink hover:border-navy/35 hover:bg-shell"
               }`}
             >
-              <Volume2 className="h-4 w-4" />
-              {isPlayingAudio
-                ? "Playing guidance"
-                : "Voice guidance"}
+              {isPlayingAudio ? (
+                <>
+                  <VolumeX className="h-4 w-4 text-red-600 animate-pulse" />
+                  <span>Stop Guidance</span>
+                </>
+              ) : (
+                <>
+                  <Volume2 className="h-4 w-4 text-navy" />
+                  <span>Voice guidance</span>
+                </>
+              )}
             </button>
 
             <button
@@ -1980,6 +1979,172 @@ const Gstr3bSimplified = () => {
                     ? "Filing..."
                     : "Confirm & File GSTR-3B"}
                 </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* =========================================================
+            FILING SUMMARY RECEIPT MODAL
+        ========================================================== */}
+        {isReceiptModalOpen && (
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 p-4 backdrop-blur-xs"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="receipt-modal-title"
+          >
+            <div className="w-full max-w-2xl rounded-xl border border-line bg-white shadow-2xl overflow-hidden">
+              <div className="flex items-center justify-between border-b border-line bg-navy px-6 py-4 text-white">
+                <div className="flex items-center gap-2.5">
+                  <div className="grid h-8 w-8 place-items-center rounded-full bg-white/10">
+                    <Printer className="h-4 w-4 text-amber" />
+                  </div>
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-white/70">
+                      Official Return Receipt
+                    </p>
+                    <h2 id="receipt-modal-title" className="text-base font-bold text-white">
+                      GSTR-3B Summary Receipt
+                    </h2>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setIsReceiptModalOpen(false)}
+                  className="rounded-lg p-1.5 text-white/70 hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
+                  aria-label="Close receipt"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              <div className="p-6 space-y-5 max-h-[75vh] overflow-y-auto">
+                <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-emerald-200 bg-emerald-50/70 p-4">
+                  <div>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800">
+                      Application Reference Number (ARN)
+                    </span>
+                    <p className="mt-0.5 font-mono text-base font-bold text-emerald-950">
+                      {submissionResult?.arn || "AA270726889900V"}
+                    </p>
+                  </div>
+                  <div className="inline-flex items-center gap-1.5 rounded-full border border-emerald-300 bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-900">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
+                    <span>FILED & ACKNOWLEDGED</span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 rounded-lg border border-line bg-shell/45 p-4 text-xs">
+                  <div>
+                    <span className="text-muted block font-medium">Taxpayer Legal Name</span>
+                    <span className="font-bold text-ink text-sm">{activePersonaMetrics.name}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted block font-medium">GSTIN</span>
+                    <span className="font-mono font-bold text-navy text-sm">{activePersonaMetrics.gstin}</span>
+                  </div>
+                  <div>
+                    <span className="text-muted block font-medium">Filing Period</span>
+                    <span className="font-semibold text-ink">July 2026</span>
+                  </div>
+                  <div>
+                    <span className="text-muted block font-medium">Filing Date & Timestamp</span>
+                    <span className="font-mono font-medium text-ink">{submissionResult?.filingDate || "28 Aug 2026, 11:45 AM"}</span>
+                  </div>
+                </div>
+
+                <div className="rounded-lg border border-line overflow-hidden">
+                  <div className="bg-slate-50 px-4 py-2.5 border-b border-line text-xs font-bold text-ink uppercase tracking-wider">
+                    Reconciled Tax Summary Breakdown
+                  </div>
+                  <div className="divide-y divide-line text-xs">
+                    <div className="flex justify-between px-4 py-2.5">
+                      <span className="text-muted">Gross Sales Tax Liability</span>
+                      <span className="font-mono font-semibold text-ink">₹42,500</span>
+                    </div>
+                    <div className="flex justify-between px-4 py-2.5">
+                      <span className="text-muted">Eligible Input Tax Credit (ITC Claimed)</span>
+                      <span className="font-mono font-semibold text-emerald-700">₹{(activePersonaMetrics.eligibleItc || 0).toLocaleString()}</span>
+                    </div>
+                    <div className="flex justify-between px-4 py-2.5">
+                      <span className="text-muted">Deferred / Blocked Credit (Protected)</span>
+                      <span className="font-mono font-semibold text-amber-700">₹6,500</span>
+                    </div>
+                    <div className="flex justify-between bg-navy/5 px-4 py-3 text-sm font-bold">
+                      <span className="text-navy">Net Cash Tax Paid</span>
+                      <span className="font-mono text-navy">₹{(activePersonaMetrics.netTax || 0).toLocaleString()}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between gap-4 border-t border-dashed border-line pt-3">
+                  <div className="flex items-center gap-3">
+                    <div className="grid h-12 w-12 place-items-center rounded border border-line bg-white font-mono text-[9px] font-bold text-center text-navy p-1">
+                      QR CODE<br/>[ARN VERIFIED]
+                    </div>
+                    <div className="text-[11px] leading-4 text-muted">
+                      <p className="font-bold text-ink">Official Tax Department Acknowledgment</p>
+                      <p>Electronically generated under Rule 61(5) of CGST Rules.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between gap-3 border-t border-line bg-slate-50 px-6 py-4">
+                <button
+                  type="button"
+                  onClick={() => setIsReceiptModalOpen(false)}
+                  className="border border-line bg-white px-4 py-2 text-xs font-semibold text-muted hover:bg-shell transition-colors cursor-pointer"
+                >
+                  Close
+                </button>
+
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const element = document.createElement("a");
+                      const content = `=======================================================\n` +
+                        `    OFFICIAL GSTR-3B RETURN FILING SUMMARY RECEIPT     \n` +
+                        `=======================================================\n` +
+                        `ARN Number       : ${submissionResult?.arn || "AA270726889900V"}\n` +
+                        `Taxpayer Name    : ${activePersonaMetrics.name}\n` +
+                        `GSTIN            : ${activePersonaMetrics.gstin}\n` +
+                        `Filing Period    : July 2026\n` +
+                        `Submission Date  : ${submissionResult?.filingDate || "28 Aug 2026"}\n` +
+                        `-------------------------------------------------------\n` +
+                        `Gross Tax Liability : ₹42,500\n` +
+                        `Eligible Tax Credit : ₹${(activePersonaMetrics.eligibleItc || 0).toLocaleString()}\n` +
+                        `Deferred Credit     : ₹6,500\n` +
+                        `Net Cash Tax Paid   : ₹${(activePersonaMetrics.netTax || 0).toLocaleString()}\n` +
+                        `-------------------------------------------------------\n` +
+                        `Goods and Services Tax Portal (gst.gov.in)\n`;
+
+                      const file = new Blob([content], { type: 'text/plain' });
+                      element.href = URL.createObjectURL(file);
+                      element.download = `GSTR3B_Receipt_${submissionResult?.arn || "AA270726889900V"}.txt`;
+                      document.body.appendChild(element);
+                      element.click();
+                      document.body.removeChild(element);
+                      if (showToast) showToast("Receipt downloaded successfully!", "success");
+                    }}
+                    className="inline-flex items-center gap-1.5 border border-navy/30 bg-white px-3.5 py-2 text-xs font-semibold text-navy hover:bg-navy/5 transition-colors cursor-pointer"
+                  >
+                    <Download className="h-3.5 w-3.5 text-navy" />
+                    Download Receipt
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => window.print()}
+                    className="inline-flex items-center gap-1.5 bg-navy px-4 py-2 text-xs font-semibold text-white hover:bg-navy-hover transition-colors cursor-pointer"
+                  >
+                    <Printer className="h-3.5 w-3.5" />
+                    Print Receipt
+                  </button>
+                </div>
               </div>
             </div>
           </div>
