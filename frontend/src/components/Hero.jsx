@@ -26,7 +26,7 @@ const Hero = () => {
         className="absolute inset-0 h-full w-full object-cover opacity-95"
       />
 
-      <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/95 to-navy/60" />
+      <div className="absolute inset-0 bg-gradient-to-r from-navy via-navy/90 to-navy/45" />
       <div className="absolute inset-0 bg-gradient-to-t from-navy via-transparent to-transparent" />
 
       <div className="relative mx-auto flex min-h-[390px] max-w-360 flex-col justify-center px-4 py-12 sm:min-h-[440px] sm:px-6 sm:py-20 lg:min-h-[560px] lg:px-6">

@@ -186,3 +186,20 @@ select:focus-visible {
     scroll-behavior: auto;
   }
 }
+
+@keyframes copilot-pulse {
+  0%,
+  100% {
+    transform: scale(0.85);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+.animate-copilot-pulse {
+  animation: copilot-pulse 2s ease-in-out infinite;
+}

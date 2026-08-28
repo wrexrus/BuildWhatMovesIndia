@@ -70,14 +70,15 @@ const CopilotHeroCard = () => {
         "
       >
         <div className="grid lg:grid-cols-[1.04fr_0.96fr]">
-          {}
+          { }
           <div className="p-5 sm:p-9 lg:p-10">
             <div className="flex items-center gap-2">
               <span className="relative flex h-5 w-5 items-center justify-center">
                 <span className="absolute h-2 w-2 rounded-full bg-navy" />
-                <span className="absolute h-5 w-5 rounded-full border border-navy/10" />
+                <span
+                  className="absolute h-5 w-5 rounded-full border border-navy/30 animate-copilot-pulse"
+                />
               </span>
-
               <span className="text-[10px] font-semibold uppercase tracking-[0.12em] text-muted">
                 GST Copilot
               </span>
@@ -157,7 +158,7 @@ const CopilotHeroCard = () => {
             </div>
           </div>
 
-          {}
+          { }
           <div className="bg-shell/55 p-5 sm:p-8 lg:p-10">
             <div className="flex h-full flex-col justify-center">
               <div>

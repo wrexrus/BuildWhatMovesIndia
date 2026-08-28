@@ -956,9 +956,6 @@ const Gstr3bSimplified = () => {
   return (
     <PageContainer>
       <div className="mx-auto max-w-7xl px-4 py-7 font-sans sm:px-6 lg:px-8">
-        {/* =========================================================
-            DEMO ENVIRONMENT NOTICE
-        ========================================================== */}
         <div className="mb-6 flex flex-col gap-2 border border-[#e8c980] bg-[#fff9e9] px-4 py-3 text-xs text-[#6d5200] sm:flex-row sm:items-center sm:justify-between">
           <div>
             <span className="mr-2 font-semibold uppercase tracking-[0.08em]">
@@ -975,23 +972,6 @@ const Gstr3bSimplified = () => {
             MOCK DATA ACTIVE
           </span>
         </div>
-
-        {/* =========================================================
-            PAGE HEADER
-        ========================================================== */}
-        {/* Catchy Demo Spin-up Banner Note */}
-        <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-amber-200 bg-amber-50/90 px-4 py-2.5 text-xs text-amber-950 shadow-xs">
-          <div className="flex items-center gap-2.5">
-            <span className="flex h-2 w-2 rounded-full bg-amber-500 animate-ping" />
-            <p>
-              <strong className="font-semibold text-amber-950">💡 Demo Note:</strong> Refresh the page once if initial reconciliation loading takes a moment (happens sometimes during free cloud server spin-up).
-            </p>
-          </div>
-        </div>
-
-        {/* =========================================================
-            HEADER & ACTIONS
-        ========================================================== */}
         <header className="border-b border-line pb-6">
           <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
             <div>
@@ -1053,7 +1033,6 @@ const Gstr3bSimplified = () => {
           </div>
         </header>
 
-        {/* Prompt Card if Taxpayer Profile is Not Selected */}
         {!selectedPersonaGstin ? (
           <div className="mt-8 rounded-xl border border-dashed border-navy/25 bg-white p-10 text-center shadow-xs">
             <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-navy/10 text-navy">
@@ -1076,9 +1055,6 @@ const Gstr3bSimplified = () => {
           </div>
         ) : (
           <>
-        {/* =========================================================
-            TAXPAYER SUMMARY
-        ========================================================== */}
         <section className="mt-6 border border-line bg-white">
           <div className="border-b border-line px-5 py-4 sm:px-6">
             <h2 className="text-sm font-semibold text-ink">
@@ -1159,9 +1135,6 @@ const Gstr3bSimplified = () => {
           </div>
         </section>
 
-        {/* =========================================================
-            KEY FIGURES
-        ========================================================== */}
         <section className="mt-6 grid border-y border-line bg-white sm:grid-cols-2 lg:grid-cols-4">
           <div className="border-b border-line px-5 py-5 sm:border-r lg:border-b-0">
             <p className="text-xs font-semibold uppercase tracking-[0.07em] text-muted">
@@ -1322,9 +1295,6 @@ const Gstr3bSimplified = () => {
           </div>
         </section>
 
-        {/* =========================================================
-            MISMATCH REVIEW
-        ========================================================== */}
         <section className="mt-8 border border-line bg-white">
           <div className="flex flex-col gap-4 border-b border-line px-5 py-5 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
             <div>
@@ -1544,9 +1514,6 @@ const Gstr3bSimplified = () => {
           )}
         </section>
 
-        {/* =========================================================
-            RECONCILIATION REGISTER
-        ========================================================== */}
         <section className="mt-8 border border-line bg-white">
           <div className="flex flex-col gap-4 border-b border-line px-5 py-5 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
             <div>
@@ -1772,9 +1739,6 @@ const Gstr3bSimplified = () => {
         </>
         )}
 
-        {/* =========================================================
-            UPLOAD MODAL
-        ========================================================== */}
         {isUploadDropzoneOpen && (
           <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 p-4"
@@ -1869,9 +1833,6 @@ const Gstr3bSimplified = () => {
           </div>
         )}
 
-        {/* =========================================================
-            PRE-FILING MODAL
-        ========================================================== */}
         {isPreFilingSummaryOpen && (
           <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/45 p-4"
@@ -2026,9 +1987,6 @@ const Gstr3bSimplified = () => {
           </div>
         )}
 
-        {/* =========================================================
-            FILING SUMMARY RECEIPT MODAL
-        ========================================================== */}
         {isReceiptModalOpen && (
           <div
             className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 p-4 backdrop-blur-xs"
