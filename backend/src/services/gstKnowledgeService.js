@@ -76,7 +76,7 @@ function isGstDomainQuery(query) {
     "challan", "pmt-06", "payment", "cash ledger", "credit ledger", "refund",
     "registration", "new gstin", "cancel gstin", "cancelled gstin", "suspend gstin",
     "tds", "tcs", "income tax", "advance tax", "itr", "form 16", "tax slab", "tax rate",
-    "net tax payable", "safety score", "pending action", "what to do next", "action items",
+    "net tax payable", "safety score", "pending action", "what to do next", "what should i do next", "what next", "action items",
     "ramesh", "hardware", "asian paints", "ultratech", "jaquar", "jaipur", "polycab",
     "gst copilot", "gst assistant", "small business", "shopkeeper", "dukan"
   ];
@@ -182,7 +182,7 @@ ${modeInstruction}`;
       const augmentedPrompt = `[TAXPAYER PROFILE & CONTEXT]
 • Taxpayer: Ramesh Kumar (Nagpur Hardware & Sanitary Store)
 • Active Return: July 2026 GSTR-3B Return
-• Status: 14 Matched Invoices, 3 Pending Mismatches (Asian Paints unfiled ₹4,500, Jaipur Handicrafts ₹6,000 tax rate mismatch, UltraTech late upload ₹9,800). Net tax payable: ₹24,300.`;
+• Status: 14 Matched Invoices, 3 Pending Mismatches (Asian Paints unfiled ₹4,500, Jaipur Handicrafts ₹6,000 tax rate mismatch, UltraTech late upload ₹9,800). Net tax payable: ₹24,300.
 
 [USER QUERY]
 "${query}"
