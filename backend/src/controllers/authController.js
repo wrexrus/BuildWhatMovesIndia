@@ -1,7 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET, JWT_EXPIRES_IN } = require('../config/env');
 
-// In-memory registered users store for prototype
 const usersStore = [
   {
     userId: "USER-NAGPUR-001",
@@ -29,9 +28,7 @@ function generateJwtToken(userPayload) {
   );
 }
 
-/**
- * Taxpayer Login
- */
+
 function login(req, res) {
   const { gstin, email, password, role } = req.body || {};
 
@@ -41,7 +38,6 @@ function login(req, res) {
   let user = usersStore.find(u => u.gstin === queryGstin || u.email === queryEmail);
 
   if (!user) {
-    // Default fallback to Ramesh for hackathon prototype convenience
     user = {
       userId: `USER-${Date.now()}`,
       name: "Ramesh Kumar",
@@ -62,7 +58,7 @@ function login(req, res) {
     success: true,
     message: `Welcome back, ${user.name}! Session active for 10 minutes.`,
     token,
-    expiresInSeconds: 600, // 10 minutes
+    expiresInSeconds: 600, 
     lastLogin: lastLoginFormatted,
     user: {
       ...user,
@@ -71,9 +67,7 @@ function login(req, res) {
   });
 }
 
-/**
- * Taxpayer Registration
- */
+
 function register(req, res) {
   const { name, tradeName, gstin, state, email, password } = req.body || {};
 
@@ -112,9 +106,7 @@ function register(req, res) {
   });
 }
 
-/**
- * Mock One-Tap Login (Ramesh Profile)
- */
+
 function mockLogin(req, res) {
   const mockUser = usersStore[0];
   const token = generateJwtToken(mockUser);
@@ -133,9 +125,7 @@ function mockLogin(req, res) {
   });
 }
 
-/**
- * Get Active Authenticated Profile (Protected Route)
- */
+
 function getProfile(req, res) {
   return res.status(200).json({
     success: true,

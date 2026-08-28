@@ -1,6 +1,4 @@
-/**
- * Multi-Language Voice Audio Script Payload Generator for Audio-Guided Assistance
- */
+
 function generateVoiceScript(mismatchItem, language = 'HI') {
   const code = mismatchItem ? mismatchItem.errorCode : 'GENERAL';
   const supplier = mismatchItem ? mismatchItem.supplierName || 'Supplier' : 'Supplier';

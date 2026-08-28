@@ -1,9 +1,7 @@
 const { reconcileInvoices } = require('../services/reconciliationService');
 const { getCurrentInvoices } = require('./invoiceController');
 
-/**
- * Export Reconciliation Report as CSV
- */
+
 function exportReconciliationCsv(req, res) {
   try {
     const invoices = getCurrentInvoices();
@@ -34,9 +32,6 @@ function exportReconciliationCsv(req, res) {
   }
 }
 
-/**
- * Upload & Parse Raw CSV/JSON Invoices
- */
 function uploadRawInvoices(req, res) {
   try {
     const { rawInvoices } = req.body;

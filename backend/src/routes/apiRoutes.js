@@ -9,7 +9,6 @@ const portalServiceRoutes = require('./portalServiceRoutes');
 const filingRoutes = require('./filingRoutes');
 const { getVoiceExplanation, streamVoiceAudio } = require('../controllers/voiceController');
 
-// Compose domain-specific sub-routers
 router.use('/auth', authRoutes);
 router.use('/invoices', invoiceRoutes);
 router.use('/reconcile', reconciliationRoutes);
@@ -17,11 +16,9 @@ router.use('/chat', chatRoutes);
 router.use('/services', portalServiceRoutes);
 router.use('/gstr3b', filingRoutes);
 
-// Direct alias compatibility for /api/explain-voice & audio stream
 router.post('/explain-voice', getVoiceExplanation);
 router.get('/explain-voice/audio', streamVoiceAudio);
 
-// Health check endpoint
 router.get('/health', (req, res) => {
   res.status(200).json({
     status: "OK",

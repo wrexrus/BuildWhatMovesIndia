@@ -1,6 +1,4 @@
-/**
- * Supported Regional Language Definitions & Mapping
- */
+
 const SUPPORTED_LANGUAGES = {
   EN: "English",
   HI: "Hindi (हिंदी - Devanagari script)",

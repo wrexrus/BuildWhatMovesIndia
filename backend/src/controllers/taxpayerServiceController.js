@@ -16,9 +16,6 @@ function loadPersonasData() {
   return JSON.parse(fs.readFileSync(filePath, 'utf8'));
 }
 
-/**
- * Service: Search Taxpayer by GSTIN/UIN
- */
 function searchTaxpayer(req, res) {
   const gstin = (req.params.gstin || req.query.gstin || '').toUpperCase().trim();
   const taxpayers = loadTaxpayers();
@@ -50,9 +47,6 @@ function searchTaxpayer(req, res) {
   });
 }
 
-/**
- * Service: Track Return Filing History
- */
 function trackReturnStatus(req, res) {
   const gstin = (req.params.gstin || req.query.gstin || '').toUpperCase().trim();
   const taxpayers = loadTaxpayers();
@@ -81,9 +75,7 @@ function trackReturnStatus(req, res) {
   });
 }
 
-/**
- * Service: HSN / SAC Code & Tax Rate Finder
- */
+
 function hsnLookup(req, res) {
   const query = (req.query.q || req.query.code || '').toLowerCase().trim();
   const hsnList = loadHsnData();
@@ -108,9 +100,7 @@ function hsnLookup(req, res) {
   });
 }
 
-/**
- * Service: Get All 10 Taxpayer Demo Personas & Case Studies
- */
+
 function getTaxpayerPersonas(req, res) {
   const personas = loadPersonasData();
   return res.status(200).json({

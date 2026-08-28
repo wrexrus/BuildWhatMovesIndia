@@ -25,22 +25,18 @@ function getVoiceExplanation(req, res) {
   }
 }
 
-/**
- * High-Quality Server-Side Audio Stream Endpoint (Proxy for Regional Human Voice)
- * Streams real MP3 audio for Hindi (HI), Marathi (MR), Tamil (TA), Punjabi (PA), Gujarati (GU), and English (EN)
- */
+
 async function streamVoiceAudio(req, res) {
   try {
     const textQuery = req.query.text || "Namaste! GST Saathi audio active.";
     const langKey = (req.query.lang || 'HI').toUpperCase();
 
-    // Strip Emojis, Bullet Points, URLs, and extra symbols
     const cleanText = textQuery
       .replace(/[🌐🔴🟡🟢💰📅📊⚡•*#_`]/g, ' ')
       .replace(/https?:\/\/\S+/g, '')
       .replace(/\s+/g, ' ')
       .trim()
-      .substring(0, 200); // Limit chunk size for fast TTS streaming
+      .substring(0, 200); 
 
     const langMap = {
       HI: 'hi',

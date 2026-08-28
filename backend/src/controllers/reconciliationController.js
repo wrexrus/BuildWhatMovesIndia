@@ -8,10 +8,8 @@ async function reconcile(req, res) {
     const gstin = req.query.gstin || req.body.gstin || null;
     const activeInvoices = req.body.invoices || getCurrentInvoices();
 
-    // 1. Run Rule Engine with Persona GSTIN filtering
     const reconciliationData = reconcileInvoices(activeInvoices, gstin);
 
-    // 2. Attach Instant Grounded Plain Language Explanations (0ms Latency, 0 Network API calls)
     const enrichedResults = reconciliationData.results.map((item) => {
       if (item.status !== 'MATCHED') {
         const explanation = getGroundedExplanation(item, language);

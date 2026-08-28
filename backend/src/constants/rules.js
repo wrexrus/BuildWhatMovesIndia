@@ -1,6 +1,3 @@
-/**
- * Core GST Reconciliation Rule Codes & Descriptions
- */
 const RULE_CODES = {
   ERR_SUPPLIER_UNFILED: "ERR_SUPPLIER_UNFILED",
   ERR_TAX_AMOUNT_MISMATCH: "ERR_TAX_AMOUNT_MISMATCH",

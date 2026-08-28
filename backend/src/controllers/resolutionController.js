@@ -15,7 +15,6 @@ function resolveMismatch(req, res) {
 
     switch (actionType) {
       case 'CLAIM_LOWER_LIMIT':
-        // Adjust tax amount to match GSTR-2B (e.g., Jaquar ₹18,000 -> ₹12,000)
         if (targetIndex !== -1) {
           invoices[targetIndex].totalTax = 12000;
           invoices[targetIndex].igst = 12000;
@@ -25,7 +24,6 @@ function resolveMismatch(req, res) {
         break;
 
       case 'DEFER_TO_NEXT_MONTH':
-        // Zero out current month claim for unfiled/late invoice
         if (targetIndex !== -1) {
           invoices[targetIndex].deferredTax = invoices[targetIndex].totalTax;
           invoices[targetIndex].totalTax = 0;
@@ -38,7 +36,6 @@ function resolveMismatch(req, res) {
         break;
 
       case 'REMOVE_DUPLICATE':
-        // Delete duplicate entry
         invoices = invoices.filter(i => !(i.invoiceNumber === invoiceNumber && i.itemDescription.includes("Duplicate")));
         actionTaken = "Removed duplicate invoice entry.";
         break;
@@ -47,11 +44,9 @@ function resolveMismatch(req, res) {
         return res.status(400).json({ success: false, message: "Invalid actionType provided." });
     }
 
-    // Save updated invoices state
     req.body = { invoices };
     updateInvoices(req, { status: () => ({ json: () => {} }) });
 
-    // Re-run reconciliation
     const updatedReconciliation = reconcileInvoices(invoices);
 
     return res.status(200).json({

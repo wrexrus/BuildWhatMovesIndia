@@ -1,9 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { JWT_SECRET } = require('../config/env');
 
-/**
- * Verify JWT Token Middleware (10-minute session timeout)
- */
+
 function verifyToken(req, res, next) {
   const authHeader = req.headers.authorization || req.headers.Authorization;
 

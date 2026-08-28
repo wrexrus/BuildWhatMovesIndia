@@ -37,9 +37,7 @@ function submitGstr3b(req, res) {
   }
 }
 
-/**
- * Render printable HTML Filing Receipt for Ramesh
- */
+
 function getFilingReceiptHtml(req, res) {
   const arn = req.params.arn || "AA270726849201V";
   const activeInvoices = getCurrentInvoices();

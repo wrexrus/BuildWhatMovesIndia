@@ -1,6 +1,4 @@
-/**
- * Centralized Async Error Handling Middleware
- */
+
 function errorHandler(err, req, res, next) {
   console.error(`[SERVER ERROR] ${req.method} ${req.url}:`, err.message);
   
@@ -12,9 +10,7 @@ function errorHandler(err, req, res, next) {
   });
 }
 
-/**
- * Request Logger Middleware
- */
+
 function requestLogger(req, res, next) {
   const start = Date.now();
   res.on('finish', () => {
