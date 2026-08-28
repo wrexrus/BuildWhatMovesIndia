@@ -78,6 +78,21 @@ const ChatbotWidget = () => {
 
 
   const messagesEndRef = useRef(null);
+  const messagesContainerRef = useRef(null);
+  const handleSendQueryRef = useRef(null);
+  const streamingIntervalRef = useRef(null);
+
+  const scrollToBottom = (smooth = false) => {
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTo({
+        top: messagesContainerRef.current.scrollHeight,
+        behavior: smooth ? "smooth" : "auto",
+      });
+    }
+    messagesEndRef.current?.scrollIntoView({
+      behavior: smooth ? "smooth" : "auto",
+    });
+  };
 
   const labels =
     UI_LABELS[chatLanguage] ||
@@ -192,6 +207,10 @@ const ChatbotWidget = () => {
 
 
   useEffect(() => {
+    handleSendQueryRef.current = handleSendQuery;
+  });
+
+  useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape" && isOpen) {
         setIsOpen(false);
@@ -207,9 +226,22 @@ const ChatbotWidget = () => {
         event.detail?.query;
 
       setIsOpen(true);
+      stopSpeech();
+      setSpeakingIndex(null);
 
       if (targetQuery) {
-        handleSendQuery(targetQuery);
+        if (streamingIntervalRef.current) {
+          window.clearInterval(streamingIntervalRef.current);
+          streamingIntervalRef.current = null;
+        }
+        setIsStreaming(false);
+        setLoading(false);
+
+        setTimeout(() => {
+          if (handleSendQueryRef.current) {
+            handleSendQueryRef.current(targetQuery);
+          }
+        }, 50);
       }
     };
 
@@ -239,9 +271,13 @@ const ChatbotWidget = () => {
   useEffect(() => {
     if (!isOpen) return;
 
-    messagesEndRef.current?.scrollIntoView({
-      behavior: "smooth",
-    });
+    scrollToBottom(false);
+
+    const timer = setTimeout(() => {
+      scrollToBottom(false);
+    }, 50);
+
+    return () => clearTimeout(timer);
   }, [messages, loading, isStreaming, isOpen]);
 
 
@@ -251,6 +287,10 @@ const ChatbotWidget = () => {
     status,
     source
   ) => {
+    if (streamingIntervalRef.current) {
+      window.clearInterval(streamingIntervalRef.current);
+      streamingIntervalRef.current = null;
+    }
     setIsStreaming(true);
 
     const words = fullText.split(" ");
@@ -275,7 +315,7 @@ const ChatbotWidget = () => {
 
     let index = 0;
 
-    const interval = window.setInterval(
+    streamingIntervalRef.current = window.setInterval(
       () => {
         if (index < words.length) {
           currentText +=
@@ -303,12 +343,17 @@ const ChatbotWidget = () => {
             return updated;
           });
 
+          scrollToBottom(false);
           index += 1;
           return;
         }
 
-        window.clearInterval(interval);
+        if (streamingIntervalRef.current) {
+          window.clearInterval(streamingIntervalRef.current);
+          streamingIntervalRef.current = null;
+        }
         setIsStreaming(false);
+        scrollToBottom(false);
       },
       30
     );
@@ -321,11 +366,18 @@ const ChatbotWidget = () => {
   ) => {
     const textToSend = queryText || query;
 
-    if (
-      !textToSend.trim() ||
-      loading ||
-      isStreaming
-    ) {
+    if (!textToSend.trim()) {
+      return;
+    }
+
+    if (queryText) {
+      if (streamingIntervalRef.current) {
+        window.clearInterval(streamingIntervalRef.current);
+        streamingIntervalRef.current = null;
+      }
+      setIsStreaming(false);
+      setLoading(false);
+    } else if (loading || isStreaming) {
       return;
     }
 
@@ -911,6 +963,7 @@ const ChatbotWidget = () => {
 
           { }
           <div
+            ref={messagesContainerRef}
             className="min-h-0 flex-1 overflow-y-auto bg-[#fbfcfd] px-3 py-4 sm:px-4 sm:py-5 overscroll-contain"
           >
             <div className="mx-auto max-w-[65ch]">

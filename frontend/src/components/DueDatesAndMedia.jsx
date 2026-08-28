@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Download, Play, FileText, CheckCircle2 } from "lucide-react";
+import { Download, Play, FileText, CheckCircle2, X, ExternalLink } from "lucide-react";
 import { useToast } from "../context/ToastContext";
 
 const TODAY = new Date("2026-08-24");
@@ -18,10 +18,40 @@ const dueDates = [
 ];
 
 const mediaItems = [
-  { title: "Map-based geocoding in registration", date: "Mar 1, 2024" },
-  { title: "Validate a digital signature on a downloaded document", date: "Feb 27, 2024" },
-  { title: "Utilise Cash/ITC for payment of demand", date: "Feb 16, 2024" },
+  {
+    id: "geo",
+    title: "Map-based geocoding in registration",
+    date: "Mar 1, 2024",
+    duration: "4:15",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ", // fallback placeholder embed
+    officialUrl: "https://tutorial.gst.gov.in/userguide/registration/index.htm#t=map_geocoding.htm",
+    desc: "Official guide on using interactive map geocoding to pin business addresses accurately during new GST registration."
+  },
+  {
+    id: "dsc",
+    title: "Validate a digital signature on a downloaded document",
+    date: "Feb 27, 2024",
+    duration: "3:40",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    officialUrl: "https://tutorial.gst.gov.in/userguide/returns/index.htm#t=dsc_validation.htm",
+    desc: "Step-by-step tutorial on verifying PDF digital signatures (DSC) for official GST registration certificates and returns."
+  },
+  {
+    id: "cash",
+    title: "Utilise Cash/ITC for payment of demand",
+    date: "Feb 16, 2024",
+    duration: "5:10",
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
+    officialUrl: "https://tutorial.gst.gov.in/userguide/payments/index.htm#t=utilize_cash_itc.htm",
+    desc: "Detailed instructions on setting off pending tax liabilities using electronic cash ledger and ITC balance."
+  },
 ];
+
+const toneStyles = {
+  overdue: "bg-red-100 text-red-800 font-bold border border-red-200",
+  soon: "bg-amber-100 text-amber-900 font-bold border border-amber-300",
+  upcoming: "bg-navy/5 text-muted font-medium border border-slate-200",
+};
 
 function urgency(dueDateStr) {
   const due = new Date(dueDateStr);
@@ -31,14 +61,9 @@ function urgency(dueDateStr) {
   return { label: `${daysLeft}d left`, tone: "upcoming", daysLeft };
 }
 
-const toneStyles = {
-  overdue: "bg-red-100 text-red-800 font-bold border border-red-200",
-  soon: "bg-amber-100 text-amber-900 font-bold border border-amber-300",
-  upcoming: "bg-navy/5 text-muted font-medium border border-slate-200",
-};
-
 const DueDatesAndMedia = () => {
   const [activeTab, setActiveTab] = useState("Monthly");
+  const [activeVideo, setActiveVideo] = useState(null);
   const { showToast } = useToast() || {};
 
   const rows = useMemo(
@@ -157,34 +182,94 @@ const DueDatesAndMedia = () => {
 
         <div>
           <div className="mb-4 flex flex-wrap items-end justify-between gap-3 sm:mb-5">
-            <h2 className="text-xl font-bold tracking-tight text-ink sm:text-[1.65rem]">GST media</h2>
+            <h2 className="text-xl font-bold tracking-tight text-ink sm:text-[1.65rem]">GST media & tutorials</h2>
             <a
-              href="#"
-              className="inline-flex min-h-10 items-center text-[0.82rem] font-medium text-navy focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2"
+              href="https://tutorial.gst.gov.in/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-10 items-center gap-1 text-[0.82rem] font-medium text-navy hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2"
             >
-              View all
+              <span>View all</span>
+              <ExternalLink size={13} />
             </a>
           </div>
 
           <div className="grid gap-2.5">
             {mediaItems.map((item) => (
-              <a
-                key={item.title}
-                href="#"
-                className="group flex min-w-0 items-center gap-3 rounded-lg border border-line bg-white p-3 transition-colors hover:border-navy/25 focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2"
+              <button
+                key={item.id}
+                type="button"
+                onClick={() => setActiveVideo(item)}
+                className="group flex min-w-0 w-full items-center gap-3 rounded-lg border border-line bg-white p-3 text-left transition-colors hover:border-navy/30 hover:bg-slate-50/50 cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2"
               >
                 <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-navy text-white transition-colors group-hover:bg-navy-hover">
                   <Play size={14} className="fill-white" />
                 </span>
-                <div className="min-w-0">
-                  <p className="break-words text-[0.84rem] font-medium leading-snug text-ink sm:text-[0.87rem]">{item.title}</p>
-                  <p className="mt-0.5 font-mono text-[0.75rem] text-muted">{item.date}</p>
+                <div className="min-w-0 flex-1">
+                  <p className="break-words text-[0.84rem] font-semibold leading-snug text-ink sm:text-[0.87rem] group-hover:text-navy">{item.title}</p>
+                  <div className="mt-1 flex items-center gap-3 font-mono text-[0.75rem] text-muted">
+                    <span>{item.date}</span>
+                    <span>• {item.duration} min</span>
+                  </div>
                 </div>
-              </a>
+              </button>
             ))}
           </div>
         </div>
       </div>
+
+      {/* Video Modal Player */}
+      {activeVideo && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
+          <div className="relative w-full max-w-2xl rounded-2xl bg-white p-5 sm:p-6 shadow-2xl border border-slate-200">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2">
+                <span className="grid h-7 w-7 place-items-center rounded-full bg-navy/10 text-navy font-bold">
+                  <Play size={14} className="fill-navy" />
+                </span>
+                <h3 className="font-bold text-slate-800 text-base">{activeVideo.title}</h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setActiveVideo(null)}
+                className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-800 cursor-pointer"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="my-4 overflow-hidden rounded-xl bg-slate-900 border border-slate-800 aspect-video flex items-center justify-center text-white relative p-4 text-center">
+              <div className="max-w-md space-y-3">
+                <div className="mx-auto grid h-14 w-14 place-items-center rounded-full bg-amber text-navy font-bold shadow-lg">
+                  <Play size={24} className="fill-navy ml-1" />
+                </div>
+                <h4 className="font-bold text-lg text-white">{activeVideo.title}</h4>
+                <p className="text-xs text-slate-300 leading-relaxed">{activeVideo.desc}</p>
+                <a
+                  href={activeVideo.officialUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-2 inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-xs font-bold text-navy hover:bg-slate-100 transition-colors"
+                >
+                  <span>Open Tutorial on GST.gov.in</span>
+                  <ExternalLink size={14} />
+                </a>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-between pt-2 text-xs text-slate-500 font-medium">
+              <span>Published: {activeVideo.date}</span>
+              <button
+                type="button"
+                onClick={() => setActiveVideo(null)}
+                className="font-bold text-slate-700 hover:text-navy cursor-pointer"
+              >
+                Close Preview
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };

@@ -1,29 +1,41 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { ArrowUp } from "lucide-react";
 
 const columns = [
   {
     title: "About GST",
-    links: ["GST Council Structure", "GST History"],
+    links: [
+      { name: "GST Council Structure", path: "/gst-law" },
+      { name: "GST History & Acts", path: "/gst-law" },
+    ],
   },
   {
     title: "Website Policies",
-    links: ["Website Policy", "Terms and Conditions", "Hyperlink Policy", "Disclaimer"],
+    links: [
+      { name: "Website Policy", external: "https://www.gst.gov.in/websitepolicies" },
+      { name: "Terms and Conditions", external: "https://www.gst.gov.in/termsandconditions" },
+      { name: "Hyperlink Policy", external: "https://www.gst.gov.in/hyperlinkpolicy" },
+      { name: "Disclaimer", external: "https://www.gst.gov.in/disclaimer" },
+    ],
   },
   {
     title: "Related Sites",
-    links: ["Central Board of Indirect Taxes and Customs", "State Tax Websites", "National Portal"],
+    links: [
+      { name: "Central Board of Indirect Taxes (CBIC)", external: "https://www.cbic.gov.in/" },
+      { name: "State Tax GSK Centers", path: "/registration/home-state-gsk" },
+      { name: "National Portal of India", external: "https://www.india.gov.in/" },
+    ],
   },
   {
     title: "Help and Taxpayer Facilities",
     links: [
-      "System Requirements",
-      "GST Knowledge Portal",
-      "GST Media",
-      "Site Map",
-      "Grievance Nodal Officers",
-      "Free Accounting and Billing Services",
-      "GST Suvidha Providers",
+      { name: "System Requirements", path: "/help-taxpayer-facilities" },
+      { name: "GST Knowledge Portal", path: "/gst-statistics" },
+      { name: "GST Media & Tutorials", external: "https://tutorial.gst.gov.in/" },
+      { name: "Returns Offline Tools", path: "/downloads" },
+      { name: "Grievance Nodal Officers", path: "/services/payments/grievance" },
+      { name: "Free Billing Services", path: "/help-taxpayer-facilities" },
     ],
   },
 ];
@@ -42,13 +54,24 @@ const Footer = () => {
 
             <ul className="space-y-2.5">
               {col.links.map((link) => (
-                <li key={link}>
-                  <a
-                    href="#"
-                    className="inline-block py-0.5 text-[0.86rem] leading-relaxed text-white/80 transition-colors hover:text-white hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2"
-                  >
-                    {link}
-                  </a>
+                <li key={link.name}>
+                  {link.path ? (
+                    <Link
+                      to={link.path}
+                      className="inline-block py-0.5 text-[0.86rem] leading-relaxed text-white/80 transition-colors hover:text-white hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2"
+                    >
+                      {link.name}
+                    </Link>
+                  ) : (
+                    <a
+                      href={link.external || "https://www.gst.gov.in"}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-block py-0.5 text-[0.86rem] leading-relaxed text-white/80 transition-colors hover:text-white hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2"
+                    >
+                      {link.name}
+                    </a>
+                  )}
                 </li>
               ))}
             </ul>
@@ -70,12 +93,12 @@ const Footer = () => {
             Log or track issue
           </p>
 
-          <a
-            href="#"
+          <Link
+            to="/services/payments/grievance"
             className="mt-0.5 inline-block break-words text-[0.92rem] font-bold leading-relaxed text-white hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-amber focus-visible:outline-offset-2"
           >
             Grievance redressal portal for GST
-          </a>
+          </Link>
         </div>
       </div>
 

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Bell, X } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Bell, X, ArrowRight } from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
 
 const NoticeBar = () => {
@@ -17,6 +18,13 @@ const NoticeBar = () => {
         <div className="min-w-0 flex-1 break-words text-[0.8rem] font-medium leading-5 text-slate-800 sm:text-[0.87rem]">
           <span className="font-bold text-navy mr-1.5">{t('noticeTitle')}</span>
           <span>{t('noticeText')}</span>
+          <Link
+            to="/news-and-updates"
+            className="ml-2 inline-flex items-center gap-1 font-semibold text-navy hover:underline text-[0.78rem]"
+          >
+            <span>View Advisories</span>
+            <ArrowRight size={12} />
+          </Link>
         </div>
         <button
           type="button"

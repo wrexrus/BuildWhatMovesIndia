@@ -12,28 +12,28 @@ const TrackApplicationStatus = () => {
   const { showToast } = useToast() || {};
 
   const [searchType, setSearchType] = useState("arn");
-  const [referenceNumber, setReferenceNumber] = useState(initialArn || "TRN2026998877");
+  const [referenceNumber, setReferenceNumber] = useState(initialArn || "");
   const [activeResult, setActiveResult] = useState(null);
   const [errors, setErrors] = useState({});
 
   const isARN = searchType === "arn";
 
   useEffect(() => {
-    const storedMock = localStorage.getItem('gst_registered_mock_taxpayer');
-    if (initialArn || storedMock) {
-      handlePerformLookup(initialArn || "TRN2026998877");
+    if (initialArn) {
+      handlePerformLookup(initialArn);
+      setReferenceNumber("");
     }
   }, [initialArn]);
 
   const handlePerformLookup = (refNo) => {
-    const term = (refNo || referenceNumber).trim().toUpperCase();
+    const term = (refNo || referenceNumber || "TRN2026998877").trim().toUpperCase();
     const storedMockStr = localStorage.getItem('gst_registered_mock_taxpayer');
     let storedMock = null;
     try {
       if (storedMockStr) storedMock = JSON.parse(storedMockStr);
     } catch (e) {}
     const mockData = {
-      referenceNumber: term || "TRN2026998877",
+      referenceNumber: term,
       formType: term.startsWith("TRN") ? "GST REG-01 (New Registration Application)" : "GSTR-3B Return Statement",
       applicantName: storedMock?.name || "Ramesh Kumar",
       tradeName: storedMock?.tradeName || "Nagpur Hardware & Sanitary Store",
@@ -51,7 +51,7 @@ const TrackApplicationStatus = () => {
     };
 
     setActiveResult(mockData);
-    if (showToast) showToast(`Application status retrieved for ${term || 'TRN'}`, 'success', 'Status Found');
+    if (showToast) showToast(`Application status retrieved for ${term}`, 'success', 'Status Found');
   };
 
   const handleSubmit = (event) => {
@@ -62,11 +62,12 @@ const TrackApplicationStatus = () => {
     }
     setErrors({});
     handlePerformLookup(referenceNumber);
+    setReferenceNumber("");
   };
 
   const handleTypeChange = (type) => {
     setSearchType(type);
-    setReferenceNumber(type === "arn" ? "TRN2026998877" : "SRN2026443322");
+    setReferenceNumber("");
     setErrors({});
   };
 

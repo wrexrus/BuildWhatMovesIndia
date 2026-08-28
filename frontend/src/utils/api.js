@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:5000/api';
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 async function fetchApi(endpoint, options = {}) {
   try {
@@ -122,4 +122,10 @@ export async function fetchOfflineTools() {
 
 export async function fetchGstStatistics() {
   return fetchApi('/services/gst-statistics');
+}
+
+export async function resetInvoicesApi() {
+  return fetchApi('/invoices/reset', {
+    method: 'POST',
+  });
 }

@@ -3,10 +3,16 @@ const express = require('express');
 const cors = require('cors');
 const apiRoutes = require('./src/routes/apiRoutes');
 const { errorHandler, requestLogger } = require('./src/middleware/errorHandler');
-
 const app = express();
 
-app.use(cors());
+const corsOrigin = process.env.CORS_ORIGIN || '*';
+
+app.use(cors({
+  origin: corsOrigin === '*' ? true : corsOrigin,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 app.use(express.json());
 app.use(requestLogger);
 

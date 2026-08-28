@@ -33,11 +33,8 @@ const TrackPaymentStatus = () => {
     }
 
     setSearched(true);
-
-    console.log({
-      gstin,
-      cpin,
-    });
+    setGstin("");
+    setCpin("");
   };
 
   return (
