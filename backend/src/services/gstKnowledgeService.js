@@ -60,7 +60,8 @@ function isGstDomainQuery(query) {
     "pan", "gstin", "ramesh", "hardware", "asian paints", "ultratech", "jaquar", "polycab",
     "late fee", "interest", "reconciliation", "claim", "defer", "turnover", "ca", "return",
     "date", "due", "last date", "tareekh", "red", "lal", "pay", "kitna", "kiti", "bharaycha",
-    "score", "100%", "safety", "next", "what to do", "pending", "action", "aage", "pudhe", "step"
+    "score", "100%", "safety", "next", "what to do", "pending", "action", "aage", "pudhe", "step",
+    "hi", "hello", "hey", "namaste", "help", "guide", "info", "explain", "how", "what", "why"
   ];
   return gstKeywords.some(keyword => q.includes(keyword));
 }
